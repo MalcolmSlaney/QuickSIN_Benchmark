@@ -215,9 +215,23 @@ def parse_transcript(response: cloud_speech.RecognizeResponse) -> List[RecogResu
     # print(words[-1])
   return words
 
+def print_all_sentences(results):
+  for r in results:
+    if r.alternatives:
+      print(r.alternatives[0].transcript)
+    else:
+      print('No alternatives')
+      
 
 def generate_ffmpeg_cmds():
-  """Generate the FFMPEG commands to downsample and rename the QuickSIN files."""
+  """Generate the FFMPEG commands to downsample and rename the QuickSIN files.
+  The Google drive data from Matt has these files:
+*   34 Sep List 11.aif - Stereo utterances: clean sentences on the left, constant amplitude babble noise on the right
+*   34 Sep List 11_sentence.wav - Mono clean sentences
+*   34 Sep List 11_babble.wav - Mono babble
+*   List 11.aif - Mono mixed test sentences, with the SNR stepping down after each sentence.
+
+  """
   for i in range(1, 13):
     input = f'{23+i} Sep List {i}_sentence.wav'
     output = f'QuickSIN22/Clean List {i}.wav'
