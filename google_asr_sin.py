@@ -192,18 +192,17 @@ def parse_time(time_proto) -> float:
   # return time_proto.seconds + time_proto.nanos/1e9
   return time_proto.total_seconds()
 
-def parse_transcript(response: cloud_speech.RecognizeResponse) -> List[RecogResult]:
+def parse_transcript(response:
+                     cloud_speech.RecognizeResponse) -> List[RecogResult]:
   """Parse the results from the Cloud ASR engine and return a simple list
   of words and times.  This is for the entire (60s) utterance."""
   words = []
   for a_result in response.results:
     try:
-      # For reasons I don't understand sometimes a results is missing the alternatives
-      ok = len(a_result.alternatives) > 0
+      # For reasons I don't understand sometimes a results is missing the 
+      # alternatives
+      _ = len(a_result.alternatives) > 0
     except:
-      ok = False
-    # print(ok)
-    if not ok:
       continue
     for word in a_result.alternatives[0].words:
       # print(f'Processing: {word}')
@@ -221,7 +220,7 @@ def print_all_sentences(results):
       print(r.alternatives[0].transcript)
     else:
       print('No alternatives')
-      
+
 
 def generate_ffmpeg_cmds():
   """Generate the FFMPEG commands to downsample and rename the QuickSIN files.
@@ -233,13 +232,13 @@ def generate_ffmpeg_cmds():
 
   """
   for i in range(1, 13):
-    input = f'{23+i} Sep List {i}_sentence.wav'
-    output = f'QuickSIN22/Clean List {i}.wav'
-    print(f'ffmpeg -i "{input}" -ar 22050 "{output}"')
+    input_name = f'{23+i} Sep List {i}_sentence.wav'
+    output_name = f'QuickSIN22/Clean List {i}.wav'
+    print(f'ffmpeg -i "{input_name}" -ar 22050 "{output_name}"')
 
-    input = f'List {i}.aif'
-    output = f'QuickSIN22/Babble List {i}.wav'
-    print(f'ffmpeg -i "{input}" -ar 22050 "{output}"')
+    input_name = f'List {i}.aif'
+    output_name = f'QuickSIN22/Babble List {i}.wav'
+    print(f'ffmpeg -i "{input_name}" -ar 22050 "{output_name}"')
 
     print()
 
@@ -251,7 +250,7 @@ def recognize_all_spin(all_wavs: List[str],
                        asr_engine: RecognitionEngine,
                        debug=False) -> SpinFileTranscripts:
   """Recognize some SPiN sentences using the specified ASR engine.
-  return the raw Cloud ASR responses in a dictionary keyed by the
+  Return the raw Cloud ASR responses in a dictionary keyed by the
   (last part of) the filename."""
   all_results = {}
   for f in all_wavs:
@@ -391,3 +390,154 @@ def ingest_spin_keyword_lists(key_word_list) -> Dict[Tuple[int, int],
   return all_keyword_dict
 
 all_keyword_dict = ingest_spin_keyword_lists(key_word_list)
+
+
+@dataclass
+class SpinSentence:
+  """A structure that describes one SPiN sentence, with the transcript,
+  individual words, the sentence start and end time, and the SNR.
+
+  There are six SPiN sentences per list, one per SNR."""
+  parse_transcript: str
+  key_word_list: List[List[str]]  # List of words and their alternatives
+  words: list[str]
+  start_time: float
+  end_time: float
+  snr: float
+
+
+# Organize the clean speech transcripts.  Each 60s becomes a list of recognized
+# sentences.  Return a list of list of sentences.
+
+spin_snrs = [25, 20, 15, 10, 5, 0]
+
+def create_ground_truth(spin_truth_names,
+                        true_transcripts: SpinFileTranscripts) -> List[List[SpinSentence]]:
+  all_files = list(spin_truth_names)
+
+  ground_truths = []
+  for list_number in range(12):
+    filename = f'Clean List {list_number+1}.wav'
+    sentences = []
+    skip = 0  # Hack.. need to skip some results if empty.
+    for snr_number, snr in enumerate(spin_snrs):
+      print(f'Processing {filename} with SNR #{snr_number}')
+      snr = spin_snrs[snr_number]
+      if not true_transcripts[filename].results[snr_number].alternatives:
+        # raise ValueError(f'No alternatives for list {list_number} snr {snr}')
+        print(f'  Skipping an empty result for list {list_number} snr {snr}')
+        skip += 1
+      elif true_transcripts[filename].results[snr_number].alternatives[0].transcript == 'bring it to':
+        print(f'  Skipping an extraneous result for list {list_number} snr {snr}')
+        skip += 1
+      elif list_number == 4 and true_transcripts[filename].results[snr_number].alternatives[0].transcript == 'finish':
+        # Not sure why there is a whole bunch of reco before the words start in Clean 5.
+        skip += 1
+      one_result = true_transcripts[filename].results[snr_number+skip].alternatives[0]
+      transcript = one_result.transcript
+      all_words = [r.word.lower() for r in one_result.words]
+      start_times = [parse_time(r.start_offset) for r in one_result.words]
+      end_times = [parse_time(r.end_offset) for r in one_result.words]
+
+      # if list_number == 1 and snr_number == 0:
+      #   print(one_result)
+      sentences.append(SpinSentence(transcript, all_keyword_dict[list_number, snr_number],
+                                    all_words,
+                                    min(start_times), max(end_times), snr))
+    assert len(sentences) == len(spin_snrs)
+    ground_truths.append(sentences)
+  return ground_truths
+
+def parse_spin_results(all_transcripts) -> List[List[RecogResult]]:
+  """Using the recognized babble results, Create a list of lists.  One list for
+  each of the 12 60s SPiN lists.  For each SPiN list, create a separate list for
+  each SNR."""
+  reco_results = []
+  for i in range(12):
+    filename = f'Babble List {i+1}.wav'
+    # print(filename)
+    test_results = all_transcripts[filename]
+    test_transcript = parse_transcript(test_results)
+    reco_results.append(test_transcript)
+  return reco_results
+
+
+def words_in_trial(recognized_words: List[RecogResult],
+                   start_time: float,
+                   end_time: float, tolerance: float = 2.0) -> List[str]:
+  """Pick out the words in the babble mixture that fall within time window."""
+  start_time -= tolerance
+  end_time += tolerance
+  # print(recognized_words[0].keys())
+  words = [r.word for r in recognized_words if r.end_time >= start_time and r.start_time <= end_time]
+  # Remove all but word characters (not punctuation)
+  words = [re.sub(r'[^\w]', '', word.lower()) for word in words]
+  return words
+
+
+def score_word_list(true_words: List[List[str]],
+                    recognized_words: List[str], max_count=0) -> int:
+  """How many of the key words show up in the transcript?
+  Args: 
+    true_words: a list of tuples, each tuple is a list of words 
+      and their alternates
+    recognized_words: A list of recognized words to score.
+    max_count: Maximum number to return
+
+  Returns:
+    The number of correctly (as judged by the true_words list) that
+    were recognized.
+  """
+  score = 0
+  for words_and_alternates in true_words:
+    for word in words_and_alternates:
+      if word in recognized_words:
+        score += 1
+        break
+  if max_count:
+    score = min(score, max_count)
+  return score
+
+def score_all_tests(snrs: List[float], ground_truths, reco_results,
+                    debug=False):
+  num_lists = len(ground_truths)
+  num_snrs = len(snrs)
+  num_keywords = 5
+
+  correct_counts = []
+  for snr_num, snr in enumerate(snrs):
+    correct_count = 0
+    for list_num in range(num_lists):
+      true_words = ground_truths[list_num][snr_num].key_word_list
+      recognized_words = words_in_trial(reco_results[list_num],
+                                        ground_truths[list_num][snr_num].start_time,
+                                        ground_truths[list_num][snr_num].end_time)
+      correct_this_trial = score_word_list(true_words, recognized_words,
+                                           max_count=5)
+      correct_count += correct_this_trial
+      if debug:
+        print(f'{snr}: True words: {true_words}, recognized words: {recognized_words}', correct_this_trial)
+    correct_counts.append(correct_count)
+  correct_frac = np.asarray(correct_counts, dtype=float) / (num_keywords*num_lists)
+  return correct_frac
+
+
+###### LOGISTIC Functions ####
+# Code and explanation from https://www.linkedin.com/pulse/how-fit-your-data-logistic-function-python-carlos-melus/
+
+from scipy.optimize import curve_fit
+
+def logistic_curve(x, a, b, c, d):
+    """
+    Logistic function with parameters a, b, c, d
+    a is the curve's maximum value (top asymptote)
+    b is the curve's minimum value (bottom asymptote)
+    c is the logistic growth rate or steepness of the curve
+    d is the x value of the sigmoid's midpoint
+    """
+    return ((a-b) / (1 + np.exp(-c * (x - d)))) + b
+
+def psychometric_curve(x, c, d):
+  """Like the logistic curve above, but the output is always >= 0.0 and <= 1.0.
+  """
+  return logistic_curve(x, 1, 0, c, d)

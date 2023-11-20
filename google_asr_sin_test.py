@@ -1,7 +1,13 @@
 """Code to test the auditory toolbox."""
+import io
 import os
+import re
 
 from absl.testing import absltest
+import contextlib
+import fsspec
+from typing import Optional
+
 # import numpy as np
 # import scipy
 
@@ -151,12 +157,74 @@ class GoogleRecognizerTest(absltest.TestCase):
     self.assertGreaterEqual(start_times[0], 0.0)
     self.assertGreaterEqual(end_times[-1], 2.8)
 
-  def test_spin_labels(self):
+  def test_spin_targets(self):
     self.assertEqual(gasr.word_alternatives('foo'), ['foo',])
     self.assertEqual(gasr.word_alternatives('foo/bar'), ['foo', 'bar'])
 
     self.assertEqual(gasr.all_keyword_dict[1, 0],
-                    [['tear', 'tara'], ['thin'], ['sheet'], ['yellow'], ['pad']])
+                     [['tear', 'tara'], ['thin'], ['sheet'], ['yellow'], ['pad']])
+
+  def test_ffmpeg_commands(self):
+    # https://stackoverflow.com/questions/56045623/how-to-capture-the-stdout-stderr-of-a-unittest-in-a-variable
+    f = io.StringIO()
+    with contextlib.redirect_stdout(f):
+      gasr.generate_ffmpeg_cmds()
+    lines = f.getvalue().split('\n')
+    
+    clean_re = re.compile('Clean List (\d*).wav')
+    babble_re = re.compile('Babble List (\d*).wav')
+    def match_clean(line: str, match_re) -> Optional[int]:
+      if line and len(line.strip()):
+        m = match_re.search(line)
+        if m:
+          return int(m[1])
+      return None
+    
+    # Make sure we produce all 12 "Clean List X.wav" files.
+    matches = [match_clean(line, clean_re) for line in lines]
+    matches = list(filter(lambda item: item is not None, matches))
+    self.assertEqual(matches, list(range(1, 13)))
+
+    # Make sure we produce all 12 "Babble List X.wav" files.
+    matches = [match_clean(line, babble_re) for line in lines]
+    matches = list(filter(lambda item: item is not None, matches))
+    self.assertEqual(matches, list(range(1, 13)))
+
+  def test_spin_files(self):
+    spin_file_names = fsspec.open_files('tests/*.wav')
+    spin_file_names = [f.full_name for f in spin_file_names]
+
+    spin_test_names = [f for f in spin_file_names if 'Babble' in f]
+    spin_truth_names = [f for f in spin_file_names if 'Clean' in f]
+    self.assertLen(list(spin_test_names), 2)
+    self.assertLen(list(spin_truth_names), 2)
+
+    asr_engine = gasr.RecognitionEngine()
+    asr_engine.CreateSpeechClient(GOOGLE_CLOUD_PROJECT, 'long')
+    asr_engine.CreateRecognizer(with_timings=True)
+    true_transcripts = gasr.recognize_all_spin(spin_truth_names, asr_engine)
+    self.assertEqual(list(true_transcripts.keys()), 
+                     ['Clean Partial List 1.wav',
+                      'Clean Partial List 2.wav'])
+
+    score = gasr.score_word_list([['white', 'black'], ['silk'], ['jacket'], 
+                                  ['goes'], ['with'], ['any'], ['shoes']],
+                                 ['a', 'black', 'silk', 'jacket'])
+    self.assertEqual(score, 3)
+
+    list_number = 1
+    transcript = gasr.parse_transcript(
+        true_transcripts[f'Clean Partial List {list_number+1}.wav'])
+    recognized_words = [t.word for t in transcript]
+    # print('Transcript is:', recognized_words)
+
+    # Test recognized words to make sure it contains first sentence's keywords
+    score = gasr.score_word_list(gasr.all_keyword_dict[1, 0], recognized_words)
+    self.assertEqual(score, 5)
+
+    # Test recognized words to make sure it contains second sentence's keywords
+    score = gasr.score_word_list(gasr.all_keyword_dict[1, 1], recognized_words)
+    self.assertEqual(score, 5)
 
 if __name__ == '__main__':
   absltest.main()
