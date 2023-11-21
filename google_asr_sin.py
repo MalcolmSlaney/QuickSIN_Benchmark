@@ -1,11 +1,13 @@
-import datetime
+"""Test Google Cloud ASR offerings on the Speech in Noise (SPIN) test."""
+
 import re
-from typing import Any, List, Dict, Tuple, Union
+from typing import List, Dict, Tuple, Union
 
 from dataclasses import dataclass
+from scipy import signal
 from scipy.io import wavfile
+# from scipy.optimize import curve_fit
 import numpy as np
-import matplotlib.pyplot as plt
 import os
 
 import fsspec
@@ -17,7 +19,7 @@ from google.cloud.speech_v2 import SpeechClient
 from google.cloud.speech_v2.types import cloud_speech
 
 from google.cloud.speech_v1.types.cloud_speech import RecognizeResponse
-# Supported Languages: 
+# Supported Languages:
 # https://cloud.google.com/speech-to-text/v2/docs/speech-to-text-supported-languages
 
 class RecognitionEngine(object):
@@ -100,12 +102,13 @@ class RecognitionEngine(object):
               ),
     )
 
-  def RecognizeFile(self, 
-                    audio_file_path: str, 
-                    with_timings=False, 
+  def RecognizeFile(self,
+                    audio_file_path: str,
+                    with_timings=False,
                     debug=False) -> cloud_speech.RecognizeResponse:
     """Recognize the speech from a file.
-    Returns: https://cloud.google.com/python/docs/reference/speech/latest/google.cloud.speech_v1.types.RecognizeResponse
+    Returns: 
+    https://cloud.google.com/python/docs/reference/speech/latest/google.cloud.speech_v1.types.RecognizeResponse
     
     Note: Unless the file ends in .wav, the file is read in, and the entire
     contents, including the binary header, are passed to the recognizer as a
@@ -116,7 +119,8 @@ class RecognitionEngine(object):
         return self.RecognizeWaveform(audio_data, audio_fs,
                                       with_timings=with_timings)
 
-    recognizer_name = f'projects/{self._project}/locations/{self._location}/recognizers/_'
+    recognizer_name = (f'projects/{self._project}/locations/'
+                       f'{self._location}/recognizers/_')
     # Create the request we'd like to send
     request = cloud_speech.RecognizeRequest(
         recognizer = recognizer_name,
@@ -138,7 +142,8 @@ class RecognitionEngine(object):
     if isinstance(waveform, np.ndarray):
       waveform = waveform.astype(np.int16).tobytes()
 
-    recognizer_name = f'projects/{self._project}/locations/{self._location}/recognizers/_'
+    recognizer_name = (f'projects/{self._project}/locations/'
+                       f'{self._location}/recognizers/_')
     # Create the request we'd like to send
     self._recognizer_config = cloud_speech.RecognitionConfig(
         explicit_decoding_config = cloud_speech.ExplicitDecodingConfig(
@@ -199,7 +204,7 @@ def parse_transcript(response:
   words = []
   for a_result in response.results:
     try:
-      # For reasons I don't understand sometimes a results is missing the 
+      # For reasons I don't understand sometimes a results is missing the
       # alternatives
       _ = len(a_result.alternatives) > 0
     except:
@@ -223,12 +228,14 @@ def print_all_sentences(results):
 
 
 def generate_ffmpeg_cmds():
-  """Generate the FFMPEG commands to downsample and rename the QuickSIN files.
-  The Google drive data from Matt has these files:
-*   34 Sep List 11.aif - Stereo utterances: clean sentences on the left, constant amplitude babble noise on the right
+  """Generate the FFMPEG commands to downsample and rename the
+  QuickSIN files. The Google drive data from Matt has these files:
+*   34 Sep List 11.aif - Stereo utterances: clean sentences on the left,
+      constant amplitude babble noise on the right
 *   34 Sep List 11_sentence.wav - Mono clean sentences
 *   34 Sep List 11_babble.wav - Mono babble
-*   List 11.aif - Mono mixed test sentences, with the SNR stepping down after each sentence.
+*   List 11.aif - Mono mixed test sentences, with the SNR stepping
+      down after each sentence.
 
   """
   for i in range(1, 13):
@@ -272,10 +279,54 @@ def recognize_all_spin(all_wavs: List[str],
 # These are the structures returned by the Cloud Spech-to-Text API
 
 
+def find_sentence_boundaries(spin_truth_names) -> Tuple[list[int],
+                                                        np.ndarray]:
+  """Figure out the inter-sentence boundaries of each 
+  sentence in all lists.  Sum the absolute value of each
+  waveform, filter this to get an envelope, then look for the
+  minimum.
+
+  Return a list of sample numbers.
+  """
+  # Figure out the maximum length
+  max_len = 0
+  for i in range(12):
+    with fsspec.open(spin_truth_names[i], 'rb') as fp:
+      _, audio_data = wavfile.read(fp)
+      max_len = max(max_len, len(audio_data))
+  # Now sum the absolute value of each of the 12 waveforms.
+  all_audio = np.zeros(max_len, float)
+  for i in range(12):
+    with fsspec.open(spin_truth_names[i], 'rb') as fp:
+      _, audio_data = wavfile.read(fp)
+      all_audio[:len(audio_data)] = (all_audio[:len(audio_data)] +
+                                     np.abs(audio_data))
+
+  # Now filter this signal to snmooth it.
+  b, a = signal.butter(4, 0.00005)
+  envelope = signal.filtfilt(b, a, all_audio, padlen=150)
+  envelope = signal.filtfilt(b, a, envelope, padlen=150)
+
+  def find_min(y, start, stop):
+    start_sample = int(start)
+    end_sample = int(stop)
+    # plt.plot(y[start_sample:end_sample])
+    i = np.argmin(y[start_sample:end_sample]) + start_sample
+    return i
+
+  # Look for the minimum in each approximate range.
+  splits = np.array([0.2, 0.3, 0.5, 0.7, 0.9, 1.1])*1e6
+  breaks = [0]
+  for i in range(5):
+    breaks.append(find_min(envelope, splits[i], splits[i+1]))
+  breaks.append(max_len)
+
+  return breaks, all_audio
 
 #################### SPIN TESTS ############################
 
-# Pages 111 and 112 of this PDF: https://etda.libraries.psu.edu/files/final_submissions/5788
+# Pages 111 and 112 of this PDF:
+# https://etda.libraries.psu.edu/files/final_submissions/5788
 
 key_word_list = """
 L 0 S 0  white silk jacket any shoes
@@ -370,10 +421,11 @@ def word_alternatives(words) -> List[str]:
   return [words,]
 
 
-def ingest_spin_keyword_lists(key_word_list) -> Dict[Tuple[int, int], 
+def ingest_spin_keyword_lists(key_word_list) -> Dict[Tuple[int, int],
                                                      List[List[str]]]:
   """Convert the text from the big string above into a list of key words 
-  (and alternatives) that describe the expected answers from a SPIN test."""
+  (and alternatives) that describe the expected answers from a SPIN test.
+  """
   all_keyword_dict = {}
   for line in key_word_list:
     line = line.strip().lower()
@@ -411,10 +463,9 @@ class SpinSentence:
 
 spin_snrs = [25, 20, 15, 10, 5, 0]
 
-def create_ground_truth(spin_truth_names,
-                        true_transcripts: SpinFileTranscripts) -> List[List[SpinSentence]]:
-  all_files = list(spin_truth_names)
-
+def create_ground_truth(
+    spin_truth_names: List[str],
+    true_transcripts: SpinFileTranscripts) -> List[List[SpinSentence]]:
   ground_truths = []
   for list_number in range(12):
     filename = f'Clean List {list_number+1}.wav'
@@ -423,17 +474,20 @@ def create_ground_truth(spin_truth_names,
     for snr_number, snr in enumerate(spin_snrs):
       print(f'Processing {filename} with SNR #{snr_number}')
       snr = spin_snrs[snr_number]
-      if not true_transcripts[filename].results[snr_number].alternatives:
-        # raise ValueError(f'No alternatives for list {list_number} snr {snr}')
-        print(f'  Skipping an empty result for list {list_number} snr {snr}')
+      alternatives = true_transcripts[filename].results[snr_number].alternatives
+      if not alternatives:
+        print(f'  Skipping an empty result for list {list_number} '
+              f'snr {snr}')
         skip += 1
-      elif true_transcripts[filename].results[snr_number].alternatives[0].transcript == 'bring it to':
-        print(f'  Skipping an extraneous result for list {list_number} snr {snr}')
+      elif alternatives[0].transcript == 'bring it to':
+        print(f'  Skipping an extraneous result for list {list_number} '
+              f'snr {snr}')
         skip += 1
-      elif list_number == 4 and true_transcripts[filename].results[snr_number].alternatives[0].transcript == 'finish':
-        # Not sure why there is a whole bunch of reco before the words start in Clean 5.
+      elif list_number == 4 and alternatives[0].transcript == 'finish':
+        # Not sure why there is a whole bunch of reco before the
+        # words start in Clean 5.
         skip += 1
-      one_result = true_transcripts[filename].results[snr_number+skip].alternatives[0]
+      one_result = alternatives[0]
       transcript = one_result.transcript
       all_words = [r.word.lower() for r in one_result.words]
       start_times = [parse_time(r.start_offset) for r in one_result.words]
@@ -441,7 +495,8 @@ def create_ground_truth(spin_truth_names,
 
       # if list_number == 1 and snr_number == 0:
       #   print(one_result)
-      sentences.append(SpinSentence(transcript, all_keyword_dict[list_number, snr_number],
+      sentences.append(SpinSentence(transcript,
+                                    all_keyword_dict[list_number, snr_number],
                                     all_words,
                                     min(start_times), max(end_times), snr))
     assert len(sentences) == len(spin_snrs)
@@ -469,7 +524,8 @@ def words_in_trial(recognized_words: List[RecogResult],
   start_time -= tolerance
   end_time += tolerance
   # print(recognized_words[0].keys())
-  words = [r.word for r in recognized_words if r.end_time >= start_time and r.start_time <= end_time]
+  words = [r.word for r in recognized_words
+           if r.end_time >= start_time and r.start_time <= end_time]
   # Remove all but word characters (not punctuation)
   words = [re.sub(r'[^\w]', '', word.lower()) for word in words]
   return words
@@ -501,7 +557,6 @@ def score_word_list(true_words: List[List[str]],
 def score_all_tests(snrs: List[float], ground_truths, reco_results,
                     debug=False):
   num_lists = len(ground_truths)
-  num_snrs = len(snrs)
   num_keywords = 5
 
   correct_counts = []
@@ -509,33 +564,36 @@ def score_all_tests(snrs: List[float], ground_truths, reco_results,
     correct_count = 0
     for list_num in range(num_lists):
       true_words = ground_truths[list_num][snr_num].key_word_list
-      recognized_words = words_in_trial(reco_results[list_num],
-                                        ground_truths[list_num][snr_num].start_time,
-                                        ground_truths[list_num][snr_num].end_time)
+      recognized_words = words_in_trial(
+        reco_results[list_num],
+        ground_truths[list_num][snr_num].start_time,
+        ground_truths[list_num][snr_num].end_time)
       correct_this_trial = score_word_list(true_words, recognized_words,
                                            max_count=5)
       correct_count += correct_this_trial
       if debug:
-        print(f'{snr}: True words: {true_words}, recognized words: {recognized_words}', correct_this_trial)
+        print(f'{snr}: True words: {true_words}, '
+              f'recognized words: {recognized_words}', correct_this_trial)
     correct_counts.append(correct_count)
-  correct_frac = np.asarray(correct_counts, dtype=float) / (num_keywords*num_lists)
+  correct_frac = np.asarray(correct_counts,
+                            dtype=float) / (num_keywords*num_lists)
   return correct_frac
 
 
 ###### LOGISTIC Functions ####
-# Code and explanation from https://www.linkedin.com/pulse/how-fit-your-data-logistic-function-python-carlos-melus/
+# Code and explanation from
+# https://www.linkedin.com/pulse/how-fit-your-data-logistic-function-python-carlos-melus/
 
-from scipy.optimize import curve_fit
 
 def logistic_curve(x, a, b, c, d):
-    """
-    Logistic function with parameters a, b, c, d
-    a is the curve's maximum value (top asymptote)
-    b is the curve's minimum value (bottom asymptote)
-    c is the logistic growth rate or steepness of the curve
-    d is the x value of the sigmoid's midpoint
-    """
-    return ((a-b) / (1 + np.exp(-c * (x - d)))) + b
+  """
+  Logistic function with parameters a, b, c, d
+  a is the curve's maximum value (top asymptote)
+  b is the curve's minimum value (bottom asymptote)
+  c is the logistic growth rate or steepness of the curve
+  d is the x value of the sigmoid's midpoint
+  """
+  return ((a-b) / (1 + np.exp(-c * (x - d)))) + b
 
 def psychometric_curve(x, c, d):
   """Like the logistic curve above, but the output is always >= 0.0 and <= 1.0.
