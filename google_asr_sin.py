@@ -555,10 +555,12 @@ def compute_quicksin_truth(
   spin_file_names = [f.full_name for f in spin_file_names]
   spin_truth_names = [f for f in spin_file_names if 'Clean' in f]
   assert spin_truth_names, f'Could not find clean speech files in {wav_dir}.'
-
+  print(f'Found {len(spin_truth_names)} QuickSIN lists to process.')
   if sentence_breaks is None:
+    print('Finding sentence boundaries...')
     sentence_breaks, _ = find_sentence_boundaries(spin_truth_names)
 
+  print('Transcribing the QuickSIN WAV files.')
   model = 'latest_long'
   asr_engine = RecognitionEngine()
   asr_engine.CreateSpeechClient(project_id, model)
@@ -566,6 +568,7 @@ def compute_quicksin_truth(
 
   true_transcripts = recognize_all_spin(spin_truth_names, asr_engine)
 
+  print('Formatting the QuickSIN Ground Truth.')
   spin_ground_truths = format_quicksin_truth(true_transcripts, 
                                              sentence_breaks,
                                              snr_list)
