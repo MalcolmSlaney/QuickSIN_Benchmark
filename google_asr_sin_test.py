@@ -6,6 +6,9 @@ import re
 from absl.testing import absltest
 import contextlib
 import fsspec
+import numpy as np
+from scipy.optimize import curve_fit
+
 from typing import Optional
 
 # import numpy as np
@@ -32,7 +35,7 @@ def quickstart_v2(
 
   # Reads a file as bytes
   with open(audio_file, 'rb') as f:
-      content = f.read()
+    content = f.read()
 
   config = cloud_speech.RecognitionConfig(
       auto_decoding_config=cloud_speech.AutoDetectDecodingConfig(),
@@ -41,7 +44,7 @@ def quickstart_v2(
   )
 
   request = cloud_speech.RecognizeRequest(
-      recognizer=f"projects/{project_id}/locations/global/recognizers/_",
+      recognizer=f'projects/{project_id}/locations/global/recognizers/_',
       config=config,
       content=content,
   )
@@ -50,7 +53,7 @@ def quickstart_v2(
   response = client.recognize(request=request)
 
   for result in response.results:
-      print(f"Transcript: {result.alternatives[0].transcript}")
+    print(f'Transcript: {result.alternatives[0].transcript}')
 
   return response
 
@@ -68,17 +71,17 @@ def transcribe_chirp(
   )
 
   # Reads a file as bytes
-  with open(audio_file, "rb") as f:
-      content = f.read()
+  with open(audio_file, 'rb') as f:
+    content = f.read()
 
   config = cloud_speech.RecognitionConfig(
       auto_decoding_config=cloud_speech.AutoDetectDecodingConfig(),
-      language_codes=["en-US"],
-      model="chirp",
+      language_codes=['en-US'],
+      model='chirp',
   )
 
   request = cloud_speech.RecognizeRequest(
-      recognizer=f"projects/{project_id}/locations/us-central1/recognizers/_",
+      recognizer=f'projects/{project_id}/locations/us-central1/recognizers/_',
       config=config,
       content=content,
   )
@@ -125,7 +128,8 @@ class GoogleRecognizerTest(absltest.TestCase):
     alternative = response.results[0].alternatives[0]
 
     # Make sure we get the correct transcription and the number of words
-    self.assertEqual(alternative.transcript, 'a huge tapestry hung in her hallway')
+    self.assertEqual(alternative.transcript,
+                     'a huge tapestry hung in her hallway')
     self.assertLen(alternative.words, 7)
 
     # Make sure the word start and end times make sense.
@@ -162,7 +166,8 @@ class GoogleRecognizerTest(absltest.TestCase):
     self.assertEqual(gasr.word_alternatives('foo/bar'), ['foo', 'bar'])
 
     self.assertEqual(gasr.all_keyword_dict[1, 0],
-                     [['tear', 'tara'], ['thin'], ['sheet'], ['yellow'], ['pad']])
+                     [['tear', 'tara'], ['thin'], ['sheet'],
+                      ['yellow'], ['pad']])
 
   def test_ffmpeg_commands(self):
     # https://stackoverflow.com/questions/56045623/how-to-capture-the-stdout-stderr-of-a-unittest-in-a-variable
@@ -170,16 +175,16 @@ class GoogleRecognizerTest(absltest.TestCase):
     with contextlib.redirect_stdout(f):
       gasr.generate_ffmpeg_cmds()
     lines = f.getvalue().split('\n')
-    
-    clean_re = re.compile('Clean List (\d*).wav')
-    babble_re = re.compile('Babble List (\d*).wav')
+
+    clean_re = re.compile(r'Clean List (\d*).wav')
+    babble_re = re.compile(r'Babble List (\d*).wav')
     def match_clean(line: str, match_re) -> Optional[int]:
       if line and len(line.strip()):
         m = match_re.search(line)
         if m:
           return int(m[1])
       return None
-    
+
     # Make sure we produce all 12 "Clean List X.wav" files.
     matches = [match_clean(line, clean_re) for line in lines]
     matches = list(filter(lambda item: item is not None, matches))
@@ -191,9 +196,15 @@ class GoogleRecognizerTest(absltest.TestCase):
     self.assertEqual(matches, list(range(1, 13)))
 
   def test_spin_files(self):
+    score = gasr.score_word_list([['white', 'black'], ['silk'], ['jacket'],
+                                  ['goes'], ['with'], ['any'], ['shoes']],
+                                 ['a', 'black', 'silk', 'jacket'])
+    self.assertEqual(score, 3)
+
     spin_file_names = fsspec.open_files('tests/*.wav')
     spin_file_names = [f.full_name for f in spin_file_names]
 
+    # Make sure we find the right number of clean and babble test files.
     spin_test_names = [f for f in spin_file_names if 'Babble' in f]
     spin_truth_names = [f for f in spin_file_names if 'Clean' in f]
     self.assertLen(list(spin_test_names), 2)
@@ -202,29 +213,70 @@ class GoogleRecognizerTest(absltest.TestCase):
     asr_engine = gasr.RecognitionEngine()
     asr_engine.CreateSpeechClient(GOOGLE_CLOUD_PROJECT, 'long')
     asr_engine.CreateRecognizer(with_timings=True)
-    true_transcripts = gasr.recognize_all_spin(spin_truth_names, asr_engine)
-    self.assertEqual(list(true_transcripts.keys()), 
-                     ['Clean Partial List 1.wav',
-                      'Clean Partial List 2.wav'])
+    reco_transcripts = gasr.recognize_all_spin(spin_truth_names, asr_engine)
 
-    score = gasr.score_word_list([['white', 'black'], ['silk'], ['jacket'], 
-                                  ['goes'], ['with'], ['any'], ['shoes']],
-                                 ['a', 'black', 'silk', 'jacket'])
-    self.assertEqual(score, 3)
+    # Make sure the SPIN files recognition results have the right form.
+    self.assertIsInstance(reco_transcripts, list)
+    self.assertLen(reco_transcripts, len(spin_truth_names))
+    self.assertIsInstance(reco_transcripts[0], list)
+    self.assertIsInstance(reco_transcripts[0][0], gasr.RecogResult)
 
-    list_number = 1
-    transcript = gasr.parse_transcript(
-        true_transcripts[f'Clean Partial List {list_number+1}.wav'])
-    recognized_words = [t.word for t in transcript]
-    # print('Transcript is:', recognized_words)
+    # Create the ground truth (correct words and their timing)
+    spin_ground = gasr.create_spin_truth(reco_transcripts,
+                                         [0, 236105/22050, 419853/22050],
+                                         [20, 10])
+    self.assertLen(spin_ground, 2)  # One for each input file
 
-    # Test recognized words to make sure it contains first sentence's keywords
-    score = gasr.score_word_list(gasr.all_keyword_dict[1, 0], recognized_words)
+    self.assertLen(spin_ground[0], 2)  # Two sentences in partial files #1
+    self.assertLen(spin_ground[1], 2)  # Two sentences in partial files #2
+
+    self.assertIsInstance(spin_ground[0][0], gasr.SpinSentence)
+    self.assertIsInstance(spin_ground[0][1], gasr.SpinSentence)
+    self.assertIsInstance(spin_ground[1][0], gasr.SpinSentence)
+    self.assertIsInstance(spin_ground[1][1], gasr.SpinSentence)
+
+    # Make sure we get the right words from the transcdript
+    found_words = gasr.words_in_trial(reco_transcripts[0], 5, 6, tolerance=0)
+    print(f'Found words are: {found_words}')
+    self.assertEqual(found_words, ['white', 'silk', 'jacket'])
+
+    # Make sure we get more words with a bigger tolerance.
+    found_words = gasr.words_in_trial(reco_transcripts[0], 5, 6, tolerance=1)
+    print(f'Found words are: {found_words}')
+    self.assertEqual(found_words, ['it', 'is', 'a', 'white', 'silk', 'jacket',
+                                   'goes', 'with', 'any', 'shoes'])
+
+    # Make sure we count the number of words right.
+    true_words = spin_ground[0][0].true_word_list
+    score = gasr.score_word_list(true_words, found_words)
     self.assertEqual(score, 5)
 
-    # Test recognized words to make sure it contains second sentence's keywords
-    score = gasr.score_word_list(gasr.all_keyword_dict[1, 1], recognized_words)
-    self.assertEqual(score, 5)
+    # Now look at the wrong list.
+    true_words = spin_ground[0][1].true_word_list
+    score = gasr.score_word_list(true_words, found_words)
+    self.assertEqual(score, 0)
+
+    score = gasr.score_all_tests([20, 10], spin_ground, reco_transcripts,
+                                 debug=True)
+
+
+  def test_logistic_fit(self):
+    t = np.arange(-10, 10, .01)
+
+    a = 1  # fixed in this application
+    b = 0  # Fixed in this application
+    c = 3
+    d = 4
+    data = gasr.logistic_curve(t, a, b, c, d)
+
+    # pylint: disable=unbalanced-tuple-unpacking
+    logistic_params, _ = curve_fit(gasr.psychometric_curve,
+                                            t,
+                                            data,
+                                            ftol=1e-4)
+    est_c, est_d = logistic_params
+    self.assertEqual(c, est_c)
+    self.assertEqual(d, est_d)
 
 if __name__ == '__main__':
   absltest.main()

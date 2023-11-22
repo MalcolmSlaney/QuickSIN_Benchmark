@@ -23,7 +23,7 @@ from google.cloud.speech_v1.types.cloud_speech import RecognizeResponse
 # https://cloud.google.com/speech-to-text/v2/docs/speech-to-text-supported-languages
 
 class RecognitionEngine(object):
-  """A class that provides a nice interface to Google's Cloud
+  """A class that provides a nicer interface to Google's Cloud
   text-to-speech API.
   """
   def __init__(self):
@@ -184,7 +184,7 @@ class RecognitionEngine(object):
       audio_data = audio_file.read()
     return audio_data
 
-
+####### Utilities to Parse Google Recognition Results ########
 @dataclass
 class RecogResult:
   word: str
@@ -227,6 +227,8 @@ def print_all_sentences(results):
       print('No alternatives')
 
 
+####### Utilities to prepare original SPIN waveforms ########
+
 def generate_ffmpeg_cmds():
   """Generate the FFMPEG commands to downsample and rename the
   QuickSIN files. The Google drive data from Matt has these files:
@@ -250,43 +252,46 @@ def generate_ffmpeg_cmds():
     print()
 
 
+####### Organize SPIN recogntion results ########
 
-SpinFileTranscripts = Dict[str, cloud_speech.RecognizeResponse]
+# A list of lists.  Each (final) list is a list of recognition results (words
+# and times). Then a list of these "sentence" lists.
+SpinFileTranscripts = List[List[RecogResult]]
 
 def recognize_all_spin(all_wavs: List[str],
                        asr_engine: RecognitionEngine,
                        debug=False) -> SpinFileTranscripts:
   """Recognize some SPiN sentences using the specified ASR engine.
-  Return the raw Cloud ASR responses in a dictionary keyed by the
+  Return the transcription results in a dictionary keyed by the
   (last part of) the filename."""
-  all_results = {}
+  all_results = []
   for f in all_wavs:
     if 'Calibration' in f:
       continue
-    pretty_file = os.path.basename(f)
+    pretty_file_name = os.path.basename(f)
     if debug:
-      print('Recognizing', pretty_file)
+      print('Recognizing', pretty_file_name)
     resp = asr_engine.RecognizeFile(f, with_timings=True, debug=debug)
     if debug:
-      print(f'{pretty_file}:',)
+      print(f'{pretty_file_name}:',)
       for result in resp.results:
         if result.alternatives:
           print(f'   {result.alternatives[0].transcript}')
         else:
           print('.   ** Empty ASR Result **')
-    all_results[pretty_file] = resp
+    recog_results = parse_transcript(resp)
+    all_results.append(recog_results)
   return all_results
-# These are the structures returned by the Cloud Spech-to-Text API
 
 
-def find_sentence_boundaries(spin_truth_names) -> Tuple[list[int],
-                                                        np.ndarray]:
+def find_sentence_boundaries(
+    spin_truth_names: List[str]) -> Tuple[list[int], np.ndarray]:
   """Figure out the inter-sentence boundaries of each 
-  sentence in all lists.  Sum the absolute value of each
+  sentence in all lists. Do this by summing the absolute value of each
   waveform, filter this to get an envelope, then look for the
-  minimum.
+  minimums.
 
-  Return a list of sample numbers.
+  Return a list of sample numbers indicating the midpoint between sentences.
   """
   # Figure out the maximum length
   max_len = 0
@@ -421,13 +426,13 @@ def word_alternatives(words) -> List[str]:
   return [words,]
 
 
-def ingest_spin_keyword_lists(key_word_list) -> Dict[Tuple[int, int],
-                                                     List[List[str]]]:
+def ingest_spin_keyword_lists(word_list: str) -> Dict[Tuple[int, int],
+                                                      List[List[str]]]:
   """Convert the text from the big string above into a list of key words 
   (and alternatives) that describe the expected answers from a SPIN test.
   """
-  all_keyword_dict = {}
-  for line in key_word_list:
+  keyword_dict = {}
+  for line in word_list:
     line = line.strip().lower()
     if not line: continue
     list_number = int(line[1:3])
@@ -438,33 +443,70 @@ def ingest_spin_keyword_lists(key_word_list) -> Dict[Tuple[int, int],
     if len(key_list) != 5:
       print(f'Have too many words in L{list_number} S{sentence_number}:',
             key_list)
-    all_keyword_dict[list_number, sentence_number] = key_list
-  return all_keyword_dict
+    keyword_dict[list_number, sentence_number] = key_list
+  return keyword_dict
 
 all_keyword_dict = ingest_spin_keyword_lists(key_word_list)
 
+######## Recognize the SPIN waveforms and calculate all word timings ##########
 
 @dataclass
 class SpinSentence:
   """A structure that describes one SPiN sentence, with the transcript,
   individual words, the sentence start and end time, and the SNR.
 
-  There are six SPiN sentences per list, one per SNR."""
-  parse_transcript: str
-  key_word_list: List[List[str]]  # List of words and their alternatives
-  words: list[str]
+  There are six SPiN sentences per list, one per SNR.
+  """
+  sentence_words: List[str]
+  true_word_list: List[List[str]]  # List of words and their alternatives
+  # words: list[str]
   start_time: float
   end_time: float
-  snr: float
+  snr: float  # This sentence's test SNR
 
 
-# Organize the clean speech transcripts.  Each 60s becomes a list of recognized
-# sentences.  Return a list of list of sentences.
+# Organize the clean speech transcripts.  Each 60s wavedform becomes a list of
+# recognized sentences.  Return a list of list of sentences.
 
-spin_snrs = [25, 20, 15, 10, 5, 0]
+spin_snrs = (25, 20, 15, 10, 5, 0)
 
-def create_ground_truth(
-    spin_truth_names: List[str],
+def create_spin_truth(
+    spin_transcripts: SpinFileTranscripts,  # List of List of RecogResults
+    sentence_breaks: List[float],  # Times in seconds
+    snr_list: Tuple[float] = spin_snrs,) -> List[List[SpinSentence]]:
+  """Parse the recognition results and produce a List (of sentences at different
+  SNRs).  Return a list of 12 SPIN lists, each list containing the 6 SPIN 
+  sentences at the different SNRs.
+  """
+  assert len(spin_transcripts) > 0
+  # assert len(sentence_breaks) == 7
+  # assert len(snr_list) == 6
+  spin_results = []
+  # Iterate through the lists (each list contains 6 different sentences)
+  for list_number, clean_transcript in enumerate(spin_transcripts):
+    sentences = []
+    for snr_number, snr in enumerate(snr_list):
+      sentence_start_time = sentence_breaks[snr_number]
+      sentence_end_time = sentence_breaks[snr_number+1]
+      sentence_words = [w for w in clean_transcript
+                        if (w.start_time > sentence_start_time and
+                            w.end_time < sentence_end_time)]
+      assert len(sentence_words) > 0, (f'No words found for list {list_number},'
+                                       f' snr #{snr_number}')
+      recognized_words = [w.word for w in sentence_words]
+      sentence = SpinSentence(recognized_words,
+                              all_keyword_dict[list_number, snr_number],
+                              min(*[w.start_time for w in sentence_words]),
+                              max(*[w.start_time for w in sentence_words]),
+                              snr
+                              )
+      sentences.append(sentence)
+    spin_results.append(sentences)
+  return spin_results
+
+
+def xx_create_ground_truth(
+    # spin_truth_names: List[str],
     true_transcripts: SpinFileTranscripts) -> List[List[SpinSentence]]:
   ground_truths = []
   for list_number in range(12):
@@ -489,7 +531,7 @@ def create_ground_truth(
         skip += 1
       one_result = alternatives[0]
       transcript = one_result.transcript
-      all_words = [r.word.lower() for r in one_result.words]
+      # all_words = [r.word.lower() for r in one_result.words]
       start_times = [parse_time(r.start_offset) for r in one_result.words]
       end_times = [parse_time(r.end_offset) for r in one_result.words]
 
@@ -497,13 +539,13 @@ def create_ground_truth(
       #   print(one_result)
       sentences.append(SpinSentence(transcript,
                                     all_keyword_dict[list_number, snr_number],
-                                    all_words,
+                                    # all_words,
                                     min(start_times), max(end_times), snr))
     assert len(sentences) == len(spin_snrs)
     ground_truths.append(sentences)
   return ground_truths
 
-def parse_spin_results(all_transcripts) -> List[List[RecogResult]]:
+def xx_parse_spin_results(all_transcripts) -> List[List[RecogResult]]:
   """Using the recognized babble results, Create a list of lists.  One list for
   each of the 12 60s SPiN lists.  For each SPiN list, create a separate list for
   each SNR."""
@@ -518,8 +560,9 @@ def parse_spin_results(all_transcripts) -> List[List[RecogResult]]:
 
 
 def words_in_trial(recognized_words: List[RecogResult],
-                   start_time: float,
-                   end_time: float, tolerance: float = 2.0) -> List[str]:
+                   start_time: float,  # Seconds
+                   end_time: float,    # Seconds
+                   tolerance: float = 2.0) -> List[str]:
   """Pick out the words in the babble mixture that fall within time window."""
   start_time -= tolerance
   end_time += tolerance
@@ -563,7 +606,7 @@ def score_all_tests(snrs: List[float], ground_truths, reco_results,
   for snr_num, snr in enumerate(snrs):
     correct_count = 0
     for list_num in range(num_lists):
-      true_words = ground_truths[list_num][snr_num].key_word_list
+      true_words = ground_truths[list_num][snr_num].true_word_list
       recognized_words = words_in_trial(
         reco_results[list_num],
         ground_truths[list_num][snr_num].start_time,
@@ -572,8 +615,10 @@ def score_all_tests(snrs: List[float], ground_truths, reco_results,
                                            max_count=5)
       correct_count += correct_this_trial
       if debug:
-        print(f'{snr}: True words: {true_words}, '
-              f'recognized words: {recognized_words}', correct_this_trial)
+        print(f'SNR {snr}:')
+        print(f'  Expected words: {true_words}')
+        print(f'  Recognized words: {recognized_words}')
+        print(f'  Correct count is {correct_this_trial}')
     correct_counts.append(correct_count)
   correct_frac = np.asarray(correct_counts,
                             dtype=float) / (num_keywords*num_lists)
@@ -585,7 +630,8 @@ def score_all_tests(snrs: List[float], ground_truths, reco_results,
 # https://www.linkedin.com/pulse/how-fit-your-data-logistic-function-python-carlos-melus/
 
 
-def logistic_curve(x, a, b, c, d):
+def logistic_curve(x: np.ndarray,
+                   a: float, b: float, c:float, d: float) -> float:
   """
   Logistic function with parameters a, b, c, d
   a is the curve's maximum value (top asymptote)
