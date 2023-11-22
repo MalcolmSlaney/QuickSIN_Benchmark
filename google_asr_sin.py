@@ -495,7 +495,9 @@ def format_quicksin_truth(
                         if (w.start_time > sentence_start_time and
                             w.end_time < sentence_end_time)]
       assert len(sentence_words) > 0, (f'No words found for list {list_number},'
-                                       f' snr #{snr_number}')
+                                       f' snr #{snr_number} between '
+                                       f'{sentence_start_time}s and '
+                                       f'{sentence_end_time}s.')
       recognized_words = [w.word for w in sentence_words]
       sentence = SpinSentence(recognized_words,
                               all_keyword_dict[list_number, snr_number],
@@ -560,8 +562,11 @@ def compute_quicksin_truth(
   if sentence_breaks is None:
     print('Finding sentence boundaries...')
     sentence_breaks, _ = find_sentence_boundaries(spin_truth_names)
-    print('Sentence breaks are:', sentence_breaks)
     
+    # TODO(malcolm): Perhaps this should be done in find_sentence_boundaries?!?
+    sentence_breaks = [b/22050.0 for b in sentence_breaks]
+    print('Sentence breaks are:', sentence_breaks)
+
   print('Transcribing the QuickSIN WAV files....')
   model = 'latest_long'
   asr_engine = RecognitionEngine()
