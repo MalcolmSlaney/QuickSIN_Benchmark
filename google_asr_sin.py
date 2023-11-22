@@ -1,9 +1,10 @@
 """Test Google Cloud ASR offerings on the Speech in Noise (SPIN) test."""
 
+import json
 import re
-from typing import List, Dict, Tuple, Union
+from typing import List, Dict, Optional, Tuple, Union
 
-from dataclasses import dataclass
+import dataclasses
 from scipy import signal
 from scipy.io import wavfile
 # from scipy.optimize import curve_fit
@@ -185,7 +186,7 @@ class RecognitionEngine(object):
     return audio_data
 
 ####### Utilities to Parse Google Recognition Results ########
-@dataclass
+@dataclasses.dataclass
 class RecogResult:
   word: str
   start_time: float
@@ -221,7 +222,7 @@ def parse_transcript(response:
     # print(words[-1])
   return words
 
-def print_all_sentences(results):
+def print_all_sentences(results: cloud_speech.RecognizeResponse):
   for r in results:
     if r.alternatives:
       print(r.alternatives[0].transcript)
@@ -452,7 +453,7 @@ all_keyword_dict = ingest_spin_keyword_lists(key_word_list)
 
 ######## Recognize the SPIN waveforms and calculate all word timings ##########
 
-@dataclass
+@dataclasses.dataclass
 class SpinSentence:
   """A structure that describes one SPiN sentence, with the transcript,
   individual words, the sentence start and end time, and the SNR.
@@ -472,17 +473,17 @@ class SpinSentence:
 
 spin_snrs = (25, 20, 15, 10, 5, 0)
 
-def create_spin_truth(
+def format_quicksin_truth(
     spin_transcripts: SpinFileTranscripts,  # List of List of RecogResults
     sentence_breaks: List[float],  # Times in seconds
-    snr_list: Tuple[float] = spin_snrs,) -> List[List[SpinSentence]]:
+    snr_list: Tuple[float] = spin_snrs) -> List[List[SpinSentence]]:
   """Parse the recognition results and produce a List (of sentences at different
   SNRs).  Return a list of 12 SPIN lists, each list containing the 6 SPIN 
   sentences at the different SNRs.
   """
   assert len(spin_transcripts) > 0
-  # assert len(sentence_breaks) == 7
-  # assert len(snr_list) == 6
+  # assert len(sentence_breaks) == 7  # Not 7 for testing
+  # assert len(snr_list) == 6         # Not 6 for testing
   spin_results = []
   # Iterate through the lists (each list contains 6 different sentences)
   for list_number, clean_transcript in enumerate(spin_transcripts):
@@ -505,6 +506,70 @@ def create_spin_truth(
       sentences.append(sentence)
     spin_results.append(sentences)
   return spin_results
+
+
+def print_spin_ground_truth(truth: List[List[SpinSentence]]):
+  for spin_i, spin_list in enumerate(truth):
+    print(f'\nQuickSIN list {spin_i}')
+    for sentence in spin_list:
+      print(f'SNR {sentence.snr} '
+            f'from {sentence.start_time}s to {sentence.end_time}s:',
+            ' '.join(sentence.sentence_words)
+            )
+
+
+def save_ground_truth(truth: List[List[SpinSentence]], filename: str):
+  """Save the QuickSIN ground truth into a JSON file so we don't have
+  to compute it again."""
+  class EnhancedJSONEncoder(json.JSONEncoder):
+    def default(self, o):
+      if dataclasses.is_dataclass(o):
+        return dataclasses.asdict(o)
+      return super().default(o)
+
+  with fsspec.open(filename, 'w') as fp:
+    json.dump(truth, fp, cls=EnhancedJSONEncoder)
+
+
+def load_ground_truth(filename: str) -> List[List[SpinSentence]]:
+  """Load the precomputed QuickSIN ground truth from a file."""
+  with fsspec.open(filename, 'r') as fp:
+    truth = json.load(fp)
+  for i in range(len(truth)):        # Nominally 12, except during testing
+    for s in range(len(truth[i])):   # Nominally 6, except during testing
+      truth[i][s] = SpinSentence(**truth[i][s])
+  return truth
+
+
+def compute_quicksin_truth(
+    wav_dir: str,
+    project_id: str,
+    sentence_breaks: Optional[List[float]] = None,
+    snr_list: Tuple[float] = spin_snrs) -> List[List[SpinSentence]]:
+  """Create the ground truth for a SPIN test. 
+  Process all the clean speech files to figure out the start and stop of each
+  sentence.  Combine with the keyword list to create a list (by QuickSin list) 
+  of lists of sentences (one sentence per test SNR).
+  """
+  spin_file_names = fsspec.open_files(os.path.join(wav_dir, '*.wav'))
+  spin_file_names = [f.full_name for f in spin_file_names]
+  spin_truth_names = [f for f in spin_file_names if 'Clean' in f]
+  assert spin_truth_names, f'Could not find clean speech files in {wav_dir}.'
+
+  if sentence_breaks is None:
+    sentence_breaks, _ = find_sentence_boundaries(spin_truth_names)
+
+  model = 'latest_long'
+  asr_engine = RecognitionEngine()
+  asr_engine.CreateSpeechClient(project_id, model)
+  asr_engine.CreateRecognizer(with_timings=True)
+
+  true_transcripts = recognize_all_spin(spin_truth_names, asr_engine)
+
+  spin_ground_truths = format_quicksin_truth(true_transcripts, 
+                                             sentence_breaks,
+                                             snr_list)
+  return spin_ground_truths
 
 
 def xx_create_ground_truth(

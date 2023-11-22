@@ -222,9 +222,8 @@ class GoogleRecognizerTest(absltest.TestCase):
     self.assertIsInstance(reco_transcripts[0][0], gasr.RecogResult)
 
     # Create the ground truth (correct words and their timing)
-    spin_ground = gasr.create_spin_truth(reco_transcripts,
-                                         [0, 236105/22050, 419853/22050],
-                                         [20, 10])
+    spin_ground = gasr.format_quicksin_truth(
+      reco_transcripts, [0, 236105/22050, 419853/22050], [20, 10])
     self.assertLen(spin_ground, 2)  # One for each input file
 
     self.assertLen(spin_ground[0], 2)  # Two sentences in partial files #1
@@ -258,6 +257,23 @@ class GoogleRecognizerTest(absltest.TestCase):
 
     score = gasr.score_all_tests([20, 10], spin_ground, reco_transcripts,
                                  debug=True)
+
+  def test_create_all_spin_truth(self):
+    truths = gasr.compute_quicksin_truth(
+      'tests', GOOGLE_CLOUD_PROJECT, [0, 236105/22050, 419853/22050], [25, 20])
+    self.assertIsInstance(truths, list)
+    for li, l in enumerate(truths):
+      self.assertIsInstance(l, list,  f'Truth list {li} is not a list')
+      for si, s in enumerate(l):
+        self.assertIsInstance(s, gasr.SpinSentence, 
+                              f'Truth list {li}, sentence {si} is not a '
+                              f'SpinSentence but a {type(s)}')
+
+    json_file = 'truth_test.json'
+    gasr.save_ground_truth(truths, json_file)
+
+    new_truths = gasr.load_ground_truth(json_file)
+    self.assertEqual(truths, new_truths)
 
   def test_logistic_fit(self):
     t = np.arange(-10, 10, .01)
