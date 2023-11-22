@@ -259,7 +259,6 @@ class GoogleRecognizerTest(absltest.TestCase):
     score = gasr.score_all_tests([20, 10], spin_ground, reco_transcripts,
                                  debug=True)
 
-
   def test_logistic_fit(self):
     t = np.arange(-10, 10, .01)
 
