@@ -206,7 +206,9 @@ def parse_transcript(response:
     try:
       # For reasons I don't understand sometimes a results is missing the
       # alternatives
-      _ = len(a_result.alternatives) > 0
+      l = len(a_result.alternatives) > 0
+      if not l:
+        continue
     except:
       continue
     for word in a_result.alternatives[0].words:
