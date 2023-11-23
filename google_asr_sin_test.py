@@ -270,7 +270,7 @@ class GoogleRecognizerTest(absltest.TestCase):
     for li, l in enumerate(truths):
       self.assertIsInstance(l, list,  f'Truth list {li} is not a list')
       for si, s in enumerate(l):
-        self.assertIsInstance(s, gasr.SpinSentence, 
+        self.assertIsInstance(s, gasr.SpinSentence,
                               f'Truth list {li}, sentence {si} is not a '
                               f'SpinSentence but a {type(s)}')
 

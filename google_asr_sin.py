@@ -4,6 +4,9 @@ import json
 import re
 from typing import List, Dict, Optional, Tuple, Union
 
+from absl import app
+from absl import flags
+
 import dataclasses
 from scipy import signal
 from scipy.io import wavfile
@@ -543,7 +546,7 @@ def load_ground_truth(filename: str) -> List[List[SpinSentence]]:
   return truth
 
 
-number_re = re.compile(' (\d+).wav')
+number_re = re.compile(r' (\d+).wav')
 
 def sort_by_list_number(s: str) -> int:
   m = number_re.search(s)
@@ -585,7 +588,7 @@ def compute_quicksin_truth(
   asr_engine.CreateRecognizer(with_timings=True)
 
   true_transcripts = recognize_all_spin(spin_truth_names, asr_engine)
-  print(f'True transcripts are:', true_transcripts)
+  print('True transcripts are:', true_transcripts)
 
   print('Formatting the QuickSIN Ground Truth....')
   spin_ground_truths = format_quicksin_truth(true_transcripts,
@@ -686,7 +689,7 @@ def score_word_list(true_words: List[List[str]],
     score = min(score, max_count)
   return score
 
-def score_all_tests(snrs: List[float], 
+def score_all_tests(snrs: List[float],
                     ground_truths: List[List[SpinSentence]],
                     reco_results: List[RecogResult],
                     debug=False) -> np.ndarray:
@@ -716,7 +719,8 @@ def score_all_tests(snrs: List[float],
   return correct_frac
 
 
-# Models listed here: https://cloud.google.com/speech-to-text/docs/transcription-model
+# Models listed here:
+# https://cloud.google.com/speech-to-text/docs/transcription-model
 
 all_model_names = ('latest_long',
                    'latest_short',
@@ -732,7 +736,7 @@ all_model_names = ('latest_long',
 
 def score_all_models(
     project_id: str,
-    spin_test_names: List[str], 
+    spin_test_names: List[str],
     ground_truths: List[List[SpinSentence]],
     test_snrs: List[float] = spin_snrs,
     model_names: List[str] = all_model_names) -> Dict[str, np.ndarray]:
@@ -749,7 +753,7 @@ def score_all_models(
     asr_engine.CreateRecognizer()
     babble_transcripts = recognize_all_spin(spin_test_names, asr_engine)
     # Babble_transcripts is a SpinFileTranscripts List[List[RecogResults]]
-    
+
     scores = score_all_tests(test_snrs,
                              ground_truths,
                              babble_transcripts,
@@ -788,3 +792,56 @@ def find_spin_loss(snrs: List[float], scores: np.ndarray) -> float:
                                  ftol=1e-4)
   _, d = logistic_params
   return d
+
+def run_ground_truth(ground_truth_json_file: str, project_id: str):
+  if not os.path.exists(ground_truth_json_file):
+    sin_wav_dir = '/content/drive/MyDrive/Stanford/QuickSIN22/'
+    truths = compute_quicksin_truth(sin_wav_dir, project_id)
+    assert isinstance(truths, list)
+    save_ground_truth(truths, ground_truth_json_file)
+  else:
+    print('Reloading ground truth from', ground_truth_json_file)
+    truths = load_ground_truth(ground_truth_json_file)
+    assert isinstance(truths, list)
+    assert len(truths), 12
+  return truths
+
+def run_score_models(truths, audio_dir: str,
+                     project_id: str) -> Dict[str, np.ndarray]:
+  spin_pattern = os.path.join(audio_dir, '*.wav')
+  spin_file_names = fsspec.open_files(spin_pattern)
+  spin_file_names = [f.full_name for f in spin_file_names]
+  spin_test_names = [f for f in spin_file_names if 'Babble' in f]
+  spin_test_names.sort(key=sort_by_list_number)
+
+  model_frac_scores = score_all_models(project_id,
+                                       spin_test_names,
+                                       truths)
+  print('Model fraction correct scores:', model_frac_scores)
+  return model_frac_scores
+
+
+FLAGS = flags.FLAGS
+
+# Flag names are globally defined!  So in general, we need to be
+# careful to pick names that are unlikely to be used by other libraries.
+# If there is a conflict, we'll get an error at import time.
+flags.DEFINE_string('ground_truth_cache', 'ground_truth.json',
+                    'Where to keep a cache of the QuickSIN ground truth')
+flags.DEFINE_string('audio_dir', './', 'Where to find the QuickSIN .wav files')
+flags.DEFINE_boolean('debug', False, 'Produces debugging output.')
+flags.DEFINE_enum('job', 'running', ['running', 'stopped'], 'Job status.')
+
+
+def main(_):
+  project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
+  assert project_id, 'Can not find GOOGLE_CLOUD_PROJECT.'
+
+  truths = run_ground_truth(FLAGS.ground_truth_cache, project_id)
+
+  model_frac_scores = run_score_models(truths,
+                                       FLAGS.audio_dir,
+                                       project_id)
+
+if __name__ == '__main__':
+  app.run(main)
