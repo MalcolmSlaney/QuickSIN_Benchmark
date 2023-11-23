@@ -265,8 +265,8 @@ def recognize_all_spin(all_wavs: List[str],
                        asr_engine: RecognitionEngine,
                        debug=False) -> SpinFileTranscripts:
   """Recognize some SPiN sentences using the specified ASR engine.
-  Return the transcription results in a dictionary keyed by the
-  (last part of) the filename."""
+  Return a list of the transcription results.  Each recognition result is
+  a list of alternatives, all in RecogResult format."""
   all_results = []
   for f in all_wavs:
     if 'Calibration' in f:
@@ -543,6 +543,14 @@ def load_ground_truth(filename: str) -> List[List[SpinSentence]]:
   return truth
 
 
+number_re = re.compile(' (\d+).wav')
+
+def sort_by_list_number(s: str) -> int:
+  m = number_re.search(s)
+  assert m, f'Could not find list number in {s}'
+  return int(m[1])
+
+
 def compute_quicksin_truth(
     wav_dir: str,
     project_id: str,
@@ -557,12 +565,15 @@ def compute_quicksin_truth(
   spin_file_names = [f.full_name for f in spin_file_names]
   spin_truth_names = [f for f in spin_file_names if 'Clean' in f]
   assert spin_truth_names, f'Could not find clean speech files in {wav_dir}.'
+
+  # Make sure these are all sorted numerically.
+  spin_truth_names.sort(key=sort_by_list_number)
   print(f'Found {len(spin_truth_names)} QuickSIN lists to process.')
 
   if sentence_breaks is None:
     print('Finding sentence boundaries...')
     sentence_breaks, _ = find_sentence_boundaries(spin_truth_names)
-    
+
     # TODO(malcolm): Perhaps this should be done in find_sentence_boundaries?!?
     sentence_breaks = [b/22050.0 for b in sentence_breaks]
     print('Sentence breaks are:', sentence_breaks)
@@ -675,8 +686,10 @@ def score_word_list(true_words: List[List[str]],
     score = min(score, max_count)
   return score
 
-def score_all_tests(snrs: List[float], ground_truths, reco_results,
-                    debug=False):
+def score_all_tests(snrs: List[float], 
+                    ground_truths: List[List[SpinSentence]], 
+                    reco_results: List[RecogResult],
+                    debug=False) -> np.ndarray:
   num_lists = len(ground_truths)
   num_keywords = 5
 
