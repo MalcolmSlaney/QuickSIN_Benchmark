@@ -7,7 +7,7 @@ from typing import List, Dict, Optional, Tuple, Union
 import dataclasses
 from scipy import signal
 from scipy.io import wavfile
-# from scipy.optimize import curve_fit
+from scipy.optimize import curve_fit
 import numpy as np
 import os
 
@@ -687,7 +687,7 @@ def score_word_list(true_words: List[List[str]],
   return score
 
 def score_all_tests(snrs: List[float], 
-                    ground_truths: List[List[SpinSentence]], 
+                    ground_truths: List[List[SpinSentence]],
                     reco_results: List[RecogResult],
                     debug=False) -> np.ndarray:
   num_lists = len(ground_truths)
@@ -716,6 +716,48 @@ def score_all_tests(snrs: List[float],
   return correct_frac
 
 
+# Models listed here: https://cloud.google.com/speech-to-text/docs/transcription-model
+
+all_model_names = ('latest_long',
+                   'latest_short',
+                   # 'command_and_search',
+                   # 'phone_call',
+                   'telephony',
+                   # 'video',
+                   'medical_dictation',
+                   'medical_conversation',
+                   # 'default',
+                   'chirp',
+)
+
+def score_all_models(
+    project_id: str,
+    spin_test_names: List[str], 
+    ground_truths: List[List[SpinSentence]],
+    test_snrs: List[float] = spin_snrs,
+    model_names: List[str] = all_model_names) -> Dict[str, np.ndarray]:
+  """Score all QuickSIN test files (from the spin_test_names argument) against
+  the ground_truths.  Return a dictionary of scores vs. SNRs, keyed by the 
+  model name.
+  """
+  model_scores = {}
+
+  for model_name in model_names:
+    print(f'Model: {model_name}')
+    asr_engine = RecognitionEngine()
+    asr_engine.CreateSpeechClient(project_id, model=model_name)
+    asr_engine.CreateRecognizer()
+    babble_transcripts = recognize_all_spin(spin_test_names, asr_engine)
+    # Babble_transcripts is a SpinFileTranscripts List[List[RecogResults]]
+    
+    scores = score_all_tests(test_snrs,
+                             ground_truths,
+                             babble_transcripts,
+                             debug=True)
+    model_scores[model_name] = scores
+  return model_scores
+
+
 ###### LOGISTIC Functions ####
 # Code and explanation from
 # https://www.linkedin.com/pulse/how-fit-your-data-logistic-function-python-carlos-melus/
@@ -736,3 +778,13 @@ def psychometric_curve(x, c, d):
   """Like the logistic curve above, but the output is always >= 0.0 and <= 1.0.
   """
   return logistic_curve(x, 1, 0, c, d)
+
+
+def find_spin_loss(snrs: List[float], scores: np.ndarray) -> float:
+  #pylint: disable=unbalanced-tuple-unpacking
+  logistic_params, _ = curve_fit(psychometric_curve,
+                                 snrs,
+                                 scores,
+                                 ftol=1e-4)
+  _, d = logistic_params
+  return d

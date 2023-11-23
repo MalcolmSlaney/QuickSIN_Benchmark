@@ -169,6 +169,11 @@ class GoogleRecognizerTest(absltest.TestCase):
                      [['tear', 'tara'], ['thin'], ['sheet'],
                       ['yellow'], ['pad']])
 
+  def test_file_sort(self):
+    files = ['foo 12.wav', 'foo 7.wav', 'foo 3.wav']
+    files.sort(key=gasr.sort_by_list_number)
+    self.assertEqual(files, ['foo 3.wav', 'foo 7.wav', 'foo 12.wav'])
+
   def test_ffmpeg_commands(self):
     # https://stackoverflow.com/questions/56045623/how-to-capture-the-stdout-stderr-of-a-unittest-in-a-variable
     f = io.StringIO()
