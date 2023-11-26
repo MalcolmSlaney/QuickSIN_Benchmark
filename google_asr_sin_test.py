@@ -280,6 +280,16 @@ class GoogleRecognizerTest(absltest.TestCase):
     new_truths = gasr.load_ground_truth(json_file)
     self.assertEqual(truths, new_truths)
 
+  def test_model_results_save(self):
+    test_scores = {'1': np.arange(3), '2': np.arange(1,3)}
+    json_file = 'model_results_test.json'
+    gasr.save_model_results(test_scores, json_file)
+
+    new_scores = gasr.load_model_results(json_file)
+    self.assertLen(new_scores.keys(), 2)
+    np.testing.assert_array_equal(new_scores['1'], test_scores['1'])
+    np.testing.assert_array_equal(new_scores['2'], test_scores['2'])
+
   def test_logistic_fit(self):
     t = np.arange(-10, 10, .01)
 

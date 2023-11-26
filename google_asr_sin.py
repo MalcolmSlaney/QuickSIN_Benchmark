@@ -8,6 +8,7 @@ from absl import app
 from absl import flags
 
 import dataclasses
+import matplotlib.pyplot as plt
 from scipy import signal
 from scipy.io import wavfile
 from scipy.optimize import curve_fit
@@ -213,7 +214,7 @@ def parse_transcript(response:
       l = len(a_result.alternatives) > 0
       if not l:
         continue
-    except:
+    except: # pylint: disable=bare-except
       continue
     for word in a_result.alternatives[0].words:
       # print(f'Processing: {word}')
@@ -291,7 +292,8 @@ def recognize_all_spin(all_wavs: List[str],
 
 
 def find_sentence_boundaries(
-    spin_truth_names: List[str]) -> Tuple[list[int], np.ndarray]:
+    spin_truth_names: List[str],  # File names with clean speech.
+    sentence_boundary_graph: str = '') -> Tuple[List[int], np.ndarray]:
   """Figure out the inter-sentence boundaries of each 
   sentence in all lists. Do this by summing the absolute value of each
   waveform, filter this to get an envelope, then look for the
@@ -303,7 +305,7 @@ def find_sentence_boundaries(
   max_len = 0
   for i in range(12):
     with fsspec.open(spin_truth_names[i], 'rb') as fp:
-      _, audio_data = wavfile.read(fp)
+      audio_fs, audio_data = wavfile.read(fp)
       max_len = max(max_len, len(audio_data))
   # Now sum the absolute value of each of the 12 waveforms.
   all_audio = np.zeros(max_len, float)
@@ -321,16 +323,27 @@ def find_sentence_boundaries(
   def find_min(y, start, stop):
     start_sample = int(start)
     end_sample = int(stop)
-    # plt.plot(y[start_sample:end_sample])
     i = np.argmin(y[start_sample:end_sample]) + start_sample
-    return i
+    return float(i)
 
   # Look for the minimum in each approximate range.
-  splits = np.array([0.2, 0.3, 0.5, 0.7, 0.9, 1.1])*1e6
+  splits = np.array([0.2, 0.3, 0.5, 0.7, 0.9, 1.1])*1e6  # This is in samples.
   breaks = [0]
   for i in range(5):
-    breaks.append(find_min(envelope, splits[i], splits[i+1]))
-  breaks.append(max_len)
+    breaks.append(find_min(envelope, splits[i], splits[i+1])/audio_fs)
+  breaks.append(max_len/audio_fs)
+
+  # Plot the results
+  if sentence_boundary_graph:
+    plt.clf()
+    plt.plot(np.arange(len(all_audio))/float(audio_fs), all_audio)
+    plt.xlabel('Time (s)')
+    plt.ylabel('Average Audio Level')
+    plt.title('Sentence Boundaries from Average Amplitude')
+    current_axis = plt.axis()
+    for b in breaks:
+      plt.plot([b, b], current_axis[2:], '--')
+    plt.savefig(sentence_boundary_graph)
 
   return breaks, all_audio
 
@@ -478,22 +491,23 @@ spin_snrs = (25, 20, 15, 10, 5, 0)
 
 def format_quicksin_truth(
     spin_transcripts: SpinFileTranscripts,  # List of List of RecogResults
-    sentence_breaks: List[float],  # Times in seconds
+    sentence_breaks: List[float],           # Times in seconds
     snr_list: Tuple[float] = spin_snrs) -> List[List[SpinSentence]]:
   """Parse the recognition results and produce a List (of sentences at different
   SNRs).  Return a list of 12 SPIN lists, each list containing the 6 SPIN 
   sentences at the different SNRs.
   """
   assert len(spin_transcripts) > 0
-  # assert len(sentence_breaks) == 7  # Not 7 for testing
-  # assert len(snr_list) == 6         # Not 6 for testing
+  # assert len(sentence_breaks) == 7  # Nominally 7 except when testing
+  # assert len(snr_list) == 6         # Nominally 6 except when testing
   spin_results = []
   # Iterate through the lists (each list contains 6 different sentences)
+  print('Sentence breaks are at:', sentence_breaks)
   for list_number, clean_transcript in enumerate(spin_transcripts):
     sentences = []
     for snr_number, snr in enumerate(snr_list):
-      sentence_start_time = sentence_breaks[snr_number]
-      sentence_end_time = sentence_breaks[snr_number+1]
+      sentence_start_time = float(sentence_breaks[snr_number])
+      sentence_end_time = float(sentence_breaks[snr_number+1])
       sentence_words = [w for w in clean_transcript
                         if (w.start_time > sentence_start_time and
                             w.end_time < sentence_end_time)]
@@ -540,7 +554,10 @@ def load_ground_truth(filename: str) -> List[List[SpinSentence]]:
   """Load the precomputed QuickSIN ground truth from a file."""
   with fsspec.open(filename, 'r') as fp:
     truth = json.load(fp)
+  print('Loaded ground truth is:', truth)
+  assert isinstance(truth, list)
   for i in range(len(truth)):        # Nominally 12, except during testing
+    assert isinstance(truth[i], list)
     for s in range(len(truth[i])):   # Nominally 6, except during testing
       truth[i][s] = SpinSentence(**truth[i][s])
   return truth
@@ -558,7 +575,8 @@ def compute_quicksin_truth(
     wav_dir: str,
     project_id: str,
     sentence_breaks: Optional[List[float]] = None,
-    snr_list: Tuple[float] = spin_snrs) -> List[List[SpinSentence]]:
+    snr_list: Tuple[float] = spin_snrs,
+    sentence_boundary_graph: str = '') -> List[List[SpinSentence]]:
   """Create the ground truth for a SPIN test. 
   Process all the clean speech files to figure out the start and stop of each
   sentence.  Combine with the keyword list to create a list (by QuickSin list) 
@@ -575,20 +593,22 @@ def compute_quicksin_truth(
 
   if sentence_breaks is None:
     print('Finding sentence boundaries...')
-    sentence_breaks, _ = find_sentence_boundaries(spin_truth_names)
-
-    # TODO(malcolm): Perhaps this should be done in find_sentence_boundaries?!?
-    sentence_breaks = [b/22050.0 for b in sentence_breaks]
+    sentence_breaks, _ = find_sentence_boundaries(spin_truth_names,
+                                                  sentence_boundary_graph)
     print('Sentence breaks are:', sentence_breaks)
 
-  print('Transcribing the QuickSIN WAV files....')
   model = 'latest_long'
+  print(f'Transcribing the QuickSIN WAV files with {model} model....')
   asr_engine = RecognitionEngine()
   asr_engine.CreateSpeechClient(project_id, model)
   asr_engine.CreateRecognizer(with_timings=True)
 
   true_transcripts = recognize_all_spin(spin_truth_names, asr_engine)
-  print('True transcripts are:', true_transcripts)
+  print('True transcripts are:')
+  for l in range(len(true_transcripts)):
+    for s in range(len(true_transcripts[l])):
+      print(f'List {l}, Sentence {s}:', true_transcripts[l][s])
+
 
   print('Formatting the QuickSIN Ground Truth....')
   spin_ground_truths = format_quicksin_truth(true_transcripts,
@@ -762,6 +782,28 @@ def score_all_models(
   return model_scores
 
 
+def save_model_results(scores: Dict[str, np.ndarray], filename: str):
+  """Save the QuickSIN results for all models into a JSON file so we don't have
+  to compute it again."""
+  class NumpyArrayEncoder(json.JSONEncoder):
+    def default(self, o):
+      if isinstance(o, np.ndarray):
+        return o.tolist()
+      return json.JSONEncoder.default(self, o)
+
+  with fsspec.open(filename, 'w') as fp:
+    json.dump(scores, fp, cls=NumpyArrayEncoder)
+
+
+def load_model_results(filename: str) -> Dict[str, np.ndarray]:
+  """Load the precomputed QuickSIN results from a file."""
+  with fsspec.open(filename, 'r') as fp:
+    results = json.load(fp)
+  for k in results:
+    results[k] = np.asarray(results[k])
+  return results
+
+
 ###### LOGISTIC Functions ####
 # Code and explanation from
 # https://www.linkedin.com/pulse/how-fit-your-data-logistic-function-python-carlos-melus/
@@ -793,10 +835,17 @@ def find_spin_loss(snrs: List[float], scores: np.ndarray) -> float:
   _, d = logistic_params
   return d
 
-def run_ground_truth(ground_truth_json_file: str, project_id: str):
+def run_ground_truth(ground_truth_json_file: str,
+                     project_id: str,
+                     sin_wav_dir: str = ('/content/drive/MyDrive/'
+                                         'Stanford/QuickSIN22/'),
+                     sentence_boundary_graph: str = '',
+                    ):
   if not os.path.exists(ground_truth_json_file):
-    sin_wav_dir = '/content/drive/MyDrive/Stanford/QuickSIN22/'
-    truths = compute_quicksin_truth(sin_wav_dir, project_id)
+    truths = compute_quicksin_truth(
+      sin_wav_dir,
+      project_id,
+      sentence_boundary_graph=sentence_boundary_graph)
     assert isinstance(truths, list)
     save_ground_truth(truths, ground_truth_json_file)
   else:
@@ -806,18 +855,25 @@ def run_ground_truth(ground_truth_json_file: str, project_id: str):
     assert len(truths), 12
   return truths
 
-def run_score_models(truths, audio_dir: str,
+def run_score_models(models_json_file: str,
+                     truths, audio_dir: str,
                      project_id: str) -> Dict[str, np.ndarray]:
-  spin_pattern = os.path.join(audio_dir, '*.wav')
-  spin_file_names = fsspec.open_files(spin_pattern)
-  spin_file_names = [f.full_name for f in spin_file_names]
-  spin_test_names = [f for f in spin_file_names if 'Babble' in f]
-  spin_test_names.sort(key=sort_by_list_number)
+  if not os.path.exists(models_json_file):
+    spin_pattern = os.path.join(audio_dir, '*.wav')
+    spin_file_names = fsspec.open_files(spin_pattern)
+    spin_file_names = [f.full_name for f in spin_file_names]
+    spin_test_names = [f for f in spin_file_names if 'Babble' in f]
+    spin_test_names.sort(key=sort_by_list_number)
 
-  model_frac_scores = score_all_models(project_id,
-                                       spin_test_names,
-                                       truths)
-  print('Model fraction correct scores:', model_frac_scores)
+    model_frac_scores = score_all_models(project_id,
+                                         spin_test_names,
+                                         truths)
+    print('Model fraction correct scores:', model_frac_scores)
+    save_model_results(model_frac_scores, models_json_file)
+  else:
+    print('Reloading model scores from', models_json_file)
+    model_frac_scores = load_model_results(models_json_file)
+    assert isinstance(model_frac_scores, dict)
   return model_frac_scores
 
 
@@ -828,20 +884,107 @@ FLAGS = flags.FLAGS
 # If there is a conflict, we'll get an error at import time.
 flags.DEFINE_string('ground_truth_cache', 'ground_truth.json',
                     'Where to keep a cache of the QuickSIN ground truth')
-flags.DEFINE_string('audio_dir', './', 'Where to find the QuickSIN .wav files')
+flags.DEFINE_string('models_scores_cache', 'models_scores.json',
+                    'Where to keep a cache of the QuickSIN model results')
+flags.DEFINE_string('audio_dir', '../QuickSIN/QuickSIN22/',
+                    'Where to find the QuickSIN .wav files')
+flags.DEFINE_string('sentence_boundary_graph',
+                    'results/sentence_boundaries.png',
+                    'Where to store the sentence boundary debugging graph')
+flags.DEFINE_string('all_score_graph', 'results/all_score_graph.png',
+                    'Where to store the plot with all the scores.')
+flags.DEFINE_string('spin_logistic_graph', 'results/spin_logistic_graph.png',
+                    'Where to store the plot with logistic SPIN scores.')
+flags.DEFINE_string('spin_counting_graph', 'results/spin_counting_graph.png',
+                    'Where to store the plot with logistic SPIN scores.')
+flags.DEFINE_string('logistic_counting_graph',
+                    'results/logistic-counting-comparison.png',
+                    'Graph comparing regression vs. counting results')
 flags.DEFINE_boolean('debug', False, 'Produces debugging output.')
-flags.DEFINE_enum('job', 'running', ['running', 'stopped'], 'Job status.')
 
 
 def main(_):
   project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
   assert project_id, 'Can not find GOOGLE_CLOUD_PROJECT.'
 
-  truths = run_ground_truth(FLAGS.ground_truth_cache, project_id)
+  truths = run_ground_truth(FLAGS.ground_truth_cache,
+                            project_id,
+                            FLAGS.audio_dir,
+                            FLAGS.sentence_boundary_graph)
 
-  model_frac_scores = run_score_models(truths,
+  model_frac_scores = run_score_models(FLAGS.models_scores_cache,
+                                       truths,
                                        FLAGS.audio_dir,
                                        project_id)
+
+  #pylint: disable=consider-using-dict-items
+  if FLAGS.all_score_graph:
+    plt.clf()
+    for m in model_frac_scores:
+      plt.plot(spin_snrs, model_frac_scores[m], label=m)
+    plt.xlabel('SNR (dB)')
+    plt.ylabel('Fraction of words recognized correctly')
+    plt.legend()
+    plt.savefig(FLAGS.all_score_graph)
+
+  spin_loss = {}
+  for m in model_frac_scores:
+    spin_loss[m] = find_spin_loss(spin_snrs,
+                                  model_frac_scores[m])
+
+  if FLAGS.spin_logistic_graph:
+    fig = plt.figure(figsize=(10, 6))
+    ax = fig.add_subplot(111)
+    bar_labels = [s.replace('_', ' ') for s in spin_loss]
+    bar_container = ax.bar(bar_labels,
+                           spin_loss.values())
+    ax.set(ylabel='QuickSIN Score (dB)',
+           title='Cloud ASR QuickSIN Scores (logistic)', ylim=(0, 16))
+    ax.bar_label(bar_container)
+    a = plt.axis()
+    plt.plot(a[:2], [15, 15], '--', label='Severe SNRloss')
+    plt.plot(a[:2], [7, 7], '--', label='Moderate SNRloss')
+    plt.plot(a[:2], [3, 3], '--', label='Mild SNRloss')
+    plt.legend()
+    plt.axis(a)
+    plt.savefig(FLAGS.spin_logistic_graph)
+
+  quicksin_counting_scores = {}
+  for m in model_frac_scores:
+    # if m == 'latest_short': continue
+    # Translate fraction correct into the average number of correct
+    # words per SNR across all lists.
+    quicksin_counting_scores[m] = 25.5 - 5 * np.sum(model_frac_scores[m])
+
+  if FLAGS.spin_counting_graph:
+    fig = plt.figure(figsize=(10, 6))
+    ax = fig.add_subplot(111)
+    bar_labels = [s.replace('_', ' ') for s in quicksin_counting_scores]
+    bar_container = ax.bar(bar_labels,
+                           quicksin_counting_scores.values())
+    ax.set(ylabel='QuickSIN Score (dB)',
+           title='Cloud ASR QuickSIN Scores (counting)', ylim=(0, 16))
+    ax.bar_label(bar_container)
+    a = plt.axis()
+    plt.plot(a[:2], [15, 15], '--', label='Severe SNRloss')
+    plt.plot(a[:2], [7, 7], '--', label='Moderate SNRloss')
+    plt.plot(a[:2], [3, 3], '--', label='Mild SNRloss')
+    plt.legend()
+    plt.axis(a)
+    plt.savefig(FLAGS.spin_counting_graph)
+
+  if FLAGS.logistic_counting_graph:
+    plt.clf()
+    plt.plot(spin_loss.values(), quicksin_counting_scores.values(), 'x')
+    plt.xlabel('QuickSIN score by logistic regression')
+    plt.ylabel('QuickSIN score by counting')
+    plt.title('Comparison of scores by counting and logistic regression')
+    current_axis = plt.axis()
+    print(current_axis)
+    left = max(current_axis[0], current_axis[2])
+    right = min(current_axis[1], current_axis[3])
+    plt.plot([left, right], [left, right], '--')
+    plt.savefig(FLAGS.logistic_counting_graph)
 
 if __name__ == '__main__':
   app.run(main)
