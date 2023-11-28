@@ -162,12 +162,12 @@ class GoogleRecognizerTest(absltest.TestCase):
     self.assertGreaterEqual(end_times[-1], 2.8)
 
   def test_spin_targets(self):
-    self.assertEqual(gasr.word_alternatives('foo'), ['foo',])
-    self.assertEqual(gasr.word_alternatives('foo/bar'), ['foo', 'bar'])
+    self.assertEqual(gasr.word_alternatives('foo'), set(['foo',]))
+    self.assertEqual(gasr.word_alternatives('foo/bar'), set(['foo', 'bar']))
 
     self.assertEqual(gasr.all_keyword_dict[1, 0],
-                     [['tear', 'tara'], ['thin'], ['sheet'],
-                      ['yellow'], ['pad']])
+                     [set(['tear', 'tara']), set(['thin']), set(['sheet']),
+                      set(['yellow']), set(['pad'])])
 
   def test_file_sort(self):
     files = ['foo 12.wav', 'foo 7.wav', 'foo 3.wav']
@@ -201,8 +201,9 @@ class GoogleRecognizerTest(absltest.TestCase):
     self.assertEqual(matches, list(range(1, 13)))
 
   def test_spin_files(self):
-    score = gasr.score_word_list([['white', 'black'], ['silk'], ['jacket'],
-                                  ['goes'], ['with'], ['any'], ['shoes']],
+    score = gasr.score_word_list([set(['white', 'black']), set(['silk']),
+                                  set(['jacket']), set(['goes']), set(['with']),
+                                  set(['any']), set(['shoes'])],
                                  ['a', 'black', 'silk', 'jacket'])
     self.assertEqual(score, 3)
 
@@ -274,7 +275,7 @@ class GoogleRecognizerTest(absltest.TestCase):
                               f'Truth list {li}, sentence {si} is not a '
                               f'SpinSentence but a {type(s)}')
 
-    json_file = 'truth_test.json'
+    json_file = '/tmp/truth_test.json'
     gasr.save_ground_truth(truths, json_file)
 
     new_truths = gasr.load_ground_truth(json_file)
@@ -282,7 +283,7 @@ class GoogleRecognizerTest(absltest.TestCase):
 
   def test_model_results_save(self):
     test_scores = {'1': np.arange(3), '2': np.arange(1,3)}
-    json_file = 'model_results_test.json'
+    json_file = '/tmp/model_results_test.json'
     gasr.save_model_results(test_scores, json_file)
 
     new_scores = gasr.load_model_results(json_file)

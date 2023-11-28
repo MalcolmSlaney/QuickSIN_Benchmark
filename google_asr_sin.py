@@ -1,8 +1,9 @@
 """Test Google Cloud ASR offerings on the Speech in Noise (SPIN) test."""
 
+import datetime
 import json
 import re
-from typing import List, Dict, Optional, Tuple, Union
+from typing import List, Dict, Optional, Set, Tuple, Union
 
 from absl import app
 from absl import flags
@@ -438,17 +439,26 @@ L11 S 4  many ways do these things
 L11 S 5  we like see clear weather
 """.split('\n')
 
-def word_alternatives(words) -> List[str]:
-  """Convert a string with words separated by '/' into a tuple."""
-  if '/' in words:
-    return words.split('/')
-  return [words,]
+homonyms = """
+  tails/tales
+  4/four
+  maire/mare
+""".split('\n')
+# homonyms = [[w.strip() for w in []]]
+
+def word_alternatives(words) -> Set[str]:
+  """Convert a string with words separated by '/' into a set."""
+  return set(words.strip().split('/'))
 
 
 def ingest_spin_keyword_lists(word_list: str) -> Dict[Tuple[int, int],
-                                                      List[List[str]]]:
-  """Convert the text from the big string above into a list of key words 
+                                                      List[Set[str]]]:
+  """Convert the text from the big string above into a set of key words 
   (and alternatives) that describe the expected answers from a SPIN test.
+
+  For each line (which will be entered into a dictionary keyed by list and
+  sentence number) create a list of test words, where each test word is stored 
+  as a list of alternatives in a set.
   """
   keyword_dict = {}
   for line in word_list:
@@ -458,7 +468,7 @@ def ingest_spin_keyword_lists(word_list: str) -> Dict[Tuple[int, int],
     sentence_number = int(line[5:7])
     key_words = line[7:].split(' ')
     key_words = [w for w in key_words if w]
-    key_list = [word_alternatives(w) for w in key_words]
+    key_list = [word_alternatives(w) for w in key_words] # list of sets.
     if len(key_list) != 5:
       print(f'Have too many words in L{list_number} S{sentence_number}:',
             key_list)
@@ -477,7 +487,7 @@ class SpinSentence:
   There are six SPiN sentences per list, one per SNR.
   """
   sentence_words: List[str]
-  true_word_list: List[List[str]]  # List of words and their alternatives
+  true_word_list: List[Set[str]]  # List of words and their alternatives
   # words: list[str]
   start_time: float
   end_time: float
@@ -540,26 +550,38 @@ def print_spin_ground_truth(truth: List[List[SpinSentence]]):
 def save_ground_truth(truth: List[List[SpinSentence]], filename: str):
   """Save the QuickSIN ground truth into a JSON file so we don't have
   to compute it again."""
-  class EnhancedJSONEncoder(json.JSONEncoder):
+  class GoogleSinEncoder(json.JSONEncoder):
     def default(self, o):
       if dataclasses.is_dataclass(o):
         return dataclasses.asdict(o)
+      elif isinstance(o, set):
+        return list(o)
       return super().default(o)
 
+  saved_data = {
+    'ground_truth': truth,
+    'time': str(datetime.datetime.now()),
+  }
   with fsspec.open(filename, 'w') as fp:
-    json.dump(truth, fp, cls=EnhancedJSONEncoder)
+    json.dump(saved_data, fp, cls=GoogleSinEncoder)
 
 
 def load_ground_truth(filename: str) -> List[List[SpinSentence]]:
   """Load the precomputed QuickSIN ground truth from a file."""
   with fsspec.open(filename, 'r') as fp:
-    truth = json.load(fp)
-  print('Loaded ground truth is:', truth)
+    saved_data = json.load(fp)
+  if isinstance(saved_data, dict):
+    truth = saved_data['ground_truth']
+  else:
+    truth = saved_data  # Old format file
+  print('Loaded ground truth is:', saved_data)
   assert isinstance(truth, list)
   for i in range(len(truth)):        # Nominally 12, except during testing
     assert isinstance(truth[i], list)
     for s in range(len(truth[i])):   # Nominally 6, except during testing
       truth[i][s] = SpinSentence(**truth[i][s])
+      truth[i][s].true_word_list = [set(word_list) for word_list
+                                    in truth[i][s].true_word_list]
   return truth
 
 
@@ -686,7 +708,18 @@ def words_in_trial(recognized_words: List[RecogResult],
   return words
 
 
-def score_word_list(true_words: List[List[str]],
+def prettyprint_words_and_alternatives(words_and_alternatives):
+  results = []
+  for w in words_and_alternatives:
+    if isinstance(w, str):
+      results.append(w)
+    elif isinstance(w, (list, set)):
+      results.append('/'.join(list(w)))
+    else:
+      raise ValueError(f'Unexpected type in {words_and_alternatives}')
+  return results
+
+def score_word_list(true_words: List[Set[str]],
                     recognized_words: List[str], max_count=0) -> int:
   """How many of the key words show up in the transcript?
   Args: 
@@ -700,13 +733,24 @@ def score_word_list(true_words: List[List[str]],
     were recognized.
   """
   score = 0
+  missing_words = []
   for words_and_alternates in true_words:
     for word in words_and_alternates:
+      found = False
       if word in recognized_words:
-        score += 1
+        found = True
         break
+    if found:
+      score += 1
+    else:
+      missing_words.append(words_and_alternates)
   if max_count:
     score = min(score, max_count)
+  if missing_words:
+    missing_words = prettyprint_words_and_alternatives(missing_words)
+    #pylint: disable=inconsistent-quotes
+    print(f'Want {", ".join(missing_words)}, '
+          f'from: {", ".join(recognized_words)}')
   return score
 
 def score_all_tests(snrs: List[float],
@@ -791,14 +835,20 @@ def save_model_results(scores: Dict[str, np.ndarray], filename: str):
         return o.tolist()
       return json.JSONEncoder.default(self, o)
 
+  saved_data = {
+    'model_results': scores,
+    'time': str(datetime.datetime.now())
+  }
   with fsspec.open(filename, 'w') as fp:
-    json.dump(scores, fp, cls=NumpyArrayEncoder)
+    json.dump(saved_data, fp, cls=NumpyArrayEncoder)
 
 
 def load_model_results(filename: str) -> Dict[str, np.ndarray]:
   """Load the precomputed QuickSIN results from a file."""
   with fsspec.open(filename, 'r') as fp:
     results = json.load(fp)
+  if 'model_results' in results:
+    results = results['model_results']
   for k in results:
     results[k] = np.asarray(results[k])
   return results
@@ -901,6 +951,8 @@ flags.DEFINE_string('logistic_counting_graph',
                     'results/logistic-counting-comparison.png',
                     'Graph comparing regression vs. counting results')
 flags.DEFINE_boolean('debug', False, 'Produces debugging output.')
+flags.DEFINE_float('human_level', 2.0,
+                   'Normal human performance so we can subtract it (dB)')
 
 
 def main(_):
@@ -921,7 +973,9 @@ def main(_):
   if FLAGS.all_score_graph:
     plt.clf()
     for m in model_frac_scores:
-      plt.plot(spin_snrs, model_frac_scores[m], label=m)
+      plt.plot(spin_snrs,
+               model_frac_scores[m],
+               label=m)
     plt.xlabel('SNR (dB)')
     plt.ylabel('Fraction of words recognized correctly')
     plt.legend()
@@ -930,15 +984,14 @@ def main(_):
   spin_loss = {}
   for m in model_frac_scores:
     spin_loss[m] = find_spin_loss(spin_snrs,
-                                  model_frac_scores[m])
+                                  model_frac_scores[m]) - FLAGS.human_level
 
   if FLAGS.spin_logistic_graph:
     fig = plt.figure(figsize=(10, 6))
     ax = fig.add_subplot(111)
     bar_labels = [s.replace('_', ' ') for s in spin_loss]
-    bar_container = ax.bar(bar_labels,
-                           spin_loss.values())
-    ax.set(ylabel='QuickSIN Score (dB)',
+    bar_container = ax.bar(bar_labels, spin_loss.values())
+    ax.set(ylabel='QuickSIN Loss (dB)',
            title='Cloud ASR QuickSIN Scores (logistic)', ylim=(0, 16))
     ax.bar_label(bar_container)
     a = plt.axis()
@@ -954,15 +1007,17 @@ def main(_):
     # if m == 'latest_short': continue
     # Translate fraction correct into the average number of correct
     # words per SNR across all lists.
-    quicksin_counting_scores[m] = 25.5 - 5 * np.sum(model_frac_scores[m])
+    quicksin_counting_scores[m] = (25.5 - 5 * np.sum(model_frac_scores[m]) -
+                                   FLAGS.human_level)
 
   if FLAGS.spin_counting_graph:
     fig = plt.figure(figsize=(10, 6))
     ax = fig.add_subplot(111)
     bar_labels = [s.replace('_', ' ') for s in quicksin_counting_scores]
-    bar_container = ax.bar(bar_labels,
-                           quicksin_counting_scores.values())
-    ax.set(ylabel='QuickSIN Score (dB)',
+    bar_container = ax.bar(
+      bar_labels,
+      quicksin_counting_scores.values())
+    ax.set(ylabel='QuickSIN Loss (dB)',
            title='Cloud ASR QuickSIN Scores (counting)', ylim=(0, 16))
     ax.bar_label(bar_container)
     a = plt.axis()
