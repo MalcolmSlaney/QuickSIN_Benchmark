@@ -95,9 +95,9 @@ def transcribe_chirp(
   return response
 
 class GoogleRecognizerTest(absltest.TestCase):
-  """Test cases for auditory toolbox."""
+  """Test cases for QuickSIN Google Cloud ASR tests."""
   def test_google_generic_v2(self):
-    """Test basic Google Cloud v2 speec-to-text functionality."""
+    """Test basic Google Cloud v2 speech-to-text functionality."""
     project_id = GOOGLE_CLOUD_PROJECT
     response = quickstart_v2(project_id, 'tests/tapestry.wav')
     self.assertLen(response.results, 1)
@@ -105,6 +105,7 @@ class GoogleRecognizerTest(absltest.TestCase):
                      'a huge tapestry hung in her hallway')
 
   def test_google_chirp(self):
+    """Make sure we can transcribe with the Chirp recognizer (in beta)"""
     project_id = GOOGLE_CLOUD_PROJECT
     response = transcribe_chirp(project_id, 'tests/tapestry.wav')
 
@@ -113,6 +114,9 @@ class GoogleRecognizerTest(absltest.TestCase):
                      'a huge tapestry hung in her hallway')
 
   def test_asr_class(self):
+    """Test my new ASR class, which abstracts many of the Cloud ASR calls into
+    a simpler API.
+    """
     engine = gasr.RecognitionEngine()
     engine.CreateSpeechClient(GOOGLE_CLOUD_PROJECT, model='long')
     engine.CreateRecognizer()
@@ -139,6 +143,46 @@ class GoogleRecognizerTest(absltest.TestCase):
     self.assertGreaterEqual(start_times[0], 0.0)
     self.assertGreaterEqual(end_times[-1], 2.8)
 
+  def test_ground_truth_preparation(self):
+    homonyms = """
+      tails/tales
+      4/four
+      # testing/ignore/this/line
+      maire/mare
+      thin/skinny/swelte
+    """
+    homonym_list = gasr.make_homonyms_dictionary(homonyms)
+    homonym_expectation = {'tails': {'tales'},
+                           '4': {'four'},
+                           'maire': {'mare'},
+                           'thin': {'skinny', 'swelte'}}
+    self.assertEqual(homonym_list, homonym_expectation)
+
+    key_word_list = """
+L 0 S 2  Footprints show/showed path took thin
+L 0 S 4  band Steel 3/three inches/in wide
+L 1 S 0  tear/Tara thin sheet yellow pad
+""".split('\n')
+
+    all_keyword_dict = gasr.ingest_quicksin_truth(key_word_list,
+                                                  homonym_list)
+
+    expected_ground_truth = {(0, 2): [{'footprints'},
+                                      {'show', 'showed'},
+                                      {'path'},
+                                      {'took'},
+                                      {'skinny', 'swelte', 'thin'}],
+                             (0, 4): [{'band'}, {'steel'},
+                                      {'3', 'three'},
+                                      {'in', 'inches'},
+                                      {'wide'}],
+                             (1, 0): [{'tara', 'tear'},
+                                      {'skinny', 'swelte', 'thin'},
+                                      {'sheet'},
+                                      {'yellow'},
+                                      {'pad'}]}
+    self.assertEqual(all_keyword_dict, expected_ground_truth)
+
   def test_parse_transcript(self):
     engine = gasr.RecognitionEngine()
     engine.CreateSpeechClient(GOOGLE_CLOUD_PROJECT, model='long')
@@ -162,8 +206,8 @@ class GoogleRecognizerTest(absltest.TestCase):
     self.assertGreaterEqual(end_times[-1], 2.8)
 
   def test_spin_targets(self):
-    self.assertEqual(gasr.word_alternatives('foo'), set(['foo',]))
-    self.assertEqual(gasr.word_alternatives('foo/bar'), set(['foo', 'bar']))
+    self.assertEqual(gasr.word_alternatives('foo', {}), set(['foo',]))
+    self.assertEqual(gasr.word_alternatives('foo/bar', {}), set(['foo', 'bar']))
 
     self.assertEqual(gasr.all_keyword_dict[1, 0],
                      [set(['tear', 'tara']), set(['thin']), set(['sheet']),

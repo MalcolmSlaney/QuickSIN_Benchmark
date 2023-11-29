@@ -260,7 +260,7 @@ def generate_ffmpeg_cmds():
     print()
 
 
-####### Organize SPIN recogntion results ########
+################## Organize SPIN recogntion results #######################
 
 # A list of lists.  Each (final) list is a list of recognition results (words
 # and times). Then a list of these "sentence" lists.
@@ -348,7 +348,7 @@ def find_sentence_boundaries(
 
   return breaks, all_audio
 
-#################### SPIN TESTS ############################
+######################## QuickSIN Ground Truth ################################
 
 # Pages 111 and 112 of this PDF:
 # https://etda.libraries.psu.edu/files/final_submissions/5788
@@ -439,20 +439,53 @@ L11 S 4  many ways do these things
 L11 S 5  we like see clear weather
 """.split('\n')
 
+
+def word_alternatives(words: str,
+                      homonyms_dict: Dict[str, Set[str]]) -> Set[str]:
+  """Convert a string with words separated by '/' into a set."""
+  all_words = words.strip().split('/')
+  base_word = all_words[0]
+  if base_word in homonyms_dict:
+    return set(all_words) | homonyms_dict[base_word]
+  return set(all_words)
+
+
 homonyms = """
+  # Add word equivalances, here.
+  # Homonyms
   tails/tales
   4/four
   maire/mare
-""".split('\n')
-# homonyms = [[w.strip() for w in []]]
+  # Close enough words.
+"""
 
-def word_alternatives(words) -> Set[str]:
-  """Convert a string with words separated by '/' into a set."""
-  return set(words.strip().split('/'))
+def make_homonyms_dictionary(*equivalance_lists: str) -> Dict[str, Set[str]]:
+  """Convert a set of speech-recognition equivalances, specified as text, into
+  a dictionary of sets of equivalent words.  Each equivalence is specified as
+  words on a line, separated by '/'.  Lines that start with '#' are ignored so
+  that the choices can be documented.
+  """
+  result_dict = {}
+  for equivalance in equivalance_lists:
+    equivalance = equivalance.split('\n')
+    equivalance_lines = [line.strip().split('/') for line in equivalance
+                         if line.strip() and line.strip()[0] != '#']
+    # print(all_sets)
+    for a_set in equivalance_lines:
+      # print(f'Processing {a_set}')
+      w = a_set[0] # The base term
+      if w in result_dict:
+        raise ValueError(f'Found duplicate key {w}')
+      else:
+        result_dict[w] = set(a_set[1:])
+      # print(f'After {w} dict is {result_dict}')
+  return result_dict
 
 
-def ingest_spin_keyword_lists(word_list: str) -> Dict[Tuple[int, int],
-                                                      List[Set[str]]]:
+def ingest_quicksin_truth(
+    word_list: str,
+    homonym_dict: Dict[str, Set[str]]) -> Dict[Tuple[int, int],
+                                               List[Set[str]]]:
   """Convert the text from the big string above into a set of key words 
   (and alternatives) that describe the expected answers from a SPIN test.
 
@@ -468,14 +501,15 @@ def ingest_spin_keyword_lists(word_list: str) -> Dict[Tuple[int, int],
     sentence_number = int(line[5:7])
     key_words = line[7:].split(' ')
     key_words = [w for w in key_words if w]
-    key_list = [word_alternatives(w) for w in key_words] # list of sets.
+    key_list = [word_alternatives(w, homonym_dict) for w in key_words]
     if len(key_list) != 5:
       print(f'Have too many words in L{list_number} S{sentence_number}:',
             key_list)
     keyword_dict[list_number, sentence_number] = key_list
   return keyword_dict
 
-all_keyword_dict = ingest_spin_keyword_lists(key_word_list)
+homonym_list = make_homonyms_dictionary(homonyms)
+all_keyword_dict = ingest_quicksin_truth(key_word_list, homonym_list)
 
 ######## Recognize the SPIN waveforms and calculate all word timings ##########
 
@@ -574,7 +608,7 @@ def load_ground_truth(filename: str) -> List[List[SpinSentence]]:
     truth = saved_data['ground_truth']
   else:
     truth = saved_data  # Old format file
-  print('Loaded ground truth is:', saved_data)
+  # print('Loaded ground truth is:', saved_data)
   assert isinstance(truth, list)
   for i in range(len(truth)):        # Nominally 12, except during testing
     assert isinstance(truth[i], list)
