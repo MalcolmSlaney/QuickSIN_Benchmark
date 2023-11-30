@@ -938,6 +938,9 @@ flags.DEFINE_string('spin_counting_graph', 'results/spin_counting_graph.png',
 flags.DEFINE_string('logistic_counting_graph',
                     'results/logistic-counting-comparison.png',
                     'Graph comparing regression vs. counting results')
+flags.DEFINE_string('logistic_fit_graph', 
+                    'results/logistic_regression.png',
+                    'Graph showing logistic regression fit to QuickSIN data')
 flags.DEFINE_boolean('debug', False, 'Produces debugging output.')
 flags.DEFINE_float('human_level', 2.0,
                    'Normal human performance so we can subtract it (dB)')
@@ -989,6 +992,23 @@ def main(_):
     plt.legend()
     plt.axis(a)
     plt.savefig(FLAGS.spin_logistic_graph)
+
+  if FLAGS.logistic_fit_graph:
+    scores = model_frac_scores['long_default']
+    logistic_params, _ = curve_fit(psychometric_curve,
+                                   spin_snrs,
+                                   scores,
+                                   ftol=1e-4)
+    detailed_snr = np.arange(0, 25, 0.1)
+    plt.plot(detailed_snr,
+             psychometric_curve(detailed_snr,
+                                logistic_params[0],
+                                logistic_params[1]),
+             label='Logistic Fit')
+    plt.plot(spin_snrs, scores, 'x', label='Experimental Data')
+    plt.xlabel('SNR (dB)')
+    plt.ylabel('Fraction recognized correctly')
+    plt.title('Logistic Regression for QuickSIN Data')
 
   quicksin_counting_scores = {}
   for m in model_frac_scores:
