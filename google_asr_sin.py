@@ -28,6 +28,9 @@ from google.cloud.speech_v1.types.cloud_speech import RecognizeResponse
 # Supported Languages:
 # https://cloud.google.com/speech-to-text/v2/docs/speech-to-text-supported-languages
 
+
+################### Speech Recognition Class (easier API) ######################
+
 class RecognitionEngine(object):
   """A class that provides a nicer interface to Google's Cloud
   text-to-speech API.
@@ -271,7 +274,9 @@ def recognize_all_spin(all_wavs: List[str],
                        debug=False) -> SpinFileTranscripts:
   """Recognize some SPiN sentences using the specified ASR engine.
   Return a list of the transcription results.  Each recognition result is
-  a list of alternatives, all in RecogResult format."""
+  a list of alternatives, all in RecogResult format. This is used for both 
+  clean and noisy utterances.
+  """
   all_results = []
   for f in all_wavs:
     if 'Calibration' in f:
@@ -672,61 +677,7 @@ def compute_quicksin_truth(
                                              snr_list)
   return spin_ground_truths
 
-
-def xx_create_ground_truth(
-    # spin_truth_names: List[str],
-    true_transcripts: SpinFileTranscripts) -> List[List[SpinSentence]]:
-  ground_truths = []
-  for list_number in range(12):
-    filename = f'Clean List {list_number+1}.wav'
-    sentences = []
-    skip = 0  # Hack.. need to skip some results if empty.
-    for snr_number, snr in enumerate(spin_snrs):
-      print(f'Processing {filename} with SNR #{snr_number}')
-      snr = spin_snrs[snr_number]
-      alternatives = true_transcripts[filename].results[snr_number].alternatives
-      if not alternatives:
-        print(f'  Skipping an empty result for list {list_number} '
-              f'snr {snr}')
-        skip += 1
-      elif alternatives[0].transcript == 'bring it to':
-        print(f'  Skipping an extraneous result for list {list_number} '
-              f'snr {snr}')
-        skip += 1
-      elif list_number == 4 and alternatives[0].transcript == 'finish':
-        # Not sure why there is a whole bunch of reco before the
-        # words start in Clean 5.
-        skip += 1
-      one_result = alternatives[0]
-      transcript = one_result.transcript
-      # all_words = [r.word.lower() for r in one_result.words]
-      start_times = [parse_time(r.start_offset) for r in one_result.words]
-      end_times = [parse_time(r.end_offset) for r in one_result.words]
-
-      # if list_number == 1 and snr_number == 0:
-      #   print(one_result)
-      sentences.append(SpinSentence(transcript,
-                                    all_keyword_dict[list_number, snr_number],
-                                    # all_words,
-                                    min(start_times), max(end_times), snr))
-    assert len(sentences) == len(spin_snrs)
-    ground_truths.append(sentences)
-  return ground_truths
-
-def xx_parse_spin_results(all_transcripts) -> List[List[RecogResult]]:
-  """Using the recognized babble results, Create a list of lists.  One list for
-  each of the 12 60s SPiN lists.  For each SPiN list, create a separate list for
-  each SNR."""
-  reco_results = []
-  for i in range(12):
-    filename = f'Babble List {i+1}.wav'
-    # print(filename)
-    test_results = all_transcripts[filename]
-    test_transcript = parse_transcript(test_results)
-    reco_results.append(test_transcript)
-  return reco_results
-
-
+################ SCORE ALL MODELS IN NOISE  ############################
 def words_in_trial(recognized_words: List[RecogResult],
                    start_time: float,  # Seconds
                    end_time: float,    # Seconds
@@ -752,6 +703,7 @@ def prettyprint_words_and_alternatives(words_and_alternatives):
     else:
       raise ValueError(f'Unexpected type in {words_and_alternatives}')
   return results
+
 
 def score_word_list(true_words: List[Set[str]],
                     recognized_words: List[str], max_count=0) -> int:
@@ -960,6 +912,8 @@ def run_score_models(models_json_file: str,
     assert isinstance(model_frac_scores, dict)
   return model_frac_scores
 
+
+#############  MAIN PROGRAM - Test all models and create graphs  ###############
 
 FLAGS = flags.FLAGS
 
