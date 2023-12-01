@@ -1,7 +1,14 @@
 ## Introduction
 
 This code implements the QuickSIN test, and uses it to test a modern
-(cloud-based) speech recognition system.
+(cloud-based) speech recognition system.  To run this code, you need
+the QuickSIN audio files, either from 
+[Etymotic](https://www.etymotic.com/product/quicksin/)
+or your favorite audiologist, as well as a Google Cloud project id you can
+charge the 
+[API calls](https://cloud.google.com/speech-to-text/v2/docs/sync-recognize)
+against. This code runs on your local machines, reads the QuickSIN
+audio files, and sends them to the cloud for recognition.
 
 For many years, speech recognizers have performed better than human in 
 *clean* speech 
@@ -69,7 +76,8 @@ The QuickSIN test gives us the number of keywords (up to 5) correctly
 recognized by the subject.  We convert this into a fraction, and then fit
 a logistic regression curve to it (as opposed to the counting method 
 first proposed).  This gives us a curve from which we can
-estimate the SNR which produces 50% accuracy.
+estimate the SNR which produces 50% accuracy, as shown in the example below.
+![Logistic Regression Example](results/logistic_fit.png)
 
 We tested the performance of six different recognizers, and plot their speech
 recogition results over the 6 different SNRs

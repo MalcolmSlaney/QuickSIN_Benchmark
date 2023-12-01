@@ -34,6 +34,9 @@ from google.cloud.speech_v1.types.cloud_speech import RecognizeResponse
 class RecognitionEngine(object):
   """A class that provides a nicer interface to Google's Cloud
   text-to-speech API.
+
+  Here are some useful links:
+    https://cloud.google.com/speech-to-text/docs/speech-to-text-supported-languages
   """
   def __init__(self):
     self._client = None
@@ -64,7 +67,6 @@ class RecognitionEngine(object):
     else:
       client_options = ClientOptions()
       self._location = 'global'
-
     self._client = SpeechClient(client_options=client_options)
 
   def ListModels(self, gcp_project: str):
@@ -355,13 +357,15 @@ def find_sentence_boundaries(
 
 ######################## QuickSIN Ground Truth ################################
 
-# Pages 111 and 112 of this PDF:
+# Pages 96-97 of this PhD thesis:
+# Suzanne E. Sklaney, Binaural sound field presentation of the QuickSIN:
+# Equivalncy across lists and signal-to-noise ratios.
 # https://etda.libraries.psu.edu/files/final_submissions/5788
 
 key_word_list = """
 L 0 S 0  white silk jacket any shoes
 L 0 S 1  child crawled into dense grass
-L 0 S 2  Footprints show/showed path took beach
+L 0 S 2  Footprints showed path took beach
 L 0 S 3  event near edge fresh air
 L 0 S 4  band Steel 3/three inches/in wide
 L 0 S 5  weight package seen high scale
@@ -369,15 +373,15 @@ L 0 S 5  weight package seen high scale
 L 1 S 0  tear/Tara thin sheet yellow pad
 L 1 S 1  cruise Waters Sleek yacht fun
 L 1 S 2  streak color down left Edge
-L 1 S 3  done before boy/boys see it
+L 1 S 3  done before boy see it
 L 1 S 4  Crouch before jump miss mark
 L 1 S 5  square peg settle round hole
 
 L 2 S 0  pitch straw through door stable
-L 2 S 1  sink thing which pile/piled dishes
+L 2 S 1  sink thing which pile dishes
 L 2 S 2  post no bills office wall
-L 2 S 3  dimes showered/shower down all sides
-L 2 S 4  pick card slip under pack/Pact
+L 2 S 3  dimes showered down all sides
+L 2 S 4  pick card slip under pack/pact
 L 2 S 5  store jammed before sale start
 
 L 3 S 0  sense smell better than touch
@@ -385,11 +389,11 @@ L 3 S 1  picked up dice second roll
 L 3 S 2  drop ashes worn/Warren Old rug
 L 3 S 3  couch cover Hall drapes blue
 L 3 S 4  stems Tall Glasses cracked broke
-L 3 S 5  cleats sank/sink deeply soft turf
+L 3 S 5  cleats sank deeply soft turf
 
 L 4 S 0  have better than wait Hope
 L 4 S 1  screen before fire kept Sparks
-L 4 S 2  thick glasses helped/help read print/prints
+L 4 S 2  thick glasses helped read print
 L 4 S 3  chair looked strong no bottom
 L 4 S 4  told wild Tales/tails frighten him
 L 4 S 5  force equal would move Earth
@@ -401,37 +405,37 @@ L 5 S 3  best method fix place clips
 L 5 S 4  if Mumble your speech lost
 L 5 S 5  toad Frog hard tell apart
 
-L 6 S 0  kite dipped swayed/suede stayed aloft/loft
-L 6 S 1  beatle/beetle drowned hot June/Tunes sun/son
+L 6 S 0  kite dipped swayed/suede stayed aloft
+L 6 S 1  beatle/beetle drowned hot June sun/son
 L 6 S 2  theft Pearl pin Kept Secret
 L 6 S 3  wide grin earned many friends
 L 6 S 4  hurdle pit aid long Pole
-L 6 S 5  Peep/keep under tent see Clown
+L 6 S 5  Peep under tent see Clown
 
 L 7 S 0  sun came light Eastern sky
 L 7 S 1  stale smell old beer lingers
 L 7 S 2  desk firm on shaky floor
 L 7 S 3  list names carved around base
 L 7 S 4  news struct/struck out Restless Minds
-L 7 S 5  Sand drifts/Drift over sill/sale house
+L 7 S 5  Sand drifts over sill house
 
 L 8 S 0  take shelter tent keep still
 L 8 S 1  Little Tales/tails they tell false
 L 8 S 2  press pedal with left foot
-L 8 S 3  black trunk fell from Landing/landings
-L 8 S 4  cheap clothes flashy/flash don't last
+L 8 S 3  black trunk fell from Landing
+L 8 S 4  cheap clothes flashy don't last
 L 8 S 5  night alarm roused/roust deep sleep
 
-L 9 S 0  dots light betray/betrayed black cat
+L 9 S 0  dots light betrayed black cat
 L 9 S 1  put chart mantle Tack down
 L 9 S 2  steady drip worse drenching rain
 L 9 S 3  flat pack less luggage space
-L 9 S 4  gloss/glass top made unfit read
+L 9 S 4  gloss top made unfit read
 L 9 S 5  Seven Seals stamped great sheets
 
 L10 S 0  marsh freeze when cold enough
-L10 S 1  gray mare walked before colt/cold
-L10 S 2  bottles hold four/for kinds rum
+L10 S 1  gray mare walked before colt
+L10 S 2  bottles hold four kinds rum
 L10 S 3  wheeled/wheled bike past winding road
 L10 S 4  throw used paper cup plate
 L10 S 5  wall phone ring loud often
@@ -439,7 +443,7 @@ L10 S 5  wall phone ring loud often
 L11 S 0  hinge door creaked old age
 L11 S 1  bright lanterns Gay dark lawn
 L11 S 2  offered proof  form large chart
-L11 S 3  their eyelids droop/drop want sleep
+L11 S 3  their eyelids droop want sleep
 L11 S 4  many ways do these things
 L11 S 5  we like see clear weather
 """.split('\n')
@@ -460,8 +464,21 @@ homonyms = """
   # Homonyms
   tails/tales
   4/four
+  four/for
   maire/mare
+  pedal/petal
+  wheeled/wield
+  sun/son
+  marsh/marsue
+  their/there
+  white/whitesilk
+  silk/whitesilk
+  roll/role
+  drowned/dround
+  yacht/yaught
+  hall/haul
   # Close enough words.
+  # None so far.. we count if an error if even one phoneme is wrong.
 """
 
 def make_homonyms_dictionary(*equivalance_lists: str) -> Dict[str, Set[str]]:
@@ -938,8 +955,8 @@ flags.DEFINE_string('spin_counting_graph', 'results/spin_counting_graph.png',
 flags.DEFINE_string('logistic_counting_graph',
                     'results/logistic-counting-comparison.png',
                     'Graph comparing regression vs. counting results')
-flags.DEFINE_string('logistic_fit_graph', 
-                    'results/logistic_regression.png',
+flags.DEFINE_string('logistic_fit_graph',
+                    'results/logistic_fit.png',
                     'Graph showing logistic regression fit to QuickSIN data')
 flags.DEFINE_boolean('debug', False, 'Produces debugging output.')
 flags.DEFINE_float('human_level', 2.0,
@@ -980,7 +997,7 @@ def main(_):
   if FLAGS.spin_logistic_graph:
     fig = plt.figure(figsize=(10, 6))
     ax = fig.add_subplot(111)
-    bar_labels = [s.replace('_', ' ') for s in spin_loss]
+    bar_labels = [s.replace('_', '\n') for s in spin_loss]
     bar_container = ax.bar(bar_labels, spin_loss.values())
     ax.set(ylabel='QuickSIN Loss (dB)',
            title='Cloud ASR QuickSIN Scores (logistic)', ylim=(0, 16))
@@ -994,21 +1011,27 @@ def main(_):
     plt.savefig(FLAGS.spin_logistic_graph)
 
   if FLAGS.logistic_fit_graph:
-    scores = model_frac_scores['long_default']
+    scores = model_frac_scores['latest_long']
+    # pylint: disable=unbalanced-tuple-unpacking
     logistic_params, _ = curve_fit(psychometric_curve,
                                    spin_snrs,
                                    scores,
                                    ftol=1e-4)
     detailed_snr = np.arange(0, 25, 0.1)
+    fig = plt.figure(figsize=(6.4, 4.8))  # Reset to default size
+    plt.plot(spin_snrs, scores, 'x', label='Experimental Data')
     plt.plot(detailed_snr,
              psychometric_curve(detailed_snr,
                                 logistic_params[0],
                                 logistic_params[1]),
              label='Logistic Fit')
-    plt.plot(spin_snrs, scores, 'x', label='Experimental Data')
+    plt.plot([0, 25], [0.5, 0.5], '--', label='50% Theshold')
+    plt.plot([logistic_params[1], logistic_params[1]], [0, 0.5], ':')
+    plt.legend()
     plt.xlabel('SNR (dB)')
     plt.ylabel('Fraction recognized correctly')
     plt.title('Logistic Regression for QuickSIN Data')
+    plt.savefig(FLAGS.logistic_fit_graph)
 
   quicksin_counting_scores = {}
   for m in model_frac_scores:
@@ -1021,7 +1044,7 @@ def main(_):
   if FLAGS.spin_counting_graph:
     fig = plt.figure(figsize=(10, 6))
     ax = fig.add_subplot(111)
-    bar_labels = [s.replace('_', ' ') for s in quicksin_counting_scores]
+    bar_labels = [s.replace('_', '\n') for s in quicksin_counting_scores]
     bar_container = ax.bar(
       bar_labels,
       quicksin_counting_scores.values())

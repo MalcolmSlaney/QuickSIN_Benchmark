@@ -1,0 +1,2014 @@
+Reloading ground truth from ground_truth.json
+Model: latest_long
+SNR 25:
+  Expected words: [{'white'}, {'silk'}, {'jacket'}, {'any'}, {'shoes'}]
+  Recognized words: ['justified', 'thirty', 'cards', 'and', 'i', 'already', 'a', 'white', 'silk', 'jacket', 'goes', 'with', 'any', 'shoes', '']
+  Correct count is 5
+Want sheet, from: gorgeous, fingers, for, all, the, first, time, in, his, life, recorded, russia, tara, thin, sheep, from, the, yellow, pad, 
+SNR 25:
+  Expected words: [{'tara', 'tear'}, {'thin'}, {'sheet'}, {'yellow'}, {'pad'}]
+  Recognized words: ['gorgeous', 'fingers', 'for', 'all', 'the', 'first', 'time', 'in', 'his', 'life', 'recorded', 'russia', 'tara', 'thin', 'sheep', 'from', 'the', 'yellow', 'pad', '']
+  Correct count is 4
+SNR 25:
+  Expected words: [{'pitch'}, {'straw'}, {'through'}, {'door'}, {'stable'}]
+  Recognized words: ['and', 'the', 'established', 'sparkly', 'pitch', 'the', 'straw', 'through', 'the', 'door', 'of', 'the', 'stable', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'sense'}, {'smell'}, {'better'}, {'than'}, {'touch'}]
+  Recognized words: ['spring', 'is', 'the', 'beginning', 'of', '90', 'cells', 'are', 'very', 'much', 'in', 'summer', 'sounds', 'the', 'sense', 'of', 'smell', 'is', 'better', 'than', 'that', 'of', 'touch', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'have'}, {'better'}, {'than'}, {'wait'}, {'hope'}]
+  Recognized words: ['characters', 'to', 'have', 'is', 'better', 'than', 'to', 'wait', 'and', 'hope', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'leaf'}, {'drifts'}, {'along'}, {'slow'}, {'spin'}]
+  Recognized words: ['so', 'just', 'delightful', 'not', 'understanding', 'the', 'leaf', 'drifts', 'along', 'with', 'a', 'slow', 'spin', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'kite'}, {'dipped'}, {'suede', 'swayed'}, {'stayed'}, {'loft', 'aloft'}]
+  Recognized words: ['theres', 'that', 'other', 'question', 'and', 'the', 'other', 'reasons', 'generations', 'of', 'the', 'world', 'the', 'kite', 'dipped', 'and', 'swayed', 'but', 'stayed', 'aloft', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'sun'}, {'came'}, {'light'}, {'eastern'}, {'sky'}]
+  Recognized words: ['the', 'configuration', 'over', 'every', 'apologies', 'the', 'sun', 'came', 'up', 'to', 'light', 'the', 'eastern', 'sky', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'take'}, {'shelter'}, {'tent'}, {'keep'}, {'still'}]
+  Recognized words: ['the', 'place', 'i', 'only', 'wish', 'the', 'right', 'take', 'shelter', 'in', 'this', 'tent', 'but', 'keep', 'still', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'dots'}, {'light'}, {'betray', 'betrayed'}, {'black'}, {'cat'}]
+  Recognized words: ['she', 'is', 'willingness', 'and', 'the', 'enemies', 'dots', 'of', 'light', 'betrayed', 'the', 'black', 'cat', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'marsh'}, {'freeze'}, {'when'}, {'cold'}, {'enough'}]
+  Recognized words: ['actually', 'very', 'distinction', 'of', 'learners', 'the', 'marsh', 'will', 'freeze', 'when', 'cold', 'enough', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'hinge'}, {'door'}, {'creaked'}, {'old'}, {'age'}]
+  Recognized words: ['so', 'there', 'was', 'a', 'cottage', 'that', 'was', 'much', 'more', 'important', 'and', 'again', 'the', 'hinge', 'and', 'the', 'door', 'creaked', 'with', 'old', 'age', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'child'}, {'crawled'}, {'into'}, {'dense'}, {'grass'}]
+  Recognized words: ['the', 'child', 'crawled', 'into', 'the', 'dense', 'grass', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'cruise'}, {'waters'}, {'sleek'}, {'yacht'}, {'fun'}]
+  Recognized words: ['a', 'cruise', 'in', 'warm', 'waters', 'in', 'a', 'sleek', 'yacht', 'is', 'fun', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'sink'}, {'thing'}, {'which'}, {'pile', 'piled'}, {'dishes'}]
+  Recognized words: ['the', 'sink', 'is', 'the', 'thing', 'in', 'which', 'we', 'piled', 'dishes', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'picked'}, {'up'}, {'dice'}, {'second'}, {'roll'}]
+  Recognized words: ['he', 'picked', 'up', 'the', 'dice', 'for', 'a', 'second', 'roll', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'screen'}, {'before'}, {'fire'}, {'kept'}, {'sparks'}]
+  Recognized words: ['the', 'screen', 'before', 'the', 'fire', 'kept', 'in', 'the', 'sparks', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'pencil'}, {'cut'}, {'sharp'}, {'both'}, {'ends'}]
+  Recognized words: ['the', 'pencil', 'was', 'cut', 'to', 'be', 'sharp', 'at', 'both', 'ends', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'beetle', 'beatle'}, {'drowned'}, {'hot'}, {'june', 'tunes'}, {'sun', 'son'}]
+  Recognized words: ['the', 'beetle', 'drowned', 'in', 'the', 'hot', 'june', 'sun', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'stale'}, {'smell'}, {'old'}, {'beer'}, {'lingers'}]
+  Recognized words: ['the', 'stale', 'smell', 'of', 'old', 'beer', 'lingers', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'little'}, {'tails', 'tales'}, {'they'}, {'tell'}, {'false'}]
+  Recognized words: ['great', 'the', 'little', 'tails', 'they', 'tell', 'are', 'false', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'put'}, {'chart'}, {'mantle'}, {'tack'}, {'down'}]
+  Recognized words: ['put', 'the', 'chart', 'on', 'the', 'mantle', 'and', 'tack', 'it', 'down', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'gray'}, {'mare'}, {'walked'}, {'before'}, {'cold', 'colt'}]
+  Recognized words: ['a', 'gray', 'mare', 'walked', 'before', 'the', 'cold', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'bright'}, {'lanterns'}, {'gay'}, {'dark'}, {'lawn'}]
+  Recognized words: ['the', 'bright', 'lanterns', 'were', 'gay', 'on', 'the', 'dark', 'lawn', '']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'footprints'}, {'show', 'showed'}, {'path'}, {'took'}, {'beach'}]
+  Recognized words: ['footprints', 'showed', 'the', 'path', 'he', 'took', 'up', 'the', 'beach', 'whether']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'streak'}, {'color'}, {'down'}, {'left'}, {'edge'}]
+  Recognized words: ['streak', 'of', 'color', 'ran', 'down', 'the', 'left', 'edge', 'it']
+  Correct count is 5
+Want wall, from: post, no, bills, on, this, office, wallace, dimes
+SNR 15:
+  Expected words: [{'post'}, {'no'}, {'bills'}, {'office'}, {'wall'}]
+  Recognized words: ['post', 'no', 'bills', 'on', 'this', 'office', 'wallace', 'dimes']
+  Correct count is 4
+SNR 15:
+  Expected words: [{'drop'}, {'ashes'}, {'worn', 'warren'}, {'old'}, {'rug'}]
+  Recognized words: ['drop', 'the', 'ashes', 'on', 'the', 'worn', 'old', 'rug']
+  Correct count is 5
+Want thick, print/prints, from: glasses, helped, him, read, the, printers, before
+SNR 15:
+  Expected words: [{'thick'}, {'glasses'}, {'helped', 'help'}, {'read'}, {'print', 'prints'}]
+  Recognized words: ['glasses', 'helped', 'him', 'read', 'the', 'printers', 'before']
+  Correct count is 3
+SNR 15:
+  Expected words: [{'down'}, {'road'}, {'way'}, {'grain'}, {'farmer'}]
+  Recognized words: ['down', 'that', 'road', 'is', 'the', 'way', 'to', 'the', 'grain', 'farmer', 'you']
+  Correct count is 5
+Want pin, from: the, theft, of, the, pearl, pinned, was, kept, secret
+SNR 15:
+  Expected words: [{'theft'}, {'pearl'}, {'pin'}, {'kept'}, {'secret'}]
+  Recognized words: ['the', 'theft', 'of', 'the', 'pearl', 'pinned', 'was', 'kept', 'secret']
+  Correct count is 4
+SNR 15:
+  Expected words: [{'desk'}, {'firm'}, {'on'}, {'shaky'}, {'floor'}]
+  Recognized words: ['the', 'desk', 'was', 'firm', 'on', 'the', 'shaky', 'floor', 'associated', 'with', 'you']
+  Correct count is 5
+Want press, pedal, from: the, petals, with, your, left, foot, which, is
+SNR 15:
+  Expected words: [{'press'}, {'pedal'}, {'with'}, {'left'}, {'foot'}]
+  Recognized words: ['the', 'petals', 'with', 'your', 'left', 'foot', 'which', 'is']
+  Correct count is 3
+Want drip, from: steady, drift, is, worse, than, a, drenching, rain, noise
+SNR 15:
+  Expected words: [{'steady'}, {'drip'}, {'worse'}, {'drenching'}, {'rain'}]
+  Recognized words: ['steady', 'drift', 'is', 'worse', 'than', 'a', 'drenching', 'rain', 'noise']
+  Correct count is 4
+Want rum, from: bottles, hold, four, kinds, of, worms, suggest, you, hear, imaginary
+SNR 15:
+  Expected words: [{'bottles'}, {'hold'}, {'for', 'four'}, {'kinds'}, {'rum'}]
+  Recognized words: ['bottles', 'hold', 'four', 'kinds', 'of', 'worms', 'suggest', 'you', 'hear', 'imaginary']
+  Correct count is 4
+Want chart, from: offered, proof, in, the, form, of, a, large, charts, automotive
+SNR 15:
+  Expected words: [{'offered'}, {'proof'}, {'form'}, {'large'}, {'chart'}]
+  Recognized words: ['offered', 'proof', 'in', 'the', 'form', 'of', 'a', 'large', 'charts', 'automotive']
+  Correct count is 4
+SNR 10:
+  Expected words: [{'event'}, {'near'}, {'edge'}, {'fresh'}, {'air'}]
+  Recognized words: ['whether', 'he', 'event', 'near', 'the', 'edge', 'brought', 'in', 'fresh', 'air', 'right']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'done'}, {'before'}, {'boys', 'boy'}, {'see'}, {'it'}]
+  Recognized words: ['it', 'was', 'done', 'before', 'the', 'boy', 'could', 'see', 'it', 'she', 'enjoys']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'dimes'}, {'showered', 'shower'}, {'down'}, {'all'}, {'sides'}]
+  Recognized words: ['dimes', 'showered', 'down', 'from', 'all', 'sides', 'of', 'justice']
+  Correct count is 5
+Want hall, from: rug, the, couch, cover, and, all, drapes, were, blue, just
+SNR 10:
+  Expected words: [{'couch'}, {'cover'}, {'hall'}, {'drapes'}, {'blue'}]
+  Recognized words: ['rug', 'the', 'couch', 'cover', 'and', 'all', 'drapes', 'were', 'blue', 'just']
+  Correct count is 4
+Want bottom, from: yes, the, chair, looked, strong, but, had, no, bondage, brightness
+SNR 10:
+  Expected words: [{'chair'}, {'looked'}, {'strong'}, {'no'}, {'bottom'}]
+  Recognized words: ['yes', 'the', 'chair', 'looked', 'strong', 'but', 'had', 'no', 'bondage', 'brightness']
+  Correct count is 4
+SNR 10:
+  Expected words: [{'best'}, {'method'}, {'fix'}, {'place'}, {'clips'}]
+  Recognized words: ['underlined', 'any', 'other', 'words', 'the', 'best', 'method', 'is', 'to', 'fix', 'it', 'in', 'place', 'with', 'clips', '']
+  Correct count is 5
+Want grin, earned, from: secret, his, wide, green, and, many, friends, 
+SNR 10:
+  Expected words: [{'wide'}, {'grin'}, {'earned'}, {'many'}, {'friends'}]
+  Recognized words: ['secret', 'his', 'wide', 'green', 'and', 'many', 'friends', '']
+  Correct count is 3
+SNR 10:
+  Expected words: [{'list'}, {'names'}, {'carved'}, {'around'}, {'base'}]
+  Recognized words: ['you', 'a', 'list', 'of', 'names', 'is', 'carved', 'around', 'the', 'base', 'information']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'black'}, {'trunk'}, {'fell'}, {'from'}, {'landing', 'landings'}]
+  Recognized words: ['a', 'program', 'that', 'impairs', 'that', 'becoming', 'the', 'black', 'trunk', 'fell', 'from', 'the', 'landings', '']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'flat'}, {'pack'}, {'less'}, {'luggage'}, {'space'}]
+  Recognized words: ['noise', 'a', 'flat', 'pack', 'takes', 'less', 'luggage', 'space', 'here']
+  Correct count is 5
+Want wheeled/wheled, past, from: imaginary, to, any, apology, he, wield, the, bike, has, the, winding, road, 
+SNR 10:
+  Expected words: [{'wheeled', 'wheled'}, {'bike'}, {'past'}, {'winding'}, {'road'}]
+  Recognized words: ['imaginary', 'to', 'any', 'apology', 'he', 'wield', 'the', 'bike', 'has', 'the', 'winding', 'road', '']
+  Correct count is 3
+Want their, eyelids, droop/drop, from: automotive, for, want, to, sleep, there
+SNR 10:
+  Expected words: [{'their'}, {'eyelids'}, {'droop', 'drop'}, {'want'}, {'sleep'}]
+  Recognized words: ['automotive', 'for', 'want', 'to', 'sleep', 'there']
+  Correct count is 2
+Want band, steel, 3/three, in/inches, wide, from: here, just
+SNR 5:
+  Expected words: [{'band'}, {'steel'}, {'3', 'three'}, {'in', 'inches'}, {'wide'}]
+  Recognized words: ['here', 'just']
+  Correct count is 0
+Want crouch, before, jump, miss, mark, from: history, 
+SNR 5:
+  Expected words: [{'crouch'}, {'before'}, {'jump'}, {'miss'}, {'mark'}]
+  Recognized words: ['history', '']
+  Correct count is 0
+Want pick, card, slip, under, pack/pact, from: justice, 
+SNR 5:
+  Expected words: [{'pick'}, {'card'}, {'slip'}, {'under'}, {'pack', 'pact'}]
+  Recognized words: ['justice', '']
+  Correct count is 0
+Want stems, cracked, broke, from: just, stands, tall, glasses
+SNR 5:
+  Expected words: [{'stems'}, {'tall'}, {'glasses'}, {'cracked'}, {'broke'}]
+  Recognized words: ['just', 'stands', 'tall', 'glasses']
+  Correct count is 2
+Want told, wild, tails/tales, frighten, him, from: brightness, 
+SNR 5:
+  Expected words: [{'told'}, {'wild'}, {'tails', 'tales'}, {'frighten'}, {'him'}]
+  Recognized words: ['brightness', '']
+  Correct count is 0
+Want if, mumble, your, speech, lost, from: 
+SNR 5:
+  Expected words: [{'if'}, {'mumble'}, {'your'}, {'speech'}, {'lost'}]
+  Recognized words: []
+  Correct count is 0
+Want hurdle, pit, aid, long, pole, from: 
+SNR 5:
+  Expected words: [{'hurdle'}, {'pit'}, {'aid'}, {'long'}, {'pole'}]
+  Recognized words: []
+  Correct count is 0
+Want news, struck/struct, out, restless, minds, from: information, 
+SNR 5:
+  Expected words: [{'news'}, {'struck', 'struct'}, {'out'}, {'restless'}, {'minds'}]
+  Recognized words: ['information', '']
+  Correct count is 0
+Want cheap, clothes, flash/flashy, don't, last, from: 
+SNR 5:
+  Expected words: [{'cheap'}, {'clothes'}, {'flash', 'flashy'}, {"don't"}, {'last'}]
+  Recognized words: []
+  Correct count is 0
+Want glass/gloss, top, made, unfit, read, from: here, 
+SNR 5:
+  Expected words: [{'glass', 'gloss'}, {'top'}, {'made'}, {'unfit'}, {'read'}]
+  Recognized words: ['here', '']
+  Correct count is 0
+Want throw, used, paper, cup, plate, from: 
+SNR 5:
+  Expected words: [{'throw'}, {'used'}, {'paper'}, {'cup'}, {'plate'}]
+  Recognized words: []
+  Correct count is 0
+Want these, from: there, are, many, ways, to, do, things, 
+SNR 5:
+  Expected words: [{'many'}, {'ways'}, {'do'}, {'these'}, {'things'}]
+  Recognized words: ['there', 'are', 'many', 'ways', 'to', 'do', 'things', '']
+  Correct count is 4
+Want weight, package, seen, high, scale, from: just, a, waste, 
+SNR 0:
+  Expected words: [{'weight'}, {'package'}, {'seen'}, {'high'}, {'scale'}]
+  Recognized words: ['just', 'a', 'waste', '']
+  Correct count is 0
+Want square, peg, settle, round, hole, from: 
+SNR 0:
+  Expected words: [{'square'}, {'peg'}, {'settle'}, {'round'}, {'hole'}]
+  Recognized words: []
+  Correct count is 0
+Want store, jammed, before, sale, start, from: 
+SNR 0:
+  Expected words: [{'store'}, {'jammed'}, {'before'}, {'sale'}, {'start'}]
+  Recognized words: []
+  Correct count is 0
+Want cleats, sank/sink, deeply, soft, turf, from: glasses, 
+SNR 0:
+  Expected words: [{'cleats'}, {'sank', 'sink'}, {'deeply'}, {'soft'}, {'turf'}]
+  Recognized words: ['glasses', '']
+  Correct count is 0
+Want force, equal, would, move, earth, from: 
+SNR 0:
+  Expected words: [{'force'}, {'equal'}, {'would'}, {'move'}, {'earth'}]
+  Recognized words: []
+  Correct count is 0
+Want toad, frog, hard, tell, apart, from: 
+SNR 0:
+  Expected words: [{'toad'}, {'frog'}, {'hard'}, {'tell'}, {'apart'}]
+  Recognized words: []
+  Correct count is 0
+Want peep/keep, under, tent, see, clown, from: 
+SNR 0:
+  Expected words: [{'peep', 'keep'}, {'under'}, {'tent'}, {'see'}, {'clown'}]
+  Recognized words: []
+  Correct count is 0
+Want sand, drifts/drift, over, sale/sill, house, from: 
+SNR 0:
+  Expected words: [{'sand'}, {'drifts', 'drift'}, {'over'}, {'sale', 'sill'}, {'house'}]
+  Recognized words: []
+  Correct count is 0
+Want night, alarm, roust/roused, deep, sleep, from: 
+SNR 0:
+  Expected words: [{'night'}, {'alarm'}, {'roust', 'roused'}, {'deep'}, {'sleep'}]
+  Recognized words: []
+  Correct count is 0
+Want seven, seals, stamped, great, sheets, from: 
+SNR 0:
+  Expected words: [{'seven'}, {'seals'}, {'stamped'}, {'great'}, {'sheets'}]
+  Recognized words: []
+  Correct count is 0
+Want wall, phone, ring, loud, often, from: 
+SNR 0:
+  Expected words: [{'wall'}, {'phone'}, {'ring'}, {'loud'}, {'often'}]
+  Recognized words: []
+  Correct count is 0
+Want we, like, see, clear, weather, from: 
+SNR 0:
+  Expected words: [{'we'}, {'like'}, {'see'}, {'clear'}, {'weather'}]
+  Recognized words: []
+  Correct count is 0
+Model: latest_short
+SNR 25:
+  Expected words: [{'white'}, {'silk'}, {'jacket'}, {'any'}, {'shoes'}]
+  Recognized words: ['a', 'white', 'silk', 'jacket', 'goes', 'with', 'any', 'shoes', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'tara', 'tear'}, {'thin'}, {'sheet'}, {'yellow'}, {'pad'}]
+  Recognized words: ['tara', 'thin', 'sheet', 'from', 'the', 'yellow', 'pad', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'pitch'}, {'straw'}, {'through'}, {'door'}, {'stable'}]
+  Recognized words: ['pitch', 'the', 'straw', 'through', 'the', 'door', 'of', 'the', 'stable', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'sense'}, {'smell'}, {'better'}, {'than'}, {'touch'}]
+  Recognized words: ['the', 'sense', 'of', 'smell', 'is', 'better', 'than', 'that', 'of', 'touch', '']
+  Correct count is 5
+Want have, better, than, wait, hope, from: , 6, 
+SNR 25:
+  Expected words: [{'have'}, {'better'}, {'than'}, {'wait'}, {'hope'}]
+  Recognized words: ['', '6', '']
+  Correct count is 0
+Want leaf, drifts, along, slow, spin, from: call, justin, timber, 
+SNR 25:
+  Expected words: [{'leaf'}, {'drifts'}, {'along'}, {'slow'}, {'spin'}]
+  Recognized words: ['call', 'justin', 'timber', '']
+  Correct count is 0
+SNR 25:
+  Expected words: [{'kite'}, {'dipped'}, {'suede', 'swayed'}, {'stayed'}, {'loft', 'aloft'}]
+  Recognized words: ['the', 'kite', 'dipped', 'and', 'suede', 'but', 'stayed', 'aloft', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'sun'}, {'came'}, {'light'}, {'eastern'}, {'sky'}]
+  Recognized words: ['the', 'sun', 'came', 'up', 'to', 'light', 'the', 'eastern', 'sky', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'take'}, {'shelter'}, {'tent'}, {'keep'}, {'still'}]
+  Recognized words: ['take', 'shelter', 'in', 'this', 'tent', 'but', 'keep', 'still', '']
+  Correct count is 5
+Want dots, light, betray/betrayed, black, cat, from: where, is, no, flavor, comma, 
+SNR 25:
+  Expected words: [{'dots'}, {'light'}, {'betray', 'betrayed'}, {'black'}, {'cat'}]
+  Recognized words: ['where', 'is', 'no', 'flavor', 'comma', '']
+  Correct count is 0
+SNR 25:
+  Expected words: [{'marsh'}, {'freeze'}, {'when'}, {'cold'}, {'enough'}]
+  Recognized words: ['extinction', 'of', 'learning', 'baby', 'barbra', 'streisand', 'the', 'marsh', 'will', 'freeze', 'when', 'cold', 'enough', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'hinge'}, {'door'}, {'creaked'}, {'old'}, {'age'}]
+  Recognized words: ['the', 'hinge', 'on', 'the', 'door', 'creaked', 'with', 'old', 'age', '']
+  Correct count is 5
+Want child, crawled, into, dense, grass, from: 
+SNR 20:
+  Expected words: [{'child'}, {'crawled'}, {'into'}, {'dense'}, {'grass'}]
+  Recognized words: []
+  Correct count is 0
+Want cruise, waters, sleek, yacht, fun, from: 
+SNR 20:
+  Expected words: [{'cruise'}, {'waters'}, {'sleek'}, {'yacht'}, {'fun'}]
+  Recognized words: []
+  Correct count is 0
+Want sink, thing, which, pile/piled, dishes, from: 
+SNR 20:
+  Expected words: [{'sink'}, {'thing'}, {'which'}, {'pile', 'piled'}, {'dishes'}]
+  Recognized words: []
+  Correct count is 0
+Want picked, up, dice, second, roll, from: 
+SNR 20:
+  Expected words: [{'picked'}, {'up'}, {'dice'}, {'second'}, {'roll'}]
+  Recognized words: []
+  Correct count is 0
+Want screen, before, fire, kept, sparks, from: 
+SNR 20:
+  Expected words: [{'screen'}, {'before'}, {'fire'}, {'kept'}, {'sparks'}]
+  Recognized words: []
+  Correct count is 0
+Want pencil, cut, sharp, both, ends, from: 
+SNR 20:
+  Expected words: [{'pencil'}, {'cut'}, {'sharp'}, {'both'}, {'ends'}]
+  Recognized words: []
+  Correct count is 0
+Want beetle/beatle, drowned, hot, june/tunes, sun/son, from: 
+SNR 20:
+  Expected words: [{'beetle', 'beatle'}, {'drowned'}, {'hot'}, {'june', 'tunes'}, {'sun', 'son'}]
+  Recognized words: []
+  Correct count is 0
+Want stale, smell, old, beer, lingers, from: 
+SNR 20:
+  Expected words: [{'stale'}, {'smell'}, {'old'}, {'beer'}, {'lingers'}]
+  Recognized words: []
+  Correct count is 0
+Want little, tails/tales, they, tell, false, from: 
+SNR 20:
+  Expected words: [{'little'}, {'tails', 'tales'}, {'they'}, {'tell'}, {'false'}]
+  Recognized words: []
+  Correct count is 0
+Want put, chart, mantle, tack, down, from: 
+SNR 20:
+  Expected words: [{'put'}, {'chart'}, {'mantle'}, {'tack'}, {'down'}]
+  Recognized words: []
+  Correct count is 0
+Want gray, mare, walked, before, cold/colt, from: 
+SNR 20:
+  Expected words: [{'gray'}, {'mare'}, {'walked'}, {'before'}, {'cold', 'colt'}]
+  Recognized words: []
+  Correct count is 0
+Want bright, lanterns, gay, dark, lawn, from: 
+SNR 20:
+  Expected words: [{'bright'}, {'lanterns'}, {'gay'}, {'dark'}, {'lawn'}]
+  Recognized words: []
+  Correct count is 0
+Want footprints, show/showed, path, took, beach, from: 
+SNR 15:
+  Expected words: [{'footprints'}, {'show', 'showed'}, {'path'}, {'took'}, {'beach'}]
+  Recognized words: []
+  Correct count is 0
+Want streak, color, down, left, edge, from: 
+SNR 15:
+  Expected words: [{'streak'}, {'color'}, {'down'}, {'left'}, {'edge'}]
+  Recognized words: []
+  Correct count is 0
+Want post, no, bills, office, wall, from: 
+SNR 15:
+  Expected words: [{'post'}, {'no'}, {'bills'}, {'office'}, {'wall'}]
+  Recognized words: []
+  Correct count is 0
+Want drop, ashes, worn/warren, old, rug, from: 
+SNR 15:
+  Expected words: [{'drop'}, {'ashes'}, {'worn', 'warren'}, {'old'}, {'rug'}]
+  Recognized words: []
+  Correct count is 0
+Want thick, glasses, helped/help, read, print/prints, from: 
+SNR 15:
+  Expected words: [{'thick'}, {'glasses'}, {'helped', 'help'}, {'read'}, {'print', 'prints'}]
+  Recognized words: []
+  Correct count is 0
+Want down, road, way, grain, farmer, from: 
+SNR 15:
+  Expected words: [{'down'}, {'road'}, {'way'}, {'grain'}, {'farmer'}]
+  Recognized words: []
+  Correct count is 0
+Want theft, pearl, pin, kept, secret, from: 
+SNR 15:
+  Expected words: [{'theft'}, {'pearl'}, {'pin'}, {'kept'}, {'secret'}]
+  Recognized words: []
+  Correct count is 0
+Want desk, firm, on, shaky, floor, from: 
+SNR 15:
+  Expected words: [{'desk'}, {'firm'}, {'on'}, {'shaky'}, {'floor'}]
+  Recognized words: []
+  Correct count is 0
+Want press, pedal, with, left, foot, from: 
+SNR 15:
+  Expected words: [{'press'}, {'pedal'}, {'with'}, {'left'}, {'foot'}]
+  Recognized words: []
+  Correct count is 0
+Want steady, drip, worse, drenching, rain, from: 
+SNR 15:
+  Expected words: [{'steady'}, {'drip'}, {'worse'}, {'drenching'}, {'rain'}]
+  Recognized words: []
+  Correct count is 0
+Want bottles, hold, for/four, kinds, rum, from: 
+SNR 15:
+  Expected words: [{'bottles'}, {'hold'}, {'for', 'four'}, {'kinds'}, {'rum'}]
+  Recognized words: []
+  Correct count is 0
+Want offered, proof, form, large, chart, from: 
+SNR 15:
+  Expected words: [{'offered'}, {'proof'}, {'form'}, {'large'}, {'chart'}]
+  Recognized words: []
+  Correct count is 0
+Want event, near, edge, fresh, air, from: 
+SNR 10:
+  Expected words: [{'event'}, {'near'}, {'edge'}, {'fresh'}, {'air'}]
+  Recognized words: []
+  Correct count is 0
+Want done, before, boys/boy, see, it, from: 
+SNR 10:
+  Expected words: [{'done'}, {'before'}, {'boys', 'boy'}, {'see'}, {'it'}]
+  Recognized words: []
+  Correct count is 0
+Want dimes, showered/shower, down, all, sides, from: 
+SNR 10:
+  Expected words: [{'dimes'}, {'showered', 'shower'}, {'down'}, {'all'}, {'sides'}]
+  Recognized words: []
+  Correct count is 0
+Want couch, cover, hall, drapes, blue, from: 
+SNR 10:
+  Expected words: [{'couch'}, {'cover'}, {'hall'}, {'drapes'}, {'blue'}]
+  Recognized words: []
+  Correct count is 0
+Want chair, looked, strong, no, bottom, from: 
+SNR 10:
+  Expected words: [{'chair'}, {'looked'}, {'strong'}, {'no'}, {'bottom'}]
+  Recognized words: []
+  Correct count is 0
+Want best, method, fix, place, clips, from: 
+SNR 10:
+  Expected words: [{'best'}, {'method'}, {'fix'}, {'place'}, {'clips'}]
+  Recognized words: []
+  Correct count is 0
+Want wide, grin, earned, many, friends, from: 
+SNR 10:
+  Expected words: [{'wide'}, {'grin'}, {'earned'}, {'many'}, {'friends'}]
+  Recognized words: []
+  Correct count is 0
+Want list, names, carved, around, base, from: 
+SNR 10:
+  Expected words: [{'list'}, {'names'}, {'carved'}, {'around'}, {'base'}]
+  Recognized words: []
+  Correct count is 0
+Want black, trunk, fell, from, landing/landings, from: 
+SNR 10:
+  Expected words: [{'black'}, {'trunk'}, {'fell'}, {'from'}, {'landing', 'landings'}]
+  Recognized words: []
+  Correct count is 0
+Want flat, pack, less, luggage, space, from: 
+SNR 10:
+  Expected words: [{'flat'}, {'pack'}, {'less'}, {'luggage'}, {'space'}]
+  Recognized words: []
+  Correct count is 0
+Want wheeled/wheled, bike, past, winding, road, from: 
+SNR 10:
+  Expected words: [{'wheeled', 'wheled'}, {'bike'}, {'past'}, {'winding'}, {'road'}]
+  Recognized words: []
+  Correct count is 0
+Want their, eyelids, droop/drop, want, sleep, from: 
+SNR 10:
+  Expected words: [{'their'}, {'eyelids'}, {'droop', 'drop'}, {'want'}, {'sleep'}]
+  Recognized words: []
+  Correct count is 0
+Want band, steel, 3/three, in/inches, wide, from: 
+SNR 5:
+  Expected words: [{'band'}, {'steel'}, {'3', 'three'}, {'in', 'inches'}, {'wide'}]
+  Recognized words: []
+  Correct count is 0
+Want crouch, before, jump, miss, mark, from: 
+SNR 5:
+  Expected words: [{'crouch'}, {'before'}, {'jump'}, {'miss'}, {'mark'}]
+  Recognized words: []
+  Correct count is 0
+Want pick, card, slip, under, pack/pact, from: 
+SNR 5:
+  Expected words: [{'pick'}, {'card'}, {'slip'}, {'under'}, {'pack', 'pact'}]
+  Recognized words: []
+  Correct count is 0
+Want stems, tall, glasses, cracked, broke, from: 
+SNR 5:
+  Expected words: [{'stems'}, {'tall'}, {'glasses'}, {'cracked'}, {'broke'}]
+  Recognized words: []
+  Correct count is 0
+Want told, wild, tails/tales, frighten, him, from: 
+SNR 5:
+  Expected words: [{'told'}, {'wild'}, {'tails', 'tales'}, {'frighten'}, {'him'}]
+  Recognized words: []
+  Correct count is 0
+Want if, mumble, your, speech, lost, from: 
+SNR 5:
+  Expected words: [{'if'}, {'mumble'}, {'your'}, {'speech'}, {'lost'}]
+  Recognized words: []
+  Correct count is 0
+Want hurdle, pit, aid, long, pole, from: 
+SNR 5:
+  Expected words: [{'hurdle'}, {'pit'}, {'aid'}, {'long'}, {'pole'}]
+  Recognized words: []
+  Correct count is 0
+Want news, struck/struct, out, restless, minds, from: 
+SNR 5:
+  Expected words: [{'news'}, {'struck', 'struct'}, {'out'}, {'restless'}, {'minds'}]
+  Recognized words: []
+  Correct count is 0
+Want cheap, clothes, flash/flashy, don't, last, from: 
+SNR 5:
+  Expected words: [{'cheap'}, {'clothes'}, {'flash', 'flashy'}, {"don't"}, {'last'}]
+  Recognized words: []
+  Correct count is 0
+Want glass/gloss, top, made, unfit, read, from: 
+SNR 5:
+  Expected words: [{'glass', 'gloss'}, {'top'}, {'made'}, {'unfit'}, {'read'}]
+  Recognized words: []
+  Correct count is 0
+Want throw, used, paper, cup, plate, from: 
+SNR 5:
+  Expected words: [{'throw'}, {'used'}, {'paper'}, {'cup'}, {'plate'}]
+  Recognized words: []
+  Correct count is 0
+Want many, ways, do, these, things, from: 
+SNR 5:
+  Expected words: [{'many'}, {'ways'}, {'do'}, {'these'}, {'things'}]
+  Recognized words: []
+  Correct count is 0
+Want weight, package, seen, high, scale, from: 
+SNR 0:
+  Expected words: [{'weight'}, {'package'}, {'seen'}, {'high'}, {'scale'}]
+  Recognized words: []
+  Correct count is 0
+Want square, peg, settle, round, hole, from: 
+SNR 0:
+  Expected words: [{'square'}, {'peg'}, {'settle'}, {'round'}, {'hole'}]
+  Recognized words: []
+  Correct count is 0
+Want store, jammed, before, sale, start, from: 
+SNR 0:
+  Expected words: [{'store'}, {'jammed'}, {'before'}, {'sale'}, {'start'}]
+  Recognized words: []
+  Correct count is 0
+Want cleats, sank/sink, deeply, soft, turf, from: 
+SNR 0:
+  Expected words: [{'cleats'}, {'sank', 'sink'}, {'deeply'}, {'soft'}, {'turf'}]
+  Recognized words: []
+  Correct count is 0
+Want force, equal, would, move, earth, from: 
+SNR 0:
+  Expected words: [{'force'}, {'equal'}, {'would'}, {'move'}, {'earth'}]
+  Recognized words: []
+  Correct count is 0
+Want toad, frog, hard, tell, apart, from: 
+SNR 0:
+  Expected words: [{'toad'}, {'frog'}, {'hard'}, {'tell'}, {'apart'}]
+  Recognized words: []
+  Correct count is 0
+Want peep/keep, under, tent, see, clown, from: 
+SNR 0:
+  Expected words: [{'peep', 'keep'}, {'under'}, {'tent'}, {'see'}, {'clown'}]
+  Recognized words: []
+  Correct count is 0
+Want sand, drifts/drift, over, sale/sill, house, from: 
+SNR 0:
+  Expected words: [{'sand'}, {'drifts', 'drift'}, {'over'}, {'sale', 'sill'}, {'house'}]
+  Recognized words: []
+  Correct count is 0
+Want night, alarm, roust/roused, deep, sleep, from: 
+SNR 0:
+  Expected words: [{'night'}, {'alarm'}, {'roust', 'roused'}, {'deep'}, {'sleep'}]
+  Recognized words: []
+  Correct count is 0
+Want seven, seals, stamped, great, sheets, from: 
+SNR 0:
+  Expected words: [{'seven'}, {'seals'}, {'stamped'}, {'great'}, {'sheets'}]
+  Recognized words: []
+  Correct count is 0
+Want wall, phone, ring, loud, often, from: 
+SNR 0:
+  Expected words: [{'wall'}, {'phone'}, {'ring'}, {'loud'}, {'often'}]
+  Recognized words: []
+  Correct count is 0
+Want we, like, see, clear, weather, from: 
+SNR 0:
+  Expected words: [{'we'}, {'like'}, {'see'}, {'clear'}, {'weather'}]
+  Recognized words: []
+  Correct count is 0
+Model: telephony
+SNR 25:
+  Expected words: [{'white'}, {'silk'}, {'jacket'}, {'any'}, {'shoes'}]
+  Recognized words: ['a', 'white', 'silk', 'jacket', 'goes', 'with', 'any', 'shoes', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'tara', 'tear'}, {'thin'}, {'sheet'}, {'yellow'}, {'pad'}]
+  Recognized words: ['tara', 'thin', 'sheet', 'from', 'the', 'yellow', 'pad', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'pitch'}, {'straw'}, {'through'}, {'door'}, {'stable'}]
+  Recognized words: ['pitch', 'the', 'straw', 'through', 'the', 'door', 'of', 'the', 'stable', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'sense'}, {'smell'}, {'better'}, {'than'}, {'touch'}]
+  Recognized words: ['the', 'sense', 'of', 'smell', 'is', 'better', 'than', 'that', 'of', 'touch', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'have'}, {'better'}, {'than'}, {'wait'}, {'hope'}]
+  Recognized words: ['to', 'have', 'is', 'better', 'than', 'to', 'wait', 'and', 'hope', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'leaf'}, {'drifts'}, {'along'}, {'slow'}, {'spin'}]
+  Recognized words: ['the', 'leaf', 'drifts', 'along', 'with', 'a', 'slow', 'spin', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'kite'}, {'dipped'}, {'suede', 'swayed'}, {'stayed'}, {'loft', 'aloft'}]
+  Recognized words: ['the', 'kite', 'dipped', 'and', 'swayed', 'but', 'stayed', 'aloft', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'sun'}, {'came'}, {'light'}, {'eastern'}, {'sky'}]
+  Recognized words: ['the', 'sun', 'came', 'up', 'to', 'light', 'the', 'eastern', 'sky', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'take'}, {'shelter'}, {'tent'}, {'keep'}, {'still'}]
+  Recognized words: ['take', 'shelter', 'in', 'this', 'tent', 'but', 'keep', 'still', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'dots'}, {'light'}, {'betray', 'betrayed'}, {'black'}, {'cat'}]
+  Recognized words: ['she', 'is', 'willing', 'dots', 'of', 'light', 'betrayed', 'the', 'black', 'cat', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'marsh'}, {'freeze'}, {'when'}, {'cold'}, {'enough'}]
+  Recognized words: ['the', 'marsh', 'will', 'freeze', 'when', 'cold', 'enough', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'hinge'}, {'door'}, {'creaked'}, {'old'}, {'age'}]
+  Recognized words: ['the', 'hinge', 'on', 'the', 'door', 'creaked', 'with', 'old', 'age', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'child'}, {'crawled'}, {'into'}, {'dense'}, {'grass'}]
+  Recognized words: ['the', 'child', 'crawled', 'into', 'the', 'dense', 'grass', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'cruise'}, {'waters'}, {'sleek'}, {'yacht'}, {'fun'}]
+  Recognized words: ['a', 'cruise', 'in', 'warm', 'waters', 'in', 'a', 'sleek', 'yacht', 'is', 'fun', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'sink'}, {'thing'}, {'which'}, {'pile', 'piled'}, {'dishes'}]
+  Recognized words: ['the', 'sink', 'is', 'the', 'thing', 'in', 'which', 'we', 'pile', 'dishes', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'picked'}, {'up'}, {'dice'}, {'second'}, {'roll'}]
+  Recognized words: ['he', 'picked', 'up', 'the', 'dice', 'for', 'a', 'second', 'roll', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'screen'}, {'before'}, {'fire'}, {'kept'}, {'sparks'}]
+  Recognized words: ['the', 'screen', 'before', 'the', 'fire', 'kept', 'in', 'the', 'sparks', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'pencil'}, {'cut'}, {'sharp'}, {'both'}, {'ends'}]
+  Recognized words: ['the', 'pencil', 'was', 'cut', 'to', 'be', 'sharp', 'at', 'both', 'ends', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'beetle', 'beatle'}, {'drowned'}, {'hot'}, {'june', 'tunes'}, {'sun', 'son'}]
+  Recognized words: ['the', 'beetle', 'drowned', 'in', 'the', 'hot', 'june', 'son', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'stale'}, {'smell'}, {'old'}, {'beer'}, {'lingers'}]
+  Recognized words: ['the', 'stale', 'smell', 'of', 'old', 'beer', 'lingers', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'little'}, {'tails', 'tales'}, {'they'}, {'tell'}, {'false'}]
+  Recognized words: ['the', 'little', 'tails', 'they', 'tell', 'are', 'false', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'put'}, {'chart'}, {'mantle'}, {'tack'}, {'down'}]
+  Recognized words: ['put', 'the', 'chart', 'on', 'the', 'mantle', 'and', 'tack', 'it', 'down', '']
+  Correct count is 5
+Want mare, cold/colt, from: a, gray, mayor, walked, before, the, cult, 
+SNR 20:
+  Expected words: [{'gray'}, {'mare'}, {'walked'}, {'before'}, {'cold', 'colt'}]
+  Recognized words: ['a', 'gray', 'mayor', 'walked', 'before', 'the', 'cult', '']
+  Correct count is 3
+SNR 20:
+  Expected words: [{'bright'}, {'lanterns'}, {'gay'}, {'dark'}, {'lawn'}]
+  Recognized words: ['the', 'bright', 'lanterns', 'were', 'gay', 'on', 'the', 'dark', 'lawn', '']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'footprints'}, {'show', 'showed'}, {'path'}, {'took'}, {'beach'}]
+  Recognized words: ['footprints', 'showed', 'the', 'path', 'he', 'took', 'up', 'the', 'beach', 'near']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'streak'}, {'color'}, {'down'}, {'left'}, {'edge'}]
+  Recognized words: ['streak', 'of', 'color', 'ran', 'down', 'the', 'left', 'edge', 'it']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'post'}, {'no'}, {'bills'}, {'office'}, {'wall'}]
+  Recognized words: ['post', 'no', 'bills', 'on', 'this', 'office', 'wall', 'diamonds']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'drop'}, {'ashes'}, {'worn', 'warren'}, {'old'}, {'rug'}]
+  Recognized words: ['drop', 'the', 'ashes', 'on', 'the', 'warren', 'old', 'rug', 'the']
+  Correct count is 5
+Want thick, glasses, from: classes, helped, him, read, the, print, the
+SNR 15:
+  Expected words: [{'thick'}, {'glasses'}, {'helped', 'help'}, {'read'}, {'print', 'prints'}]
+  Recognized words: ['classes', 'helped', 'him', 'read', 'the', 'print', 'the']
+  Correct count is 3
+Want farmer, from: down, that, road, is, the, way, to, the, grain, farm, the
+SNR 15:
+  Expected words: [{'down'}, {'road'}, {'way'}, {'grain'}, {'farmer'}]
+  Recognized words: ['down', 'that', 'road', 'is', 'the', 'way', 'to', 'the', 'grain', 'farm', 'the']
+  Correct count is 4
+Want pin, from: the, theft, of, the, pearl, pinned, was, kept, secret, his
+SNR 15:
+  Expected words: [{'theft'}, {'pearl'}, {'pin'}, {'kept'}, {'secret'}]
+  Recognized words: ['the', 'theft', 'of', 'the', 'pearl', 'pinned', 'was', 'kept', 'secret', 'his']
+  Correct count is 4
+SNR 15:
+  Expected words: [{'desk'}, {'firm'}, {'on'}, {'shaky'}, {'floor'}]
+  Recognized words: ['the', 'desk', 'was', 'firm', 'on', 'the', 'shaky', 'floor', 'a']
+  Correct count is 5
+Want press, from: the, pedal, with, your, left, foot, which, this
+SNR 15:
+  Expected words: [{'press'}, {'pedal'}, {'with'}, {'left'}, {'foot'}]
+  Recognized words: ['the', 'pedal', 'with', 'your', 'left', 'foot', 'which', 'this']
+  Correct count is 4
+Want drip, from: steady, drift, is, worse, than, a, drenching, rain, a
+SNR 15:
+  Expected words: [{'steady'}, {'drip'}, {'worse'}, {'drenching'}, {'rain'}]
+  Recognized words: ['steady', 'drift', 'is', 'worse', 'than', 'a', 'drenching', 'rain', 'a']
+  Correct count is 4
+Want for/four, rum, from: bottles, hold, 4, kinds, of, room, he
+SNR 15:
+  Expected words: [{'bottles'}, {'hold'}, {'for', 'four'}, {'kinds'}, {'rum'}]
+  Recognized words: ['bottles', 'hold', '4', 'kinds', 'of', 'room', 'he']
+  Correct count is 3
+SNR 15:
+  Expected words: [{'offered'}, {'proof'}, {'form'}, {'large'}, {'chart'}]
+  Recognized words: ['offered', 'proof', 'in', 'the', 'form', 'of', 'a', 'large', 'chart', 'their']
+  Correct count is 5
+Want event, from: near, the, edge, brought, in, fresh, air, all
+SNR 10:
+  Expected words: [{'event'}, {'near'}, {'edge'}, {'fresh'}, {'air'}]
+  Recognized words: ['near', 'the', 'edge', 'brought', 'in', 'fresh', 'air', 'all']
+  Correct count is 4
+SNR 10:
+  Expected words: [{'done'}, {'before'}, {'boys', 'boy'}, {'see'}, {'it'}]
+  Recognized words: ['it', 'was', 'done', 'before', 'the', 'boy', 'could', 'see', 'it', 'before']
+  Correct count is 5
+Want dimes, from: diamonds, shower, down, from, all, sides, under
+SNR 10:
+  Expected words: [{'dimes'}, {'showered', 'shower'}, {'down'}, {'all'}, {'sides'}]
+  Recognized words: ['diamonds', 'shower', 'down', 'from', 'all', 'sides', 'under']
+  Correct count is 4
+Want hall, from: the, couch, cover, and, tall, drapes, were, blue, light
+SNR 10:
+  Expected words: [{'couch'}, {'cover'}, {'hall'}, {'drapes'}, {'blue'}]
+  Recognized words: ['the', 'couch', 'cover', 'and', 'tall', 'drapes', 'were', 'blue', 'light']
+  Correct count is 4
+Want bottom, from: the, chair, looked, strong, but, had, no, body, 
+SNR 10:
+  Expected words: [{'chair'}, {'looked'}, {'strong'}, {'no'}, {'bottom'}]
+  Recognized words: ['the', 'chair', 'looked', 'strong', 'but', 'had', 'no', 'body', '']
+  Correct count is 4
+Want clips, from: the, best, method, is, to, fix, it, in, place, with, slips, will
+SNR 10:
+  Expected words: [{'best'}, {'method'}, {'fix'}, {'place'}, {'clips'}]
+  Recognized words: ['the', 'best', 'method', 'is', 'to', 'fix', 'it', 'in', 'place', 'with', 'slips', 'will']
+  Correct count is 4
+SNR 10:
+  Expected words: [{'wide'}, {'grin'}, {'earned'}, {'many'}, {'friends'}]
+  Recognized words: ['his', 'wide', 'grin', 'earned', 'many', 'friends', 'that']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'list'}, {'names'}, {'carved'}, {'around'}, {'base'}]
+  Recognized words: ['a', 'list', 'of', 'names', 'is', 'carved', 'around', 'the', 'base', 'struck']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'black'}, {'trunk'}, {'fell'}, {'from'}, {'landing', 'landings'}]
+  Recognized words: ['the', 'black', 'trunk', 'fell', 'from', 'the', 'landing', '']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'flat'}, {'pack'}, {'less'}, {'luggage'}, {'space'}]
+  Recognized words: ['a', 'flat', 'pack', 'takes', 'less', 'luggage', 'space', 'she', 'is', 'willing', 'to', 'associate']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'wheeled', 'wheled'}, {'bike'}, {'past'}, {'winding'}, {'road'}]
+  Recognized words: ['he', 'wheeled', 'the', 'bike', 'past', 'the', 'winding', 'road', '']
+  Correct count is 5
+Want droop/drop, from: their, eyelids, drooped, for, want, of, sleep, there
+SNR 10:
+  Expected words: [{'their'}, {'eyelids'}, {'droop', 'drop'}, {'want'}, {'sleep'}]
+  Recognized words: ['their', 'eyelids', 'drooped', 'for', 'want', 'of', 'sleep', 'there']
+  Correct count is 4
+Want band, steel, 3/three, in/inches, wide, from: all, together, 
+SNR 5:
+  Expected words: [{'band'}, {'steel'}, {'3', 'three'}, {'in', 'inches'}, {'wide'}]
+  Recognized words: ['all', 'together', '']
+  Correct count is 0
+Want crouch, miss, mark, from: before, you, jump, 
+SNR 5:
+  Expected words: [{'crouch'}, {'before'}, {'jump'}, {'miss'}, {'mark'}]
+  Recognized words: ['before', 'you', 'jump', '']
+  Correct count is 2
+Want pick, card, slip, pack/pact, from: under, the, past, where, there, are, such, as, 
+SNR 5:
+  Expected words: [{'pick'}, {'card'}, {'slip'}, {'under'}, {'pack', 'pact'}]
+  Recognized words: ['under', 'the', 'past', 'where', 'there', 'are', 'such', 'as', '']
+  Correct count is 1
+Want stems, tall, glasses, cracked, broke, from: light
+SNR 5:
+  Expected words: [{'stems'}, {'tall'}, {'glasses'}, {'cracked'}, {'broke'}]
+  Recognized words: ['light']
+  Correct count is 0
+Want told, wild, tails/tales, frighten, him, from: 
+SNR 5:
+  Expected words: [{'told'}, {'wild'}, {'tails', 'tales'}, {'frighten'}, {'him'}]
+  Recognized words: []
+  Correct count is 0
+Want if, mumble, your, speech, from: will, be, lost, 
+SNR 5:
+  Expected words: [{'if'}, {'mumble'}, {'your'}, {'speech'}, {'lost'}]
+  Recognized words: ['will', 'be', 'lost', '']
+  Correct count is 1
+Want hurdle, pit, from: that, we, should, know, the, aid, of, a, long, pole, how, enriched, our, lives
+SNR 5:
+  Expected words: [{'hurdle'}, {'pit'}, {'aid'}, {'long'}, {'pole'}]
+  Recognized words: ['that', 'we', 'should', 'know', 'the', 'aid', 'of', 'a', 'long', 'pole', 'how', 'enriched', 'our', 'lives']
+  Correct count is 3
+Want news, out, restless, minds, from: struck, down, from, 2, 
+SNR 5:
+  Expected words: [{'news'}, {'struck', 'struct'}, {'out'}, {'restless'}, {'minds'}]
+  Recognized words: ['struck', 'down', 'from', '2', '']
+  Correct count is 1
+Want cheap, clothes, flash/flashy, don't, last, from: 
+SNR 5:
+  Expected words: [{'cheap'}, {'clothes'}, {'flash', 'flashy'}, {"don't"}, {'last'}]
+  Recognized words: []
+  Correct count is 0
+Want glass/gloss, read, from: herself, with, us, on, top, made, it, unfit, 
+SNR 5:
+  Expected words: [{'glass', 'gloss'}, {'top'}, {'made'}, {'unfit'}, {'read'}]
+  Recognized words: ['herself', 'with', 'us', 'on', 'top', 'made', 'it', 'unfit', '']
+  Correct count is 3
+Want throw, used, paper, cup, plate, from: 
+SNR 5:
+  Expected words: [{'throw'}, {'used'}, {'paper'}, {'cup'}, {'plate'}]
+  Recognized words: []
+  Correct count is 0
+Want these, things, from: there, are, many, ways, to, do, this, 
+SNR 5:
+  Expected words: [{'many'}, {'ways'}, {'do'}, {'these'}, {'things'}]
+  Recognized words: ['there', 'are', 'many', 'ways', 'to', 'do', 'this', '']
+  Correct count is 3
+Want weight, package, seen, high, scale, from: 
+SNR 0:
+  Expected words: [{'weight'}, {'package'}, {'seen'}, {'high'}, {'scale'}]
+  Recognized words: []
+  Correct count is 0
+Want square, peg, settle, round, hole, from: 
+SNR 0:
+  Expected words: [{'square'}, {'peg'}, {'settle'}, {'round'}, {'hole'}]
+  Recognized words: []
+  Correct count is 0
+Want store, jammed, before, sale, start, from: 
+SNR 0:
+  Expected words: [{'store'}, {'jammed'}, {'before'}, {'sale'}, {'start'}]
+  Recognized words: []
+  Correct count is 0
+Want cleats, sank/sink, deeply, soft, turf, from: 
+SNR 0:
+  Expected words: [{'cleats'}, {'sank', 'sink'}, {'deeply'}, {'soft'}, {'turf'}]
+  Recognized words: []
+  Correct count is 0
+Want force, equal, would, move, earth, from: 
+SNR 0:
+  Expected words: [{'force'}, {'equal'}, {'would'}, {'move'}, {'earth'}]
+  Recognized words: []
+  Correct count is 0
+Want toad, frog, hard, tell, apart, from: 
+SNR 0:
+  Expected words: [{'toad'}, {'frog'}, {'hard'}, {'tell'}, {'apart'}]
+  Recognized words: []
+  Correct count is 0
+Want peep/keep, under, tent, see, clown, from: 
+SNR 0:
+  Expected words: [{'peep', 'keep'}, {'under'}, {'tent'}, {'see'}, {'clown'}]
+  Recognized words: []
+  Correct count is 0
+Want sand, drifts/drift, over, sale/sill, house, from: 
+SNR 0:
+  Expected words: [{'sand'}, {'drifts', 'drift'}, {'over'}, {'sale', 'sill'}, {'house'}]
+  Recognized words: []
+  Correct count is 0
+Want night, alarm, roust/roused, deep, sleep, from: 
+SNR 0:
+  Expected words: [{'night'}, {'alarm'}, {'roust', 'roused'}, {'deep'}, {'sleep'}]
+  Recognized words: []
+  Correct count is 0
+Want seven, seals, stamped, great, sheets, from: 
+SNR 0:
+  Expected words: [{'seven'}, {'seals'}, {'stamped'}, {'great'}, {'sheets'}]
+  Recognized words: []
+  Correct count is 0
+Want wall, phone, ring, loud, often, from: 
+SNR 0:
+  Expected words: [{'wall'}, {'phone'}, {'ring'}, {'loud'}, {'often'}]
+  Recognized words: []
+  Correct count is 0
+Want we, like, see, clear, weather, from: 
+SNR 0:
+  Expected words: [{'we'}, {'like'}, {'see'}, {'clear'}, {'weather'}]
+  Recognized words: []
+  Correct count is 0
+Model: medical_dictation
+Want white, from: a, right, silk, jacket, goes, with, any, shoes, 
+SNR 25:
+  Expected words: [{'white'}, {'silk'}, {'jacket'}, {'any'}, {'shoes'}]
+  Recognized words: ['a', 'right', 'silk', 'jacket', 'goes', 'with', 'any', 'shoes', '']
+  Correct count is 4
+Want tara/tear, thin, sheet, from: , she, from, the, yellow, pad, 
+SNR 25:
+  Expected words: [{'tara', 'tear'}, {'thin'}, {'sheet'}, {'yellow'}, {'pad'}]
+  Recognized words: ['', 'she', 'from', 'the', 'yellow', 'pad', '']
+  Correct count is 2
+Want pitch, from: pitched, the, straw, through, the, door, of, the, stable, 
+SNR 25:
+  Expected words: [{'pitch'}, {'straw'}, {'through'}, {'door'}, {'stable'}]
+  Recognized words: ['pitched', 'the', 'straw', 'through', 'the', 'door', 'of', 'the', 'stable', '']
+  Correct count is 4
+SNR 25:
+  Expected words: [{'sense'}, {'smell'}, {'better'}, {'than'}, {'touch'}]
+  Recognized words: ['the', 'sense', 'of', 'smell', 'is', 'better', 'than', 'that', 'of', 'touch', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'have'}, {'better'}, {'than'}, {'wait'}, {'hope'}]
+  Recognized words: ['', 'next', 'paragraph', 'to', 'have', 'is', 'better', 'than', 'to', 'wait', 'and', 'hope', '']
+  Correct count is 5
+Want leaf, from: pulmonologist, , the, leep, drifts, along, with, a, slow, spin, 
+SNR 25:
+  Expected words: [{'leaf'}, {'drifts'}, {'along'}, {'slow'}, {'spin'}]
+  Recognized words: ['pulmonologist', '', 'the', 'leep', 'drifts', 'along', 'with', 'a', 'slow', 'spin', '']
+  Correct count is 4
+SNR 25:
+  Expected words: [{'kite'}, {'dipped'}, {'suede', 'swayed'}, {'stayed'}, {'loft', 'aloft'}]
+  Recognized words: ['', 'the', 'kite', 'dipped', 'and', 'swayed', '', 'but', 'stayed', 'aloft', '']
+  Correct count is 5
+Want sun, sky, from: , the, son, came, up, to, light, the, eastern, skye, 
+SNR 25:
+  Expected words: [{'sun'}, {'came'}, {'light'}, {'eastern'}, {'sky'}]
+  Recognized words: ['', 'the', 'son', 'came', 'up', 'to', 'light', 'the', 'eastern', 'skye', '']
+  Correct count is 3
+Want take, tent, keep, from: , takes, shelter, in, the, stent, , but, keeps, still, 
+SNR 25:
+  Expected words: [{'take'}, {'shelter'}, {'tent'}, {'keep'}, {'still'}]
+  Recognized words: ['', 'takes', 'shelter', 'in', 'the', 'stent', '', 'but', 'keeps', 'still', '']
+  Correct count is 2
+Want dots, from: , thoughts, of, light, betrayed, the, black, cat, 
+SNR 25:
+  Expected words: [{'dots'}, {'light'}, {'betray', 'betrayed'}, {'black'}, {'cat'}]
+  Recognized words: ['', 'thoughts', 'of', 'light', 'betrayed', 'the', 'black', 'cat', '']
+  Correct count is 4
+Want marsh, from: atrial, distention, , the, marshue, will, freeze, when, cold, enough, 
+SNR 25:
+  Expected words: [{'marsh'}, {'freeze'}, {'when'}, {'cold'}, {'enough'}]
+  Recognized words: ['atrial', 'distention', '', 'the', 'marshue', 'will', 'freeze', 'when', 'cold', 'enough', '']
+  Correct count is 4
+Want hinge, from: , the, hinged, and, the, door, creaked, with, old, age, 
+SNR 25:
+  Expected words: [{'hinge'}, {'door'}, {'creaked'}, {'old'}, {'age'}]
+  Recognized words: ['', 'the', 'hinged', 'and', 'the', 'door', 'creaked', 'with', 'old', 'age', '']
+  Correct count is 4
+SNR 20:
+  Expected words: [{'child'}, {'crawled'}, {'into'}, {'dense'}, {'grass'}]
+  Recognized words: ['', 'the', 'child', 'crawled', 'into', 'the', 'dense', 'grass', '']
+  Correct count is 5
+Want sleek, from: a, cruise, in, warm, waters, in, a, sleaky, yacht, is, fun, 
+SNR 20:
+  Expected words: [{'cruise'}, {'waters'}, {'sleek'}, {'yacht'}, {'fun'}]
+  Recognized words: ['a', 'cruise', 'in', 'warm', 'waters', 'in', 'a', 'sleaky', 'yacht', 'is', 'fun', '']
+  Correct count is 4
+Want dishes, from: the, sink, is, the, thing, in, which, we, piled, issues, 
+SNR 20:
+  Expected words: [{'sink'}, {'thing'}, {'which'}, {'pile', 'piled'}, {'dishes'}]
+  Recognized words: ['the', 'sink', 'is', 'the', 'thing', 'in', 'which', 'we', 'piled', 'issues', '']
+  Correct count is 4
+SNR 20:
+  Expected words: [{'picked'}, {'up'}, {'dice'}, {'second'}, {'roll'}]
+  Recognized words: ['', 'he', 'picked', 'up', 'the', 'dice', 'for', 'a', 'second', 'roll', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'screen'}, {'before'}, {'fire'}, {'kept'}, {'sparks'}]
+  Recognized words: ['the', 'screen', 'before', 'the', 'fire', 'kept', 'in', 'the', 'sparks', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'pencil'}, {'cut'}, {'sharp'}, {'both'}, {'ends'}]
+  Recognized words: ['', 'the', 'pencil', 'was', 'cut', 'to', 'be', 'sharp', 'at', 'both', 'ends', '']
+  Correct count is 5
+Want june/tunes, sun/son, from: breath, sounds, , the, beetle, drowned, in, the, hot, junction, 
+SNR 20:
+  Expected words: [{'beetle', 'beatle'}, {'drowned'}, {'hot'}, {'june', 'tunes'}, {'sun', 'son'}]
+  Recognized words: ['breath', 'sounds', '', 'the', 'beetle', 'drowned', 'in', 'the', 'hot', 'junction', '']
+  Correct count is 3
+SNR 20:
+  Expected words: [{'stale'}, {'smell'}, {'old'}, {'beer'}, {'lingers'}]
+  Recognized words: ['the', 'stale', 'smell', 'of', 'old', 'beer', 'lingers', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'little'}, {'tails', 'tales'}, {'they'}, {'tell'}, {'false'}]
+  Recognized words: ['', 'the', 'little', 'tails', 'they', 'tell', 'are', 'false', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'put'}, {'chart'}, {'mantle'}, {'tack'}, {'down'}]
+  Recognized words: ['', 'put', 'the', 'chart', 'on', 'the', 'mantle', 'and', 'tack', 'it', 'down', '']
+  Correct count is 5
+Want mare, from: a, gray, matter, walked, before, the, cold, 
+SNR 20:
+  Expected words: [{'gray'}, {'mare'}, {'walked'}, {'before'}, {'cold', 'colt'}]
+  Recognized words: ['a', 'gray', 'matter', 'walked', 'before', 'the', 'cold', '']
+  Correct count is 4
+Want lanterns, from: the, bright, lantos, were, gay, on, the, dark, lawn, 
+SNR 20:
+  Expected words: [{'bright'}, {'lanterns'}, {'gay'}, {'dark'}, {'lawn'}]
+  Recognized words: ['the', 'bright', 'lantos', 'were', 'gay', 'on', 'the', 'dark', 'lawn', '']
+  Correct count is 4
+SNR 15:
+  Expected words: [{'footprints'}, {'show', 'showed'}, {'path'}, {'took'}, {'beach'}]
+  Recognized words: ['footprints', 'showed', 'the', 'path', 'he', 'took', 'up', 'the', 'beach', '']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'streak'}, {'color'}, {'down'}, {'left'}, {'edge'}]
+  Recognized words: ['a', 'streak', 'of', 'color', 'ran', 'down', 'the', 'left', 'edge', '']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'post'}, {'no'}, {'bills'}, {'office'}, {'wall'}]
+  Recognized words: ['post', 'no', 'bills', 'on', 'this', 'office', 'wall', '']
+  Correct count is 5
+Want worn/warren, rug, from: drop, the, ashes, on, the, one, old, drug, 
+SNR 15:
+  Expected words: [{'drop'}, {'ashes'}, {'worn', 'warren'}, {'old'}, {'rug'}]
+  Recognized words: ['drop', 'the', 'ashes', 'on', 'the', 'one', 'old', 'drug', '']
+  Correct count is 3
+SNR 15:
+  Expected words: [{'thick'}, {'glasses'}, {'helped', 'help'}, {'read'}, {'print', 'prints'}]
+  Recognized words: ['thick', 'glasses', 'helped', 'him', 'read', 'the', 'print', '']
+  Correct count is 5
+Want farmer, from: down, that, road, is, the, way, to, the, grain, findings
+SNR 15:
+  Expected words: [{'down'}, {'road'}, {'way'}, {'grain'}, {'farmer'}]
+  Recognized words: ['down', 'that', 'road', 'is', 'the', 'way', 'to', 'the', 'grain', 'findings']
+  Correct count is 4
+Want pearl, pin, from: the, theft, of, the, purulence, was, kept, secret, 
+SNR 15:
+  Expected words: [{'theft'}, {'pearl'}, {'pin'}, {'kept'}, {'secret'}]
+  Recognized words: ['the', 'theft', 'of', 'the', 'purulence', 'was', 'kept', 'secret', '']
+  Correct count is 3
+SNR 15:
+  Expected words: [{'desk'}, {'firm'}, {'on'}, {'shaky'}, {'floor'}]
+  Recognized words: ['the', 'desk', 'was', 'firm', 'on', 'the', 'shaky', 'floor', '']
+  Correct count is 5
+Want with, from: press, the, pedal, because, your, left, foot, 
+SNR 15:
+  Expected words: [{'press'}, {'pedal'}, {'with'}, {'left'}, {'foot'}]
+  Recognized words: ['press', 'the', 'pedal', 'because', 'your', 'left', 'foot', '']
+  Correct count is 4
+Want drip, rain, from: the, steady, grip, is, worse, than, a, drenching, ring, 
+SNR 15:
+  Expected words: [{'steady'}, {'drip'}, {'worse'}, {'drenching'}, {'rain'}]
+  Recognized words: ['the', 'steady', 'grip', 'is', 'worse', 'than', 'a', 'drenching', 'ring', '']
+  Correct count is 3
+Want rum, from: bottles, hold, four, kinds, of, gums, 
+SNR 15:
+  Expected words: [{'bottles'}, {'hold'}, {'for', 'four'}, {'kinds'}, {'rum'}]
+  Recognized words: ['bottles', 'hold', 'four', 'kinds', 'of', 'gums', '']
+  Correct count is 4
+SNR 15:
+  Expected words: [{'offered'}, {'proof'}, {'form'}, {'large'}, {'chart'}]
+  Recognized words: ['he', 'offered', 'proof', 'in', 'the', 'form', 'of', 'a', 'large', 'chart', '']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'event'}, {'near'}, {'edge'}, {'fresh'}, {'air'}]
+  Recognized words: ['', 'event', 'near', 'the', 'edge', 'brought', 'in', 'fresh', 'air']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'done'}, {'before'}, {'boys', 'boy'}, {'see'}, {'it'}]
+  Recognized words: ['', 'it', 'was', 'done', 'before', 'the', 'boy', 'could', 'see', 'it', '', 'regimen', '']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'dimes'}, {'showered', 'shower'}, {'down'}, {'all'}, {'sides'}]
+  Recognized words: ['', 'dimes', 'showered', 'down', 'from', 'all', 'sides', '', 'chest']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'couch'}, {'cover'}, {'hall'}, {'drapes'}, {'blue'}]
+  Recognized words: ['', 'the', 'couch', 'cover', 'and', 'hall', 'drapes', 'for', 'blue', '', 'changes']
+  Correct count is 5
+Want bottom, from: the, chair, looked, strong, but, had, no, vomiting, , 
+SNR 10:
+  Expected words: [{'chair'}, {'looked'}, {'strong'}, {'no'}, {'bottom'}]
+  Recognized words: ['the', 'chair', 'looked', 'strong', 'but', 'had', 'no', 'vomiting', '', '']
+  Correct count is 4
+SNR 10:
+  Expected words: [{'best'}, {'method'}, {'fix'}, {'place'}, {'clips'}]
+  Recognized words: ['findings', '', 'the', 'best', 'method', 'is', 'to', 'fix', 'it', 'in', 'place', 'with', 'clips', '', 'are']
+  Correct count is 5
+Want wide, grin, earned, from: his, right, groin, um, many, friends, , 
+SNR 10:
+  Expected words: [{'wide'}, {'grin'}, {'earned'}, {'many'}, {'friends'}]
+  Recognized words: ['his', 'right', 'groin', 'um', 'many', 'friends', '', '']
+  Correct count is 2
+Want names, from: , all, list, of, nodes, is, carved, around, the, base, , 
+SNR 10:
+  Expected words: [{'list'}, {'names'}, {'carved'}, {'around'}, {'base'}]
+  Recognized words: ['', 'all', 'list', 'of', 'nodes', 'is', 'carved', 'around', 'the', 'base', '', '']
+  Correct count is 4
+Want trunk, from: the, black, tones, , she, fell, from, the, landing, sepsis
+SNR 10:
+  Expected words: [{'black'}, {'trunk'}, {'fell'}, {'from'}, {'landing', 'landings'}]
+  Recognized words: ['the', 'black', 'tones', '', 'she', 'fell', 'from', 'the', 'landing', 'sepsis']
+  Correct count is 4
+SNR 10:
+  Expected words: [{'flat'}, {'pack'}, {'less'}, {'luggage'}, {'space'}]
+  Recognized words: ['', 'a', 'flat', 'pack', 'takes', 'less', 'luggage', 'space', '']
+  Correct count is 5
+Want road, from: he, wheeled, the, bike, past, the, winding, room, paper
+SNR 10:
+  Expected words: [{'wheeled', 'wheled'}, {'bike'}, {'past'}, {'winding'}, {'road'}]
+  Recognized words: ['he', 'wheeled', 'the', 'bike', 'past', 'the', 'winding', 'room', 'paper']
+  Correct count is 4
+Want their, droop/drop, want, sleep, from: , there, are, eyelids, droops, for, one, to, sleeping, 
+SNR 10:
+  Expected words: [{'their'}, {'eyelids'}, {'droop', 'drop'}, {'want'}, {'sleep'}]
+  Recognized words: ['', 'there', 'are', 'eyelids', 'droops', 'for', 'one', 'to', 'sleeping', '']
+  Correct count is 1
+Want band, steel, 3/three, in/inches, wide, from: it, improved, , osteoarthritis
+SNR 5:
+  Expected words: [{'band'}, {'steel'}, {'3', 'three'}, {'in', 'inches'}, {'wide'}]
+  Recognized words: ['it', 'improved', '', 'osteoarthritis']
+  Correct count is 0
+Want crouch, before, jump, miss, mark, from: 
+SNR 5:
+  Expected words: [{'crouch'}, {'before'}, {'jump'}, {'miss'}, {'mark'}]
+  Recognized words: []
+  Correct count is 0
+Want pick, card, slip, under, pack/pact, from: to, auscultation, bilaterally, 
+SNR 5:
+  Expected words: [{'pick'}, {'card'}, {'slip'}, {'under'}, {'pack', 'pact'}]
+  Recognized words: ['to', 'auscultation', 'bilaterally', '']
+  Correct count is 0
+Want stems, tall, glasses, cracked, broke, from: changes, gestation, 
+SNR 5:
+  Expected words: [{'stems'}, {'tall'}, {'glasses'}, {'cracked'}, {'broke'}]
+  Recognized words: ['changes', 'gestation', '']
+  Correct count is 0
+Want told, wild, tails/tales, frighten, him, from: , 
+SNR 5:
+  Expected words: [{'told'}, {'wild'}, {'tails', 'tales'}, {'frighten'}, {'him'}]
+  Recognized words: ['', '']
+  Correct count is 0
+Want if, mumble, your, speech, lost, from: are, in, no, distress, , discharge
+SNR 5:
+  Expected words: [{'if'}, {'mumble'}, {'your'}, {'speech'}, {'lost'}]
+  Recognized words: ['are', 'in', 'no', 'distress', '', 'discharge']
+  Correct count is 0
+Want hurdle, pit, aid, long, pole, from: 
+SNR 5:
+  Expected words: [{'hurdle'}, {'pit'}, {'aid'}, {'long'}, {'pole'}]
+  Recognized words: ['']
+  Correct count is 0
+Want news, struck/struct, out, restless, minds, from: 
+SNR 5:
+  Expected words: [{'news'}, {'struck', 'struct'}, {'out'}, {'restless'}, {'minds'}]
+  Recognized words: []
+  Correct count is 0
+Want cheap, clothes, flash/flashy, don't, last, from: sepsis, 
+SNR 5:
+  Expected words: [{'cheap'}, {'clothes'}, {'flash', 'flashy'}, {"don't"}, {'last'}]
+  Recognized words: ['sepsis', '']
+  Correct count is 0
+Want made, unfit, read, from: , the, gloss, on, top, is, needed, about, six
+SNR 5:
+  Expected words: [{'glass', 'gloss'}, {'top'}, {'made'}, {'unfit'}, {'read'}]
+  Recognized words: ['', 'the', 'gloss', 'on', 'top', 'is', 'needed', 'about', 'six']
+  Correct count is 2
+Want throw, used, plate, from: paper, cup, in, the, spring, runs, through, the, eyes, throughout
+SNR 5:
+  Expected words: [{'throw'}, {'used'}, {'paper'}, {'cup'}, {'plate'}]
+  Recognized words: ['paper', 'cup', 'in', 'the', 'spring', 'runs', 'through', 'the', 'eyes', 'throughout']
+  Correct count is 2
+Want these, things, from: , albumin, is, dry, , there, are, many, ways, to, do, his, stools
+SNR 5:
+  Expected words: [{'many'}, {'ways'}, {'do'}, {'these'}, {'things'}]
+  Recognized words: ['', 'albumin', 'is', 'dry', '', 'there', 'are', 'many', 'ways', 'to', 'do', 'his', 'stools']
+  Correct count is 3
+Want weight, package, seen, high, scale, from: 
+SNR 0:
+  Expected words: [{'weight'}, {'package'}, {'seen'}, {'high'}, {'scale'}]
+  Recognized words: []
+  Correct count is 0
+Want square, peg, settle, round, hole, from: 
+SNR 0:
+  Expected words: [{'square'}, {'peg'}, {'settle'}, {'round'}, {'hole'}]
+  Recognized words: []
+  Correct count is 0
+Want store, jammed, before, sale, start, from: 
+SNR 0:
+  Expected words: [{'store'}, {'jammed'}, {'before'}, {'sale'}, {'start'}]
+  Recognized words: []
+  Correct count is 0
+Want cleats, sank/sink, deeply, soft, turf, from: , 
+SNR 0:
+  Expected words: [{'cleats'}, {'sank', 'sink'}, {'deeply'}, {'soft'}, {'turf'}]
+  Recognized words: ['', '']
+  Correct count is 0
+Want force, equal, would, move, earth, from: 
+SNR 0:
+  Expected words: [{'force'}, {'equal'}, {'would'}, {'move'}, {'earth'}]
+  Recognized words: []
+  Correct count is 0
+Want toad, frog, hard, tell, apart, from: discharge, 
+SNR 0:
+  Expected words: [{'toad'}, {'frog'}, {'hard'}, {'tell'}, {'apart'}]
+  Recognized words: ['discharge', '']
+  Correct count is 0
+Want peep/keep, under, tent, see, clown, from: , 
+SNR 0:
+  Expected words: [{'peep', 'keep'}, {'under'}, {'tent'}, {'see'}, {'clown'}]
+  Recognized words: ['', '']
+  Correct count is 0
+Want sand, drifts/drift, over, sale/sill, house, from: 
+SNR 0:
+  Expected words: [{'sand'}, {'drifts', 'drift'}, {'over'}, {'sale', 'sill'}, {'house'}]
+  Recognized words: []
+  Correct count is 0
+Want night, alarm, roust/roused, deep, sleep, from: she, converted, and, again, she, just, fell, period, 
+SNR 0:
+  Expected words: [{'night'}, {'alarm'}, {'roust', 'roused'}, {'deep'}, {'sleep'}]
+  Recognized words: ['she', 'converted', 'and', 'again', 'she', 'just', 'fell', 'period', '']
+  Correct count is 0
+Want seven, seals, stamped, great, sheets, from: months, time, , this, is, a, review, of, systems, consistent
+SNR 0:
+  Expected words: [{'seven'}, {'seals'}, {'stamped'}, {'great'}, {'sheets'}]
+  Recognized words: ['months', 'time', '', 'this', 'is', 'a', 'review', 'of', 'systems', 'consistent']
+  Correct count is 0
+Want wall, phone, ring, loud, often, from: throughout, 
+SNR 0:
+  Expected words: [{'wall'}, {'phone'}, {'ring'}, {'loud'}, {'often'}]
+  Recognized words: ['throughout', '']
+  Correct count is 0
+Want we, like, see, clear, weather, from: , he, begins, to, feel, nauseated, 
+SNR 0:
+  Expected words: [{'we'}, {'like'}, {'see'}, {'clear'}, {'weather'}]
+  Recognized words: ['', 'he', 'begins', 'to', 'feel', 'nauseated', '']
+  Correct count is 0
+Model: medical_conversation
+Want white, from: , , so, , the, glimepiride, 30, , right, , , , all, right, , silk, jacket, goes, with, any, shoes, 
+SNR 25:
+  Expected words: [{'white'}, {'silk'}, {'jacket'}, {'any'}, {'shoes'}]
+  Recognized words: ['', '', 'so', '', 'the', 'glimepiride', '30', '', 'right', '', '', '', 'all', 'right', '', 'silk', 'jacket', 'goes', 'with', 'any', 'shoes', '']
+  Correct count is 4
+Want tara/tear, from: , , , , para, thin, sheet, from, the, yellow, pad, 
+SNR 25:
+  Expected words: [{'tara', 'tear'}, {'thin'}, {'sheet'}, {'yellow'}, {'pad'}]
+  Recognized words: ['', '', '', '', 'para', 'thin', 'sheet', 'from', 'the', 'yellow', 'pad', '']
+  Correct count is 4
+Want pitch, from: , , peach, the, straw, through, the, door, of, the, stable, 
+SNR 25:
+  Expected words: [{'pitch'}, {'straw'}, {'through'}, {'door'}, {'stable'}]
+  Recognized words: ['', '', 'peach', 'the', 'straw', 'through', 'the', 'door', 'of', 'the', 'stable', '']
+  Correct count is 4
+SNR 25:
+  Expected words: [{'sense'}, {'smell'}, {'better'}, {'than'}, {'touch'}]
+  Recognized words: ['', 'were', 'going', 'to', 'use', 'the', 'beginning', 'party', '', '', '', 'the', 'sense', 'of', 'smell', 'is', 'better', 'than', 'bad', 'up', 'touch', '', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'have'}, {'better'}, {'than'}, {'wait'}, {'hope'}]
+  Recognized words: ['', 'to', 'have', 'is', 'better', 'than', 'to', 'wait', 'and', 'hope', '', '']
+  Correct count is 5
+Want leaf, spin, from: , the, least, drifts, along, with, a, slow, stin, 
+SNR 25:
+  Expected words: [{'leaf'}, {'drifts'}, {'along'}, {'slow'}, {'spin'}]
+  Recognized words: ['', 'the', 'least', 'drifts', 'along', 'with', 'a', 'slow', 'stin', '']
+  Correct count is 3
+Want dipped, stayed, loft/aloft, from: , , and, the, enemy, is, the, urination, , the, kite, dips, and, swayed, , but, stadaloft, 
+SNR 25:
+  Expected words: [{'kite'}, {'dipped'}, {'suede', 'swayed'}, {'stayed'}, {'loft', 'aloft'}]
+  Recognized words: ['', '', 'and', 'the', 'enemy', 'is', 'the', 'urination', '', 'the', 'kite', 'dips', 'and', 'swayed', '', 'but', 'stadaloft', '']
+  Correct count is 2
+SNR 25:
+  Expected words: [{'sun'}, {'came'}, {'light'}, {'eastern'}, {'sky'}]
+  Recognized words: ['', '', '', 'the', 'sun', 'came', 'up', 'to', 'light', 'the', 'eastern', 'sky', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'take'}, {'shelter'}, {'tent'}, {'keep'}, {'still'}]
+  Recognized words: ['yeah', '', '', 'but', 'only', 'because', 'of', 'radiation', '', 'right', '', '', 'take', 'shelter', 'in', 'this', 'tent', '', 'but', 'keep', 'still', '']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'dots'}, {'light'}, {'betray', 'betrayed'}, {'black'}, {'cat'}]
+  Recognized words: ['', 'there', 'is', 'no', 'flavor', 'or', 'something', '', '', 'dots', 'of', 'light', '', 'betrayed', '', 'the', 'black', 'cat', '']
+  Correct count is 5
+Want marsh, from: , , the, march, will, freeze, when, cold, enough, 
+SNR 25:
+  Expected words: [{'marsh'}, {'freeze'}, {'when'}, {'cold'}, {'enough'}]
+  Recognized words: ['', '', 'the', 'march', 'will', 'freeze', 'when', 'cold', 'enough', '']
+  Correct count is 4
+Want creaked, from: , that, was, a, , the, hinge, on, the, door, creek, with, old, age, 
+SNR 25:
+  Expected words: [{'hinge'}, {'door'}, {'creaked'}, {'old'}, {'age'}]
+  Recognized words: ['', 'that', 'was', 'a', '', 'the', 'hinge', 'on', 'the', 'door', 'creek', 'with', 'old', 'age', '']
+  Correct count is 4
+SNR 20:
+  Expected words: [{'child'}, {'crawled'}, {'into'}, {'dense'}, {'grass'}]
+  Recognized words: ['', 'new', 'bracelet', '', 'the', 'child', 'crawled', 'into', 'the', 'dense', 'grass', '']
+  Correct count is 5
+Want sleek, from: , a, cruise, and, warm, waters, in, a, slinky, yacht, is, fun, 
+SNR 20:
+  Expected words: [{'cruise'}, {'waters'}, {'sleek'}, {'yacht'}, {'fun'}]
+  Recognized words: ['', 'a', 'cruise', 'and', 'warm', 'waters', 'in', 'a', 'slinky', 'yacht', 'is', 'fun', '']
+  Correct count is 4
+SNR 20:
+  Expected words: [{'sink'}, {'thing'}, {'which'}, {'pile', 'piled'}, {'dishes'}]
+  Recognized words: ['much', 'better', '', '', 'the', 'sink', 'is', 'the', 'thing', '', 'in', 'which', 'we', 'piled', 'dishes', '']
+  Correct count is 5
+Want roll, from: , , , he, picked, up, the, dice, for, a, second, role, 
+SNR 20:
+  Expected words: [{'picked'}, {'up'}, {'dice'}, {'second'}, {'roll'}]
+  Recognized words: ['', '', '', 'he', 'picked', 'up', 'the', 'dice', 'for', 'a', 'second', 'role', '']
+  Correct count is 4
+SNR 20:
+  Expected words: [{'screen'}, {'before'}, {'fire'}, {'kept'}, {'sparks'}]
+  Recognized words: ['', 'the', 'screen', 'before', 'the', 'fire', '', 'you', 'kept', 'in', 'the', 'sparks', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'pencil'}, {'cut'}, {'sharp'}, {'both'}, {'ends'}]
+  Recognized words: ['', 'the', 'pencil', 'was', 'cut', 'to', 'be', 'sharp', 'at', 'both', 'ends', '']
+  Correct count is 5
+Want drowned, june/tunes, from: , , the, beatle, dround, in, the, hot, tub, , son, , 
+SNR 20:
+  Expected words: [{'beetle', 'beatle'}, {'drowned'}, {'hot'}, {'june', 'tunes'}, {'sun', 'son'}]
+  Recognized words: ['', '', 'the', 'beatle', 'dround', 'in', 'the', 'hot', 'tub', '', 'son', '', '']
+  Correct count is 3
+SNR 20:
+  Expected words: [{'stale'}, {'smell'}, {'old'}, {'beer'}, {'lingers'}]
+  Recognized words: ['', '', '', 'the', 'stale', 'smell', 'of', 'old', 'beer', '', 'lingers', '', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'little'}, {'tails', 'tales'}, {'they'}, {'tell'}, {'false'}]
+  Recognized words: ['', 'the', 'little', 'tails', '', 'they', 'tell', 'are', 'false', '', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'put'}, {'chart'}, {'mantle'}, {'tack'}, {'down'}]
+  Recognized words: ['', '', '', 'put', 'the', 'chart', 'on', 'the', 'mantle', 'and', 'tack', 'it', 'down', '']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'gray'}, {'mare'}, {'walked'}, {'before'}, {'cold', 'colt'}]
+  Recognized words: ['', '', 'a', 'gray', 'mare', 'walked', 'before', 'the', 'cold', '', '']
+  Correct count is 5
+Want lanterns, lawn, from: , the, bright, lancets, were, gay, on, the, dark, line, 
+SNR 20:
+  Expected words: [{'bright'}, {'lanterns'}, {'gay'}, {'dark'}, {'lawn'}]
+  Recognized words: ['', 'the', 'bright', 'lancets', 'were', 'gay', 'on', 'the', 'dark', 'line', '']
+  Correct count is 3
+Want path, from: , footprints, showed, the, pack, he, took, up, the, beach, 
+SNR 15:
+  Expected words: [{'footprints'}, {'show', 'showed'}, {'path'}, {'took'}, {'beach'}]
+  Recognized words: ['', 'footprints', 'showed', 'the', 'pack', 'he', 'took', 'up', 'the', 'beach', '']
+  Correct count is 4
+SNR 15:
+  Expected words: [{'streak'}, {'color'}, {'down'}, {'left'}, {'edge'}]
+  Recognized words: ['', 'a', 'streak', 'of', 'color', '', 'ran', 'down', 'the', 'left', 'edge', '', '']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'post'}, {'no'}, {'bills'}, {'office'}, {'wall'}]
+  Recognized words: ['', 'post', '', 'no', 'bills', 'on', 'this', 'office', 'wall', '', 'no', '', 'these', 'are', 'the', 'sports', '', '', '']
+  Correct count is 5
+Want worn/warren, from: drop, the, ashes, on, the, one, old, rug, , 
+SNR 15:
+  Expected words: [{'drop'}, {'ashes'}, {'worn', 'warren'}, {'old'}, {'rug'}]
+  Recognized words: ['drop', 'the', 'ashes', 'on', 'the', 'one', 'old', 'rug', '', '']
+  Correct count is 4
+Want thick, from: , just, glasses, , you, helped, him, read, the, print, , 
+SNR 15:
+  Expected words: [{'thick'}, {'glasses'}, {'helped', 'help'}, {'read'}, {'print', 'prints'}]
+  Recognized words: ['', 'just', 'glasses', '', 'you', 'helped', 'him', 'read', 'the', 'print', '', '']
+  Correct count is 4
+Want grain, farmer, from: , down, that, road, is, the, way, to, the, grains, on, 
+SNR 15:
+  Expected words: [{'down'}, {'road'}, {'way'}, {'grain'}, {'farmer'}]
+  Recognized words: ['', 'down', 'that', 'road', 'is', 'the', 'way', 'to', 'the', 'grains', 'on', '']
+  Correct count is 3
+Want theft, pearl, pin, from: , the, best, of, the, pearls, was, kept, secret, , 
+SNR 15:
+  Expected words: [{'theft'}, {'pearl'}, {'pin'}, {'kept'}, {'secret'}]
+  Recognized words: ['', 'the', 'best', 'of', 'the', 'pearls', 'was', 'kept', 'secret', '', '']
+  Correct count is 2
+SNR 15:
+  Expected words: [{'desk'}, {'firm'}, {'on'}, {'shaky'}, {'floor'}]
+  Recognized words: ['', 'the', 'desk', 'goes', 'firm', 'on', 'the', 'shaky', 'floor', '', '']
+  Correct count is 5
+Want pedal, from: , press, the, pedals, with, your, left, foot, , und, 
+SNR 15:
+  Expected words: [{'press'}, {'pedal'}, {'with'}, {'left'}, {'foot'}]
+  Recognized words: ['', 'press', 'the', 'pedals', 'with', 'your', 'left', 'foot', '', 'und', '']
+  Correct count is 4
+Want drip, from: , the, steady, trip, is, worse, than, a, drenching, rain, 
+SNR 15:
+  Expected words: [{'steady'}, {'drip'}, {'worse'}, {'drenching'}, {'rain'}]
+  Recognized words: ['', 'the', 'steady', 'trip', 'is', 'worse', 'than', 'a', 'drenching', 'rain', '']
+  Correct count is 4
+Want rum, from: , bottles, , hold, four, kinds, of, worms, , 
+SNR 15:
+  Expected words: [{'bottles'}, {'hold'}, {'for', 'four'}, {'kinds'}, {'rum'}]
+  Recognized words: ['', 'bottles', '', 'hold', 'four', 'kinds', 'of', 'worms', '', '']
+  Correct count is 4
+SNR 15:
+  Expected words: [{'offered'}, {'proof'}, {'form'}, {'large'}, {'chart'}]
+  Recognized words: ['', 'he', 'offered', 'proof', 'in', 'the', 'form', 'of', 'a', 'large', 'chart', '']
+  Correct count is 5
+Want event, air, from: , , ejaculations, like, crap, , wiping, whether, he, used, a, knife, , , i, asked, near, the, edge, , brought, in, fresh
+SNR 10:
+  Expected words: [{'event'}, {'near'}, {'edge'}, {'fresh'}, {'air'}]
+  Recognized words: ['', '', 'ejaculations', 'like', 'crap', '', 'wiping', 'whether', 'he', 'used', 'a', 'knife', '', '', 'i', 'asked', 'near', 'the', 'edge', '', 'brought', 'in', 'fresh']
+  Correct count is 3
+SNR 10:
+  Expected words: [{'done'}, {'before'}, {'boys', 'boy'}, {'see'}, {'it'}]
+  Recognized words: ['it', 'was', 'done', 'before', 'the', 'boy', 'could', 'see', 'it', '', '']
+  Correct count is 5
+Want dimes, sides, from: , damage, , shower, down, from, alzheimers, , all, the, , 
+SNR 10:
+  Expected words: [{'dimes'}, {'showered', 'shower'}, {'down'}, {'all'}, {'sides'}]
+  Recognized words: ['', 'damage', '', 'shower', 'down', 'from', 'alzheimers', '', 'all', 'the', '', '']
+  Correct count is 3
+Want cover, hall, from: , , add, them, calories, , he, hasnt, been, there, a, couple, times, , the, couch, covers, and, haul, drapes, for, a, blue, , 
+SNR 10:
+  Expected words: [{'couch'}, {'cover'}, {'hall'}, {'drapes'}, {'blue'}]
+  Recognized words: ['', '', 'add', 'them', 'calories', '', 'he', 'hasnt', 'been', 'there', 'a', 'couple', 'times', '', 'the', 'couch', 'covers', 'and', 'haul', 'drapes', 'for', 'a', 'blue', '', '']
+  Correct count is 3
+Want bottom, from: the, chair, looked, as, strong, , but, had, no, volume, , , , 
+SNR 10:
+  Expected words: [{'chair'}, {'looked'}, {'strong'}, {'no'}, {'bottom'}]
+  Recognized words: ['the', 'chair', 'looked', 'as', 'strong', '', 'but', 'had', 'no', 'volume', '', '', '', '']
+  Correct count is 4
+Want clips, from: , , the, best, method, is, to, fix, it, in, place, with, splits, , , 
+SNR 10:
+  Expected words: [{'best'}, {'method'}, {'fix'}, {'place'}, {'clips'}]
+  Recognized words: ['', '', 'the', 'best', 'method', 'is', 'to', 'fix', 'it', 'in', 'place', 'with', 'splits', '', '', '']
+  Correct count is 4
+Want earned, from: , his, wide, grin, is, many, friends, , 
+SNR 10:
+  Expected words: [{'wide'}, {'grin'}, {'earned'}, {'many'}, {'friends'}]
+  Recognized words: ['', 'his', 'wide', 'grin', 'is', 'many', 'friends', '', '']
+  Correct count is 4
+Want carved, from: our, list, of, names, is, carbs, around, the, base, , 
+SNR 10:
+  Expected words: [{'list'}, {'names'}, {'carved'}, {'around'}, {'base'}]
+  Recognized words: ['our', 'list', 'of', 'names', 'is', 'carbs', 'around', 'the', 'base', '', '']
+  Correct count is 4
+Want trunk, fell, from: , the, black, tunnel, from, the, landing, 
+SNR 10:
+  Expected words: [{'black'}, {'trunk'}, {'fell'}, {'from'}, {'landing', 'landings'}]
+  Recognized words: ['', 'the', 'black', 'tunnel', 'from', 'the', 'landing', '']
+  Correct count is 3
+Want pack, luggage, from: , , a, flat, task, takes, less, , muggage, space, , she, is, willing
+SNR 10:
+  Expected words: [{'flat'}, {'pack'}, {'less'}, {'luggage'}, {'space'}]
+  Recognized words: ['', '', 'a', 'flat', 'task', 'takes', 'less', '', 'muggage', 'space', '', 'she', 'is', 'willing']
+  Correct count is 3
+Want wheeled/wheled, bike, past, winding, road, from: he, will, , goodbye, , he, has, to, wind, down, , , 
+SNR 10:
+  Expected words: [{'wheeled', 'wheled'}, {'bike'}, {'past'}, {'winding'}, {'road'}]
+  Recognized words: ['he', 'will', '', 'goodbye', '', 'he', 'has', 'to', 'wind', 'down', '', '', '']
+  Correct count is 0
+Want their, droop/drop, want, sleep, from: , , there, are, eyelids, drooped, from, one, side, to, the, sleeve, 
+SNR 10:
+  Expected words: [{'their'}, {'eyelids'}, {'droop', 'drop'}, {'want'}, {'sleep'}]
+  Recognized words: ['', '', 'there', 'are', 'eyelids', 'drooped', 'from', 'one', 'side', 'to', 'the', 'sleeve', '']
+  Correct count is 1
+Want steel, 3/three, in/inches, wide, from: , not, all, together, , it, is, a, band, aid, , 
+SNR 5:
+  Expected words: [{'band'}, {'steel'}, {'3', 'three'}, {'in', 'inches'}, {'wide'}]
+  Recognized words: ['', 'not', 'all', 'together', '', 'it', 'is', 'a', 'band', 'aid', '', '']
+  Correct count is 1
+Want crouch, before, jump, miss, mark, from: , 
+SNR 5:
+  Expected words: [{'crouch'}, {'before'}, {'jump'}, {'miss'}, {'mark'}]
+  Recognized words: ['', '']
+  Correct count is 0
+Want pick, card, slip, under, pack/pact, from: 
+SNR 5:
+  Expected words: [{'pick'}, {'card'}, {'slip'}, {'under'}, {'pack', 'pact'}]
+  Recognized words: ['']
+  Correct count is 0
+Want stems, tall, glasses, cracked, broke, from: , 
+SNR 5:
+  Expected words: [{'stems'}, {'tall'}, {'glasses'}, {'cracked'}, {'broke'}]
+  Recognized words: ['', '']
+  Correct count is 0
+Want told, wild, tails/tales, frighten, him, from: , 
+SNR 5:
+  Expected words: [{'told'}, {'wild'}, {'tails', 'tales'}, {'frighten'}, {'him'}]
+  Recognized words: ['', '']
+  Correct count is 0
+Want mumble, your, speech, lost, from: , on, a, scale, of, one, to, ten, , , , if, you, 
+SNR 5:
+  Expected words: [{'if'}, {'mumble'}, {'your'}, {'speech'}, {'lost'}]
+  Recognized words: ['', 'on', 'a', 'scale', 'of', 'one', 'to', 'ten', '', '', '', 'if', 'you', '']
+  Correct count is 1
+Want hurdle, pit, aid, long, pole, from: with, , 
+SNR 5:
+  Expected words: [{'hurdle'}, {'pit'}, {'aid'}, {'long'}, {'pole'}]
+  Recognized words: ['with', '', '']
+  Correct count is 0
+Want struck/struct, restless, minds, from: , , the, news, stressed, out, , , 
+SNR 5:
+  Expected words: [{'news'}, {'struck', 'struct'}, {'out'}, {'restless'}, {'minds'}]
+  Recognized words: ['', '', 'the', 'news', 'stressed', 'out', '', '', '']
+  Correct count is 2
+Want cheap, clothes, flash/flashy, don't, last, from: , , express, sclerosis, , 
+SNR 5:
+  Expected words: [{'cheap'}, {'clothes'}, {'flash', 'flashy'}, {"don't"}, {'last'}]
+  Recognized words: ['', '', 'express', 'sclerosis', '', '']
+  Correct count is 0
+Want glass/gloss, top, made, unfit, read, from: associate, out, of, curiosity, , , 
+SNR 5:
+  Expected words: [{'glass', 'gloss'}, {'top'}, {'made'}, {'unfit'}, {'read'}]
+  Recognized words: ['associate', 'out', 'of', 'curiosity', '', '', '']
+  Correct count is 0
+Want throw, used, paper, cup, plate, from: 
+SNR 5:
+  Expected words: [{'throw'}, {'used'}, {'paper'}, {'cup'}, {'plate'}]
+  Recognized words: ['']
+  Correct count is 0
+Want do, these, things, from: , there, are, many, ways, , , 
+SNR 5:
+  Expected words: [{'many'}, {'ways'}, {'do'}, {'these'}, {'things'}]
+  Recognized words: ['', 'there', 'are', 'many', 'ways', '', '', '']
+  Correct count is 2
+Want weight, package, seen, high, scale, from: , , , 
+SNR 0:
+  Expected words: [{'weight'}, {'package'}, {'seen'}, {'high'}, {'scale'}]
+  Recognized words: ['', '', '', '']
+  Correct count is 0
+Want square, peg, settle, round, hole, from: , , 
+SNR 0:
+  Expected words: [{'square'}, {'peg'}, {'settle'}, {'round'}, {'hole'}]
+  Recognized words: ['', '', '']
+  Correct count is 0
+Want store, jammed, before, sale, start, from: , 
+SNR 0:
+  Expected words: [{'store'}, {'jammed'}, {'before'}, {'sale'}, {'start'}]
+  Recognized words: ['', '']
+  Correct count is 0
+Want cleats, sank/sink, deeply, soft, turf, from: , , 
+SNR 0:
+  Expected words: [{'cleats'}, {'sank', 'sink'}, {'deeply'}, {'soft'}, {'turf'}]
+  Recognized words: ['', '', '']
+  Correct count is 0
+Want force, equal, would, move, earth, from: 
+SNR 0:
+  Expected words: [{'force'}, {'equal'}, {'would'}, {'move'}, {'earth'}]
+  Recognized words: []
+  Correct count is 0
+Want toad, frog, hard, tell, apart, from: 
+SNR 0:
+  Expected words: [{'toad'}, {'frog'}, {'hard'}, {'tell'}, {'apart'}]
+  Recognized words: []
+  Correct count is 0
+Want peep/keep, under, tent, see, clown, from: 
+SNR 0:
+  Expected words: [{'peep', 'keep'}, {'under'}, {'tent'}, {'see'}, {'clown'}]
+  Recognized words: []
+  Correct count is 0
+Want sand, drifts/drift, over, sale/sill, house, from: 
+SNR 0:
+  Expected words: [{'sand'}, {'drifts', 'drift'}, {'over'}, {'sale', 'sill'}, {'house'}]
+  Recognized words: []
+  Correct count is 0
+Want night, alarm, roust/roused, deep, sleep, from: 
+SNR 0:
+  Expected words: [{'night'}, {'alarm'}, {'roust', 'roused'}, {'deep'}, {'sleep'}]
+  Recognized words: ['']
+  Correct count is 0
+Want seven, seals, stamped, great, sheets, from: 
+SNR 0:
+  Expected words: [{'seven'}, {'seals'}, {'stamped'}, {'great'}, {'sheets'}]
+  Recognized words: []
+  Correct count is 0
+Want wall, phone, ring, loud, often, from: 
+SNR 0:
+  Expected words: [{'wall'}, {'phone'}, {'ring'}, {'loud'}, {'often'}]
+  Recognized words: ['']
+  Correct count is 0
+Want we, like, see, clear, weather, from: 
+SNR 0:
+  Expected words: [{'we'}, {'like'}, {'see'}, {'clear'}, {'weather'}]
+  Recognized words: []
+  Correct count is 0
+Model: chirp
+SNR 25:
+  Expected words: [{'white'}, {'silk'}, {'jacket'}, {'any'}, {'shoes'}]
+  Recognized words: ['a', 'white', 'silk', 'jacket', 'goes', 'with', 'any', 'shoes']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'tara', 'tear'}, {'thin'}, {'sheet'}, {'yellow'}, {'pad'}]
+  Recognized words: ['tear', 'a', 'thin', 'sheet', 'from', 'the', 'yellow', 'pad']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'pitch'}, {'straw'}, {'through'}, {'door'}, {'stable'}]
+  Recognized words: ['pitch', 'the', 'straw', 'through', 'the', 'door', 'of', 'the', 'stable']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'sense'}, {'smell'}, {'better'}, {'than'}, {'touch'}]
+  Recognized words: ['the', 'sense', 'of', 'smell', 'is', 'better', 'than', 'that', 'of', 'touch']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'have'}, {'better'}, {'than'}, {'wait'}, {'hope'}]
+  Recognized words: ['to', 'have', 'is', 'better', 'than', 'to', 'wait', 'and', 'hope']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'leaf'}, {'drifts'}, {'along'}, {'slow'}, {'spin'}]
+  Recognized words: ['the', 'leaf', 'drifts', 'along', 'with', 'slow', 'spin']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'kite'}, {'dipped'}, {'suede', 'swayed'}, {'stayed'}, {'loft', 'aloft'}]
+  Recognized words: ['the', 'kite', 'dipped', 'and', 'swayed', 'but', 'stayed', 'aloft']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'sun'}, {'came'}, {'light'}, {'eastern'}, {'sky'}]
+  Recognized words: ['the', 'sun', 'came', 'up', 'to', 'light', 'the', 'eastern', 'sky']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'take'}, {'shelter'}, {'tent'}, {'keep'}, {'still'}]
+  Recognized words: ['take', 'shelter', 'in', 'this', 'tent', 'but', 'keep', 'still']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'dots'}, {'light'}, {'betray', 'betrayed'}, {'black'}, {'cat'}]
+  Recognized words: ['dots', 'of', 'light', 'betrayed', 'the', 'black', 'cat']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'marsh'}, {'freeze'}, {'when'}, {'cold'}, {'enough'}]
+  Recognized words: ['the', 'marsh', 'will', 'freeze', 'when', 'cold', 'enough']
+  Correct count is 5
+SNR 25:
+  Expected words: [{'hinge'}, {'door'}, {'creaked'}, {'old'}, {'age'}]
+  Recognized words: ['the', 'hinge', 'on', 'the', 'door', 'creaked', 'with', 'old', 'age']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'child'}, {'crawled'}, {'into'}, {'dense'}, {'grass'}]
+  Recognized words: ['shoes', 'the', 'child', 'crawled', 'into', 'the', 'dense', 'grass']
+  Correct count is 5
+Want yacht, from: pad, a, cruise, in, warm, waters, in, a, sleek, yaught, is, fun
+SNR 20:
+  Expected words: [{'cruise'}, {'waters'}, {'sleek'}, {'yacht'}, {'fun'}]
+  Recognized words: ['pad', 'a', 'cruise', 'in', 'warm', 'waters', 'in', 'a', 'sleek', 'yaught', 'is', 'fun']
+  Correct count is 4
+SNR 20:
+  Expected words: [{'sink'}, {'thing'}, {'which'}, {'pile', 'piled'}, {'dishes'}]
+  Recognized words: ['stable', 'the', 'sink', 'is', 'the', 'thing', 'in', 'which', 'we', 'pile', 'dishes']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'picked'}, {'up'}, {'dice'}, {'second'}, {'roll'}]
+  Recognized words: ['touch', 'he', 'picked', 'up', 'the', 'dice', 'for', 'second', 'roll']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'screen'}, {'before'}, {'fire'}, {'kept'}, {'sparks'}]
+  Recognized words: ['hope', 'the', 'screen', 'before', 'the', 'fire', 'kept', 'in', 'the', 'sparks']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'pencil'}, {'cut'}, {'sharp'}, {'both'}, {'ends'}]
+  Recognized words: ['spin', 'the', 'pencil', 'was', 'cut', 'to', 'be', 'sharp', 'at', 'both', 'ends']
+  Correct count is 5
+Want drowned, from: aloft, the, beetle, droned, in, the, hot, june, sun
+SNR 20:
+  Expected words: [{'beetle', 'beatle'}, {'drowned'}, {'hot'}, {'june', 'tunes'}, {'sun', 'son'}]
+  Recognized words: ['aloft', 'the', 'beetle', 'droned', 'in', 'the', 'hot', 'june', 'sun']
+  Correct count is 4
+SNR 20:
+  Expected words: [{'stale'}, {'smell'}, {'old'}, {'beer'}, {'lingers'}]
+  Recognized words: ['sky', 'the', 'stale', 'smell', 'of', 'old', 'beer', 'lingers']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'little'}, {'tails', 'tales'}, {'they'}, {'tell'}, {'false'}]
+  Recognized words: ['still', 'the', 'little', 'tails', 'they', 'tell', 'are', 'false']
+  Correct count is 5
+SNR 20:
+  Expected words: [{'put'}, {'chart'}, {'mantle'}, {'tack'}, {'down'}]
+  Recognized words: ['cat', 'put', 'the', 'chart', 'on', 'the', 'mantle', 'and', 'tack', 'it', 'down']
+  Correct count is 5
+Want mare, from: enough, a, gray, maire, walked, before, the, cold
+SNR 20:
+  Expected words: [{'gray'}, {'mare'}, {'walked'}, {'before'}, {'cold', 'colt'}]
+  Recognized words: ['enough', 'a', 'gray', 'maire', 'walked', 'before', 'the', 'cold']
+  Correct count is 4
+SNR 20:
+  Expected words: [{'bright'}, {'lanterns'}, {'gay'}, {'dark'}, {'lawn'}]
+  Recognized words: ['age', 'the', 'bright', 'lanterns', 'were', 'gay', 'on', 'the', 'dark', 'lawn']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'footprints'}, {'show', 'showed'}, {'path'}, {'took'}, {'beach'}]
+  Recognized words: ['grass', 'footprints', 'showed', 'the', 'path', 'he', 'took', 'up', 'the', 'beach']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'streak'}, {'color'}, {'down'}, {'left'}, {'edge'}]
+  Recognized words: ['fun', 'a', 'streak', 'of', 'color', 'ran', 'down', 'the', 'left', 'edge']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'post'}, {'no'}, {'bills'}, {'office'}, {'wall'}]
+  Recognized words: ['dishes', 'post', 'no', 'bills', 'on', 'this', 'office', 'wall']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'drop'}, {'ashes'}, {'worn', 'warren'}, {'old'}, {'rug'}]
+  Recognized words: ['roll', 'drop', 'the', 'ashes', 'on', 'the', 'worn', 'old', 'rug']
+  Correct count is 5
+Want print/prints, from: sparks, thick, glasses, helped, him, read, the, printers
+SNR 15:
+  Expected words: [{'thick'}, {'glasses'}, {'helped', 'help'}, {'read'}, {'print', 'prints'}]
+  Recognized words: ['sparks', 'thick', 'glasses', 'helped', 'him', 'read', 'the', 'printers']
+  Correct count is 4
+SNR 15:
+  Expected words: [{'down'}, {'road'}, {'way'}, {'grain'}, {'farmer'}]
+  Recognized words: ['ends', 'down', 'that', 'road', 'is', 'the', 'way', 'to', 'the', 'grain', 'farmer']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'theft'}, {'pearl'}, {'pin'}, {'kept'}, {'secret'}]
+  Recognized words: ['sun', 'the', 'theft', 'of', 'the', 'pearl', 'pin', 'was', 'kept', 'secret']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'desk'}, {'firm'}, {'on'}, {'shaky'}, {'floor'}]
+  Recognized words: ['lingers', 'the', 'desk', 'was', 'firm', 'on', 'the', 'shaky', 'floor']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'press'}, {'pedal'}, {'with'}, {'left'}, {'foot'}]
+  Recognized words: ['false', 'press', 'the', 'pedal', 'with', 'your', 'left', 'foot']
+  Correct count is 5
+SNR 15:
+  Expected words: [{'steady'}, {'drip'}, {'worse'}, {'drenching'}, {'rain'}]
+  Recognized words: ['down', 'the', 'steady', 'drip', 'is', 'worse', 'than', 'a', 'drenching', 'rain']
+  Correct count is 5
+Want rum, from: cold, bottles, hold, four, kinds, of, room
+SNR 15:
+  Expected words: [{'bottles'}, {'hold'}, {'for', 'four'}, {'kinds'}, {'rum'}]
+  Recognized words: ['cold', 'bottles', 'hold', 'four', 'kinds', 'of', 'room']
+  Correct count is 4
+SNR 15:
+  Expected words: [{'offered'}, {'proof'}, {'form'}, {'large'}, {'chart'}]
+  Recognized words: ['lawn', 'he', 'offered', 'proof', 'in', 'the', 'form', 'of', 'a', 'large', 'chart']
+  Correct count is 5
+Want event, from: beach, , vent, near, the, edge, brought, in, fresh, air
+SNR 10:
+  Expected words: [{'event'}, {'near'}, {'edge'}, {'fresh'}, {'air'}]
+  Recognized words: ['beach', '', 'vent', 'near', 'the', 'edge', 'brought', 'in', 'fresh', 'air']
+  Correct count is 4
+SNR 10:
+  Expected words: [{'done'}, {'before'}, {'boys', 'boy'}, {'see'}, {'it'}]
+  Recognized words: ['edge', '', 'it', 'was', 'done', 'before', 'the', 'boy', 'could', 'see', 'it']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'dimes'}, {'showered', 'shower'}, {'down'}, {'all'}, {'sides'}]
+  Recognized words: ['wall', '', 'dimes', 'showered', 'down', 'from', 'all', 'sides']
+  Correct count is 5
+Want hall, from: rug, , the, couch, cover, and, haul, drapes, were, blue
+SNR 10:
+  Expected words: [{'couch'}, {'cover'}, {'hall'}, {'drapes'}, {'blue'}]
+  Recognized words: ['rug', '', 'the', 'couch', 'cover', 'and', 'haul', 'drapes', 'were', 'blue']
+  Correct count is 4
+Want bottom, from: printers, , the, chair, looked, strong, but, had, no, body
+SNR 10:
+  Expected words: [{'chair'}, {'looked'}, {'strong'}, {'no'}, {'bottom'}]
+  Recognized words: ['printers', '', 'the', 'chair', 'looked', 'strong', 'but', 'had', 'no', 'body']
+  Correct count is 4
+SNR 10:
+  Expected words: [{'best'}, {'method'}, {'fix'}, {'place'}, {'clips'}]
+  Recognized words: ['farmer', '', 'the', 'best', 'method', 'is', 'to', 'fix', 'it', 'in', 'place', 'with', 'clips']
+  Correct count is 5
+Want wide, grin, earned, many, friends, from: secret, , 
+SNR 10:
+  Expected words: [{'wide'}, {'grin'}, {'earned'}, {'many'}, {'friends'}]
+  Recognized words: ['secret', '', '']
+  Correct count is 0
+SNR 10:
+  Expected words: [{'list'}, {'names'}, {'carved'}, {'around'}, {'base'}]
+  Recognized words: ['floor', '', 'our', 'list', 'of', 'names', 'is', 'carved', 'around', 'the', 'base']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'black'}, {'trunk'}, {'fell'}, {'from'}, {'landing', 'landings'}]
+  Recognized words: ['foot', '', 'the', 'black', 'trunk', 'fell', 'from', 'the', 'landing']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'flat'}, {'pack'}, {'less'}, {'luggage'}, {'space'}]
+  Recognized words: ['rain', '', 'a', 'flat', 'pack', 'takes', 'less', 'luggage', 'space']
+  Correct count is 5
+SNR 10:
+  Expected words: [{'wheeled', 'wheled'}, {'bike'}, {'past'}, {'winding'}, {'road'}]
+  Recognized words: ['room', '', 'he', 'wheeled', 'the', 'bike', 'past', 'the', 'winding', 'road']
+  Correct count is 5
+Want their, eyelids, droop/drop, want, sleep, from: chart, 
+SNR 10:
+  Expected words: [{'their'}, {'eyelids'}, {'droop', 'drop'}, {'want'}, {'sleep'}]
+  Recognized words: ['chart', '']
+  Correct count is 0
+Want 3/three, in/inches, wide, from: air, it, is, band, of, steel
+SNR 5:
+  Expected words: [{'band'}, {'steel'}, {'3', 'three'}, {'in', 'inches'}, {'wide'}]
+  Recognized words: ['air', 'it', 'is', 'band', 'of', 'steel']
+  Correct count is 2
+SNR 5:
+  Expected words: [{'crouch'}, {'before'}, {'jump'}, {'miss'}, {'mark'}]
+  Recognized words: ['it', 'crouch', 'before', 'you', 'jump', 'or', 'miss', 'the', 'mark']
+  Correct count is 5
+Want card, pack/pact, from: sides, pick, a, car, and, slip, it, under, the, pass
+SNR 5:
+  Expected words: [{'pick'}, {'card'}, {'slip'}, {'under'}, {'pack', 'pact'}]
+  Recognized words: ['sides', 'pick', 'a', 'car', 'and', 'slip', 'it', 'under', 'the', 'pass']
+  Correct count is 3
+Want cracked, broke, from: blue, the, stems, of, the, tall, glasses
+SNR 5:
+  Expected words: [{'stems'}, {'tall'}, {'glasses'}, {'cracked'}, {'broke'}]
+  Recognized words: ['blue', 'the', 'stems', 'of', 'the', 'tall', 'glasses']
+  Correct count is 3
+Want frighten, him, from: body, they, told, wild, tales
+SNR 5:
+  Expected words: [{'told'}, {'wild'}, {'tails', 'tales'}, {'frighten'}, {'him'}]
+  Recognized words: ['body', 'they', 'told', 'wild', 'tales']
+  Correct count is 3
+Want mumble, from: clips, if, you, muble, your, speech, will, be, lost
+SNR 5:
+  Expected words: [{'if'}, {'mumble'}, {'your'}, {'speech'}, {'lost'}]
+  Recognized words: ['clips', 'if', 'you', 'muble', 'your', 'speech', 'will', 'be', 'lost']
+  Correct count is 4
+Want hurdle, pit, aid, long, pole, from: 
+SNR 5:
+  Expected words: [{'hurdle'}, {'pit'}, {'aid'}, {'long'}, {'pole'}]
+  Recognized words: []
+  Correct count is 0
+Want out, restless, minds, from: base, the, news, struck, doubts
+SNR 5:
+  Expected words: [{'news'}, {'struck', 'struct'}, {'out'}, {'restless'}, {'minds'}]
+  Recognized words: ['base', 'the', 'news', 'struck', 'doubts']
+  Correct count is 2
+Want don't, last, from: landing, cheap, clothes, are, flash
+SNR 5:
+  Expected words: [{'cheap'}, {'clothes'}, {'flash', 'flashy'}, {"don't"}, {'last'}]
+  Recognized words: ['landing', 'cheap', 'clothes', 'are', 'flash']
+  Correct count is 3
+Want read, from: space, the, gloss, top, made, it, unfit, to, lead
+SNR 5:
+  Expected words: [{'glass', 'gloss'}, {'top'}, {'made'}, {'unfit'}, {'read'}]
+  Recognized words: ['space', 'the', 'gloss', 'top', 'made', 'it', 'unfit', 'to', 'lead']
+  Correct count is 4
+Want throw, used, paper, cup, plate, from: road
+SNR 5:
+  Expected words: [{'throw'}, {'used'}, {'paper'}, {'cup'}, {'plate'}]
+  Recognized words: ['road']
+  Correct count is 0
+SNR 5:
+  Expected words: [{'many'}, {'ways'}, {'do'}, {'these'}, {'things'}]
+  Recognized words: ['there', 'are', 'many', 'ways', 'to', 'do', 'these', 'things']
+  Correct count is 5
+Want weight, package, seen, high, scale, from: steel
+SNR 0:
+  Expected words: [{'weight'}, {'package'}, {'seen'}, {'high'}, {'scale'}]
+  Recognized words: ['steel']
+  Correct count is 0
+Want square, peg, settle, round, hole, from: mark
+SNR 0:
+  Expected words: [{'square'}, {'peg'}, {'settle'}, {'round'}, {'hole'}]
+  Recognized words: ['mark']
+  Correct count is 0
+Want store, jammed, before, sale, start, from: pass
+SNR 0:
+  Expected words: [{'store'}, {'jammed'}, {'before'}, {'sale'}, {'start'}]
+  Recognized words: ['pass']
+  Correct count is 0
+Want cleats, sank/sink, deeply, soft, turf, from: glasses
+SNR 0:
+  Expected words: [{'cleats'}, {'sank', 'sink'}, {'deeply'}, {'soft'}, {'turf'}]
+  Recognized words: ['glasses']
+  Correct count is 0
+Want force, equal, would, move, earth, from: tales
+SNR 0:
+  Expected words: [{'force'}, {'equal'}, {'would'}, {'move'}, {'earth'}]
+  Recognized words: ['tales']
+  Correct count is 0
+Want toad, frog, hard, tell, apart, from: lost
+SNR 0:
+  Expected words: [{'toad'}, {'frog'}, {'hard'}, {'tell'}, {'apart'}]
+  Recognized words: ['lost']
+  Correct count is 0
+Want peep/keep, under, tent, see, clown, from: 
+SNR 0:
+  Expected words: [{'peep', 'keep'}, {'under'}, {'tent'}, {'see'}, {'clown'}]
+  Recognized words: []
+  Correct count is 0
+Want sand, drifts/drift, over, sale/sill, house, from: doubts, minds
+SNR 0:
+  Expected words: [{'sand'}, {'drifts', 'drift'}, {'over'}, {'sale', 'sill'}, {'house'}]
+  Recognized words: ['doubts', 'minds']
+  Correct count is 0
+Want night, alarm, roust/roused, deep, sleep, from: flash, and, again
+SNR 0:
+  Expected words: [{'night'}, {'alarm'}, {'roust', 'roused'}, {'deep'}, {'sleep'}]
+  Recognized words: ['flash', 'and', 'again']
+  Correct count is 0
+Want seven, seals, stamped, great, sheets, from: lead
+SNR 0:
+  Expected words: [{'seven'}, {'seals'}, {'stamped'}, {'great'}, {'sheets'}]
+  Recognized words: ['lead']
+  Correct count is 0
+Want wall, phone, ring, loud, often, from: road
+SNR 0:
+  Expected words: [{'wall'}, {'phone'}, {'ring'}, {'loud'}, {'often'}]
+  Recognized words: ['road']
+  Correct count is 0
+Want we, like, see, clear, weather, from: things
+SNR 0:
+  Expected words: [{'we'}, {'like'}, {'see'}, {'clear'}, {'weather'}]
+  Recognized words: ['things']
+  Correct count is 0
+Model fraction correct scores: {'latest_long': array([0.98333333, 1.        , 0.85      , 0.85      , 0.1       ,
+       0.        ]), 'latest_short': array([0.75, 0.  , 0.  , 0.  , 0.  , 0.  ]), 'telephony': array([1.        , 0.96666667, 0.86666667, 0.9       , 0.23333333,
+       0.        ]), 'medical_dictation': array([0.76666667, 0.9       , 0.85      , 0.81666667, 0.11666667,
+       0.        ]), 'medical_conversation': array([0.83333333, 0.9       , 0.81666667, 0.61666667, 0.1       ,
+       0.        ]), 'chirp': array([1.        , 0.95      , 0.96666667, 0.78333333, 0.56666667,
+       0.        ])}
