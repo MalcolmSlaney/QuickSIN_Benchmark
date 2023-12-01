@@ -77,14 +77,17 @@ recognized by the subject.  We convert this into a fraction, and then fit
 a logistic regression curve to it (as opposed to the counting method 
 first proposed).  This gives us a curve from which we can
 estimate the SNR which produces 50% accuracy, as shown in the example below.
+
 ![Logistic Regression Example](results/logistic_fit.png)
 
 We tested the performance of six different recognizers, and plot their speech
-recogition results over the 6 different SNRs
+recogition results over the 6 different SNRs.
+
 ![Recognizer Performancs vs. SNR](results/all_score_graph.png)
 
 We score the recognizer's performance using both the original counting method
 and logisitc regression, as they produce different scores for the 
 speech reception threshold.
+
 ![QuickSIN score by logistic regression](results/spin_logistic_graph.png)
 ![QuickSIN score by counting](results/spin_counting_graph.png)
