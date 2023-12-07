@@ -1,3 +1,23 @@
+# Modern speech recognizer performance on human speech-in-noise test
+Malcolm Slaney and Matt Fitzgerald,
+Stanford University
+
+---
+
+## Abstract
+We propose a standardized test 
+to evaluate modern DNN-based speech recognition system. 
+The QuickSIN test measures human speech in noise abilities, which are impacted by
+a number of factors including peripheral sensitivities, neural issues such 
+as synaptopathy, and any number of cognitive issues. The QuickSIN test scores
+human subjects from normal, to mildly , moderately, 
+and then severly impaired based upon 
+the signal-to-noise ratio (SNR) where the subject correctly recognizes 50% 
+of the keywords.
+We demonstrate that a modern recognizer, built using millions of hours of 
+unsupervised training data, achieves near-normal recognition in noise when
+with this human test.
+
 ## Introduction
 
 This code implements the QuickSIN test, and uses it to test a modern
@@ -8,7 +28,8 @@ or your favorite audiologist, as well as a Google Cloud project id you can
 charge the 
 [API calls](https://cloud.google.com/speech-to-text/v2/docs/sync-recognize)
 against. This code runs on your local machines, reads the QuickSIN
-audio files, and sends them to the cloud for recognition.
+audio files, sends the audio to the cloud for recognition, and then scores
+the results.
 
 For many years, speech recognizers have performed better than human in 
 *clean* speech 
@@ -69,6 +90,31 @@ homonyms, and within a small window (2s).  The ground truth looks like this
 
 ```
 L 3 S 4  stems Tall Glasses cracked broke
+```
+
+The recognizer returns a number of recognized words and their start and end
+times. We normalize the results, largely changing homonyms into the spelling
+that is expected on the QuickSIN test.  The test specifies 5 keywords for
+each sentence, and their correct recognition is used to score each sentence.
+We use a strict scoring standard, where each phoneme must be correctly 
+recogmized.  Thus "4" and "four" are the same word, and "Tara" is taken to be
+equal to "Tear a", 
+while "sheet" and "sheep" or "chart" and "charts" are scored as a miss.
+
+This score (the number of correctly identified words over all 6 sentences)
+is converted into an SNR-50 (the SNR which gives 50% accuracy) and then
+SNR-Loss.
+```
+The QuickSIN has five words per step and 5 dB per step. Our highest SNR is
+25 dB so we take 25 + 2.5 = 27.5 minus the total number of words repeated 
+correctly. This gives what we call SNR-50, the signal-to-noise ratio required
+for the patient to repeat 50% of the words correctly.
+```
+Furthermore
+```
+Since SNR-50 for normal-hearing persons is 2 dB, we subtract 2 dB to 
+derive the formula for a patient's SNR LOSS: 25.5 – (Total words correct 
+in 6 sentences)
 ```
 
 ## Results

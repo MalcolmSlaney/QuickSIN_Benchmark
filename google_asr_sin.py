@@ -1038,8 +1038,10 @@ def main(_):
     # if m == 'latest_short': continue
     # Translate fraction correct into the average number of correct
     # words per SNR across all lists.
-    quicksin_counting_scores[m] = (25.5 - 5 * np.sum(model_frac_scores[m]) -
-                                   FLAGS.human_level)
+    scores = model_frac_scores[m]
+    assert len(scores) == 6, f'Not enough scores {scores} for model {m}'
+    snr50 = 27.5 - 5 * np.sum(model_frac_scores[m])
+    quicksin_counting_scores[m] = snr50 - FLAGS.human_level
 
   if FLAGS.spin_counting_graph:
     fig = plt.figure(figsize=(10, 6))
