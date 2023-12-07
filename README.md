@@ -151,7 +151,8 @@ conventional counting approach or via logistic regression.
 This difference is systematic and is shown in the scatter plot below.
 We see a 1 to 2dB upward shift (pessimism) in the results 
 using the counting algorithm.
-While the regression method has a firmer statistical basis, we compare results
+While the regression method has a firmer statistical basis, we compare 
+to human results
 using the counting method since that is what conventionally defines the 
 normal, mild, moderate, and severely impaired limits.
 
@@ -161,8 +162,8 @@ normal, mild, moderate, and severely impaired limits.
 This study has a number of caveats. Most importantly, the speech recognition
 system has no sense of speaker identity or other aspects of auditoruy scene
 analysis. A human listener might attend more closely to the foreground
-speach, and thus more easily ignore the background noise.  
-Similarly, the speech recognition system is assuming a much wider vocabulary
+speach, and thus more easily ignore the background noise. Similarly, the 
+speech recognition system is assuming a much wider vocabulary
 than one might expect in an audiology booth.
 (In some cases we had to look up the recognized token
 to see that it really was a word.) Finally, we took an especially firm stance
