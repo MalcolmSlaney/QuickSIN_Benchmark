@@ -10,12 +10,12 @@ to evaluate modern DNN-based speech recognition system.
 The QuickSIN test measures human speech in noise abilities, which are impacted by
 a number of factors including peripheral sensitivities, neural issues such 
 as synaptopathy, and any number of cognitive issues. The QuickSIN test scores
-human subjects from normal, to mildly , moderately, 
-and then severly impaired based upon 
+human subjects from normal, to mildly, moderately, 
+and then severely impaired based upon 
 the signal-to-noise ratio (SNR) where the subject correctly recognizes 50% 
 of the keywords.
 We demonstrate that a modern recognizer, built using millions of hours of 
-unsupervised training data, achieves near-normal recognition in noise when
+unsupervised training data, achieves near-normal recognition in noise
 with this human test.
 
 ## Introduction
@@ -66,9 +66,12 @@ One recent example of the new unsupervised models for speech is the
 to capture the speech signal. 
 This system is now available commercially as a system called
 [Chirp](https://cloud.google.com/speech-to-text/v2/docs/chirp-model)
-and is the focus of this test.  Other commercial entities have similar 
-technology and our goal is not to perform a bakeoff, but to demonstrate
-current abilities, and make the QUickSIN tools available to others.
+and is the focus of this test.  
+
+Most importantly, our goal is *not* to perform a bakeoff.
+Other commercial entities have similar 
+technology [Radford2023] and we want to demonstrate
+current abilities, and make the QuickSIN tools available to others.
 
 ## Implementation
 
@@ -102,20 +105,25 @@ equal to "Tear a",
 while "sheet" and "sheep" or "chart" and "charts" are scored as a miss.
 
 This score (the number of correctly identified words over all 6 sentences)
-is converted into an SNR-50 (the SNR which gives 50% accuracy) and then
-SNR-Loss.
+is converted into an SNR-50 (the SNR which gives 50% accuracy)
+as follows [Etymotic2001]:
 ```
 The QuickSIN has five words per step and 5 dB per step. Our highest SNR is
 25 dB so we take 25 + 2.5 = 27.5 minus the total number of words repeated 
 correctly. This gives what we call SNR-50, the signal-to-noise ratio required
 for the patient to repeat 50% of the words correctly.
 ```
-Furthermore
+Furthermore this is converted into SNR Loss (compared to normal human listeners)
 ```
 Since SNR-50 for normal-hearing persons is 2 dB, we subtract 2 dB to 
 derive the formula for a patient's SNR LOSS: 25.5 – (Total words correct 
 in 6 sentences)
 ```
+We report SNR-Loss in this paper.
+
+With a computer implementation of this test we can easily fit a logistic 
+curve to the performance data and thus get a more accurate estimate of the 
+SNR-50.  We compute the SNR-50 both ways.
 
 ## Results
 The QuickSIN test gives us the number of keywords (up to 5) correctly 
@@ -137,3 +145,31 @@ speech reception threshold.
 
 ![QuickSIN score by logistic regression](results/spin_logistic_graph.png)
 ![QuickSIN score by counting](results/spin_counting_graph.png)
+
+The SNR-50 score differs depending on whether it is calculated by the
+conventional counting approach or via logistic regression.
+This difference is systematic and is shown in the scatter plot below.
+We see a 1 to 2dB upward shift (pessimism) in the results 
+using the counting algorithm.
+While the regression method has a firmer statistical basis, we compare results
+using the counting method since that is what conventionally defines the 
+normal, mild, moderate, and severely impaired limits.
+
+![QuickSIN comparison via counting and regression](results/logistic-counting-comparison.png
+)
+
+This study has a number of caveats. Most importantly, the speech recognition
+system has no sense of speaker identity or other aspects of auditoruy scene
+analysis. A human listener might attend more closely to the foreground
+speach, and thus more easily ignore the background noise.  
+Similarly, the speech recognition system is assuming a much wider vocabulary
+than one might expect in an audiology booth.
+(In some cases we had to look up the recognized token
+to see that it really was a word.) Finally, we took an especially firm stance
+on similar words, which is good for reproducibility, but might not be how
+human audiologists score it in a real-time test.
+
+At this point, even an ASR engine trained with 12M hours of speech is still
+showing performance in noise that is moderately impaired. But we do hope the
+QuickSIN test we propose here will allow speech recognition engineers to
+iterate towards a better solution.

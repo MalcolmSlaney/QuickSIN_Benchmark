@@ -879,7 +879,11 @@ def psychometric_curve(x, c, d):
   return logistic_curve(x, 1, 0, c, d)
 
 
-def find_spin_loss(snrs: List[float], scores: np.ndarray) -> float:
+def compute_quicksin_regression(snrs: List[float],
+                                scores: np.ndarray) -> float:
+  """Use regression to fit a logistic curve to the raw scores (vs. SNR)
+  Return the SNR that gives 50% error.
+  """
   #pylint: disable=unbalanced-tuple-unpacking
   logistic_params, _ = curve_fit(psychometric_curve,
                                  snrs,
@@ -989,16 +993,16 @@ def main(_):
     plt.legend()
     plt.savefig(FLAGS.all_score_graph)
 
-  spin_loss = {}
+  quicksin_regression_loss = {}
   for m in model_frac_scores:
-    spin_loss[m] = find_spin_loss(spin_snrs,
-                                  model_frac_scores[m]) - FLAGS.human_level
+    quicksin_regression_loss[m] = compute_quicksin_regression(
+      spin_snrs, model_frac_scores[m]) - FLAGS.human_level
 
   if FLAGS.spin_logistic_graph:
     fig = plt.figure(figsize=(10, 6))
     ax = fig.add_subplot(111)
-    bar_labels = [s.replace('_', '\n') for s in spin_loss]
-    bar_container = ax.bar(bar_labels, spin_loss.values())
+    bar_labels = [s.replace('_', '\n') for s in quicksin_regression_loss]
+    bar_container = ax.bar(bar_labels, quicksin_regression_loss.values())
     ax.set(ylabel='QuickSIN Loss (dB)',
            title='Cloud ASR QuickSIN Scores (logistic)', ylim=(0, 16))
     ax.bar_label(bar_container)
@@ -1033,7 +1037,7 @@ def main(_):
     plt.title('Logistic Regression for QuickSIN Data')
     plt.savefig(FLAGS.logistic_fit_graph)
 
-  quicksin_counting_scores = {}
+  quicksin_counting_loss = {}
   for m in model_frac_scores:
     # if m == 'latest_short': continue
     # Translate fraction correct into the average number of correct
@@ -1041,15 +1045,15 @@ def main(_):
     scores = model_frac_scores[m]
     assert len(scores) == 6, f'Not enough scores {scores} for model {m}'
     snr50 = 27.5 - 5 * np.sum(model_frac_scores[m])
-    quicksin_counting_scores[m] = snr50 - FLAGS.human_level
+    quicksin_counting_loss[m] = snr50 - FLAGS.human_level
 
   if FLAGS.spin_counting_graph:
     fig = plt.figure(figsize=(10, 6))
     ax = fig.add_subplot(111)
-    bar_labels = [s.replace('_', '\n') for s in quicksin_counting_scores]
+    bar_labels = [s.replace('_', '\n') for s in quicksin_counting_loss]
     bar_container = ax.bar(
       bar_labels,
-      quicksin_counting_scores.values())
+      quicksin_counting_loss.values())
     ax.set(ylabel='QuickSIN Loss (dB)',
            title='Cloud ASR QuickSIN Scores (counting)', ylim=(0, 16))
     ax.bar_label(bar_container)
@@ -1063,10 +1067,14 @@ def main(_):
 
   if FLAGS.logistic_counting_graph:
     plt.clf()
-    plt.plot(spin_loss.values(), quicksin_counting_scores.values(), 'x')
-    plt.xlabel('QuickSIN score by logistic regression')
-    plt.ylabel('QuickSIN score by counting')
-    plt.title('Comparison of scores by counting and logistic regression')
+    # Remove outlier from this comparison
+    quicksin_counting_loss['latest_short'] = np.nan
+    plt.plot(quicksin_regression_loss.values(),
+             quicksin_counting_loss.values(), 'x')
+    plt.xlabel('QuickSIN loss by logistic regression (dB)')
+    plt.ylabel('QuickSIN loss by counting (dB)')
+    plt.title('Comparison of loss by counting and logistic regression')
+    plt.axis('square')
     current_axis = plt.axis()
     print(current_axis)
     left = max(current_axis[0], current_axis[2])
