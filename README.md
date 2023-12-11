@@ -6,8 +6,9 @@ Stanford University
 
 ## Abstract
 We propose a standardized test 
-to evaluate modern DNN-based speech recognition system. 
-The QuickSIN test measures human speech in noise abilities, which are impacted by
+to evaluate how modern speech recognition system perform in noise. 
+The QuickSIN test measures the ability of humans to recognize speech in noise.
+In real life these abilities are impacted by
 a number of factors including peripheral sensitivities, neural issues such 
 as synaptopathy, and any number of cognitive issues. The QuickSIN test scores
 human subjects from normal, to mildly, moderately, 
