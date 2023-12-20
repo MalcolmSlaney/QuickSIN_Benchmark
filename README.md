@@ -205,6 +205,8 @@ normal, mild, moderate, and severely impaired limits.
 Figure 4: The results of logistic regression vs.
 the QuickSIN counting approximation
 showing a systematic X dB optimism by the counting approximation.
+Note: the "latest short" result is not included in this scatter plot because 
+it represents an outlier from the better performing models.
 
 ## Discussion
 
