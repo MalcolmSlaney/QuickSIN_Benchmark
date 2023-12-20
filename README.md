@@ -13,7 +13,7 @@ the results.
 
 ---
 
-# Measuring ASR speech in noise recognition with QuickSIN
+# Measuring automatic speech-in-noise recognition with QuickSIN
 Malcolm Slaney and Matt Fitzgerald,
 Stanford University
 
@@ -27,8 +27,9 @@ as synaptopathy, and any number of cognitive issues. The QuickSIN test scores
 human subjects from normal, to mildly, moderately, 
 and then severely impaired based upon 
 the signal-to-noise ratio (SNR) where the subject correctly recognizes 50% 
-of the keywords. By grounding speech-in-noise performance to human abilities
-we have a more realisitc metric for automatic speech recognizers (ASR).
+of the keywords. 
+By grounding automatic speech-in-noise performance to human abilities
+we have a more realistic metric for automatic speech recognizers (ASR).
 We demonstrate that a modern recognizer, built using millions of hours of 
 unsupervised training data, achieves near-normal recognition in noise
 with this human test.
@@ -39,7 +40,9 @@ For many years, speech recognizers have performed better than human in
 *clean* speech 
 [[Xiong 2017](https://ieeexplore.ieee.org/abstract/document/8461870)].
 But noisy speech is a problem, since recognizers
-do not have any concept of auditory stream analysis, tracking a single speaker,
+do not have any concept of auditory stream analysis
+[[Bregman 1990](https://direct.mit.edu/books/book/3887/Auditory-Scene-AnalysisThe-Perceptual-Organization)],
+tracking a single speaker,
 or other cues that humans use to recognize a speaker's speech
 in noisy environments.
 
@@ -50,7 +53,7 @@ QuickSin is used by audiologist to measures a human subject's
 ability to recognize speech with a noisy background.  It measures the 
 signal-to-noise ratio (SNR) where subject correctly recognize
 50% of the key words.
-A single test uses 6 different sentences at 6 different SNR levels
+A single test uses a list of 6 different sentences at 6 different SNR levels
 (25, 20, 15, 10, 5, 0dB) and asks the subject to repeat the words that they 
 heard. It is scored by counting the number of correctly recognized
 keywords in each sentence.
