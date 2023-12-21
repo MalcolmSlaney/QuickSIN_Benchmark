@@ -192,7 +192,7 @@ recognizers tested here, compared to clinical diagnosis levels.
 The SNR-50 score differs depending on whether it is calculated by the
 conventional counting approach or via logistic regression.
 This difference appears to be systematic and is shown in the scatter plot below.
-We see a 1 to 2dB upward shift (pessimism) in the results 
+We see a 1.5dB upward shift (pessimism) in the results when
 using the counting algorithm.
 While the regression method has a firmer statistical basis, we compare 
 to human results
@@ -204,7 +204,7 @@ normal, mild, moderate, and severely impaired limits.
 
 Figure 4: The results of logistic regression vs.
 the QuickSIN counting approximation
-showing a systematic X dB optimism by the counting approximation.
+showing a systematic 1.5dB pessimism by the counting approximation.
 Note: the "latest short" result is not included in this scatter plot because 
 it represents an outlier from the better performing models.
 
@@ -232,6 +232,7 @@ on similar words, which is good for reproducibility, but might not be how
 human audiologists score it in a real-time test.
 
 At this point, even an ASR engine trained with 12M hours of speech is still
-showing moderately impaired performance in noise. But we do hope the
+mildly impaired compared to normal human performance in noise. 
+But we do hope the
 QuickSIN test we propose here will allow speech recognition engineers to
 iterate towards a better solution.
