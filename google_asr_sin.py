@@ -638,7 +638,7 @@ def load_ground_truth(filename: str) -> List[List[SpinSentence]]:
     truth = saved_data['ground_truth']
   else:
     truth = saved_data  # Old format file
-  # print('Loaded ground truth is:', saved_data)
+  print(f'Reloading ground truth saved at {saved_data["time"]}')
   assert isinstance(truth, list)
   for i in range(len(truth)):        # Nominally 12, except during testing
     assert isinstance(truth[i], list)
@@ -874,9 +874,10 @@ def save_recognition_results(
 def load_recognition_results(filename: str) -> Dict[str, SpinFileTranscripts]:
   """Load the precomputed QuickSIN results from a file."""
   with fsspec.open(filename, 'r') as fp:
-    results = json.load(fp)
-  if 'recognition_results' in results:
-    results = results['recognition_results']
+    all_results = json.load(fp)
+  if 'recognition_results' in all_results:
+    results = all_results['recognition_results']
+  print(f'Reloading recognition results saved at {all_results["time"]}')
   for k in results:
     # print(type(results[k]), results[k])
     list_of_lists = []
@@ -908,9 +909,10 @@ def save_model_scores(scores: Dict[str, np.ndarray], filename: str):
 def load_model_scores(filename: str) -> Dict[str, np.ndarray]:
   """Load the precomputed QuickSIN results from a file."""
   with fsspec.open(filename, 'r') as fp:
-    results = json.load(fp)
-  if 'model_results' in results:
-    results = results['model_results']
+    all_results = json.load(fp)
+  if 'model_results' in all_results:
+    results = all_results['model_results']
+  print(f'Reloading model scores saved at {all_results["time"]}')
   for k in results:
     results[k] = np.asarray(results[k])
   return results
@@ -965,7 +967,6 @@ def run_ground_truth(ground_truth_json_file: str,
     assert isinstance(truths, list)
     save_ground_truth(truths, ground_truth_json_file)
   else:
-    print('Reloading ground truth from', ground_truth_json_file)
     truths = load_ground_truth(ground_truth_json_file)
     assert isinstance(truths, list)
     assert len(truths), 12
@@ -987,7 +988,6 @@ def run_recognize_models(recognition_json_file: str,
       )
     save_recognition_results(recognition_results, recognition_json_file)
   else:
-    print('Reloading recogntion results from', recognition_json_file)
     recognition_results = load_recognition_results(recognition_json_file)
     assert isinstance(recognition_results, dict)
   return recognition_results
@@ -1001,7 +1001,6 @@ def run_score_models(models_json_file: str,
     print('Model fraction correct scores:', model_frac_scores)
     save_model_scores(model_frac_scores, models_json_file)
   else:
-    print('Reloading model scores from', models_json_file)
     model_frac_scores = load_model_scores(models_json_file)
     assert isinstance(model_frac_scores, dict)
   return model_frac_scores
@@ -1011,14 +1010,11 @@ def run_score_models(models_json_file: str,
 def linear_regression(x: np.ndarray, y: np.ndarray) -> Tuple[float, float]:
   x = np.asarray(list(x))
   y = np.asarray(list(y))
-  print(f'x is a {type(x)}, y is a {type(y)}')
-  print(f'X: {x}, y: {y}')
   # https://stackoverflow.com/questions/44462766/removing-nan-elements-from-2-arrays
   indices = np.logical_not(np.logical_or(np.isnan(x), np.isnan(y)))    
   indices = np.array(indices)
   x = x[indices]
   y = y[indices]
-  print(f'X: {x}, y: {y}')
   m = (len(x) * np.sum(x*y) - np.sum(x) * np.sum(y)) / (len(x)*np.sum(x*x) - np.sum(x) ** 2)
   b = (np.sum(y) - m *np.sum(x)) / len(x)
   return m, b
@@ -1170,7 +1166,6 @@ def main(_):
     plt.title('Comparison of loss by counting and logistic regression')
     plt.axis('square')
     current_axis = plt.axis()
-    print(current_axis)
     left = max(current_axis[0], current_axis[2])
     right = min(current_axis[1], current_axis[3])
     plt.plot([left, right], [left, right], '--')
@@ -1178,7 +1173,8 @@ def main(_):
 
     m, b = linear_regression(quicksin_regression_loss.values(),
                              quicksin_counting_loss.values())
-    print(f'Linear regression: slope is {m}, bias is {b}')
+    print('Linear regression connecting logistic and counting approaches: '
+          f'slope is {m}, bias is {b}')
 
 if __name__ == '__main__':
   app.run(main)
