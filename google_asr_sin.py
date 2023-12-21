@@ -638,6 +638,7 @@ def load_ground_truth(filename: str) -> List[List[SpinSentence]]:
     truth = saved_data['ground_truth']
   else:
     truth = saved_data  # Old format file
+  #pylint: disable=inconsistent-quotes
   print(f'Reloading ground truth saved at {saved_data["time"]}')
   assert isinstance(truth, list)
   for i in range(len(truth)):        # Nominally 12, except during testing
@@ -877,6 +878,7 @@ def load_recognition_results(filename: str) -> Dict[str, SpinFileTranscripts]:
     all_results = json.load(fp)
   if 'recognition_results' in all_results:
     results = all_results['recognition_results']
+  #pylint: disable=inconsistent-quotes
   print(f'Reloading recognition results saved at {all_results["time"]}')
   for k in results:
     # print(type(results[k]), results[k])
@@ -912,6 +914,7 @@ def load_model_scores(filename: str) -> Dict[str, np.ndarray]:
     all_results = json.load(fp)
   if 'model_results' in all_results:
     results = all_results['model_results']
+  #pylint: disable=inconsistent-quotes
   print(f'Reloading model scores saved at {all_results["time"]}')
   for k in results:
     results[k] = np.asarray(results[k])
@@ -1011,11 +1014,12 @@ def linear_regression(x: np.ndarray, y: np.ndarray) -> Tuple[float, float]:
   x = np.asarray(list(x))
   y = np.asarray(list(y))
   # https://stackoverflow.com/questions/44462766/removing-nan-elements-from-2-arrays
-  indices = np.logical_not(np.logical_or(np.isnan(x), np.isnan(y)))    
+  indices = np.logical_not(np.logical_or(np.isnan(x), np.isnan(y)))
   indices = np.array(indices)
   x = x[indices]
   y = y[indices]
-  m = (len(x) * np.sum(x*y) - np.sum(x) * np.sum(y)) / (len(x)*np.sum(x*x) - np.sum(x) ** 2)
+  m = (len(x) * np.sum(x*y) - np.sum(x) * np.sum(y)) / (len(x)*np.sum(x*x) -
+                                                        np.sum(x) ** 2)
   b = (np.sum(y) - m *np.sum(x)) / len(x)
   return m, b
 
