@@ -1,19 +1,4 @@
-
-## Repository ReadMe
-This code implements the QuickSIN test, and uses it to test a modern
-(cloud-based) speech recognition system.  To run this code, you need
-the QuickSIN audio files, either from 
-[Etymotic](https://www.etymotic.com/product/quicksin/)
-or your favorite audiologist, as well as a Google Cloud project id you can
-charge the 
-[API calls](https://cloud.google.com/speech-to-text/v2/docs/sync-recognize)
-against. This code runs on your local machines, reads the QuickSIN
-audio files, sends the audio to the cloud for recognition, and then scores
-the results.
-
----
-
-# Measuring automatic speech-in-noise recognition with QuickSIN
+# Measuring automatic speech-in-noise recognition with QuickSI
 Malcolm Slaney and Matt Fitzgerald,
 Stanford University
 
@@ -208,6 +193,12 @@ showing a systematic 1.5dB pessimism by the counting approximation.
 Note: the "latest short" result is not included in this scatter plot because 
 it represents an outlier from the better performing models.
 
+Question for readers:  How should I rectify the difference between counting
+and logistic regression?  The impaired levels are based on the counting method
+and are fixed.  Perhaps tell people to use the regression approach, but 
+add 1.5dB to the SNR Loss to match the counting approach and the existing 
+guidelines. Call this "SNR Loss Counting".
+
 ## Discussion
 
 We believe that QuickSIN is a simple and effective way to characterize
@@ -236,3 +227,32 @@ mildly impaired compared to normal human performance in noise.
 But we do hope the
 QuickSIN test we propose here will allow speech recognition engineers to
 iterate towards a better solution.
+
+
+---
+
+## Implementation Notes
+
+This code implements the QuickSIN test, and uses it to test a modern
+(cloud-based) speech recognition system.  To run this code, you need
+the QuickSIN audio files, either from 
+[Etymotic](https://www.etymotic.com/product/quicksin/)
+or your favorite audiologist, as well as a Google Cloud project id you can
+charge the 
+[API calls](https://cloud.google.com/speech-to-text/v2/docs/sync-recognize)
+against. This code runs on your local machines, reads the QuickSIN
+audio files, sends the audio to the cloud for recognition, and then scores
+the results.
+
+The main program (google_asr_sin.py) caches the intermediate results 
+to make it easier to replot the results.
+The table below shows the purpose of each cache file,
+the command line flag that specifies the file,
+and the default file name are shown in the table below.
+
+|                   | **Command Line Flag**   | **Default File Name**  |
+|-------------------|-------------------------|------------------------|
+| Ground Truth      | ground_truth_cache      | ground_truth.json      |
+| Model Recognition | model_recognition_cache | model_recognition.json |
+| Model Result      | model_result_cache      | model_result.json      |
+
