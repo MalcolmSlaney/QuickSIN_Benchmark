@@ -1,4 +1,5 @@
 """Code to test the auditory toolbox."""
+import dataclasses
 import io
 import os
 import re
@@ -325,12 +326,24 @@ L 1 S 0  tear/Tara thin sheet yellow pad
     new_truths = gasr.load_ground_truth(json_file)
     self.assertEqual(truths, new_truths)
 
+
+  def test_recognition_results(self):
+    sft = {'foo': [[gasr.RecogResult('bar', 1, 2)]]}
+    json_file = '/tmp/recog_results_test.json'
+    gasr.save_recognition_results(sft,  json_file)
+
+    new_sft = gasr.load_recognition_results(json_file)
+    self.assertIsInstance(new_sft, dict)
+    self.assertListEqual(list(new_sft), list(sft))
+    self.assertEqual(dataclasses.asdict(sft['foo'][0][0]),
+                     dataclasses.asdict(new_sft['foo'][0][0]))
+
   def test_model_results_save(self):
     test_scores = {'1': np.arange(3), '2': np.arange(1,3)}
     json_file = '/tmp/model_results_test.json'
-    gasr.save_model_results(test_scores, json_file)
+    gasr.save_model_scores(test_scores, json_file)
 
-    new_scores = gasr.load_model_results(json_file)
+    new_scores = gasr.load_model_scores(json_file)
     self.assertLen(new_scores.keys(), 2)
     np.testing.assert_array_equal(new_scores['1'], test_scores['1'])
     np.testing.assert_array_equal(new_scores['2'], test_scores['2'])

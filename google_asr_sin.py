@@ -623,7 +623,15 @@ def save_ground_truth(truth: List[List[SpinSentence]], filename: str):
 
 
 def load_ground_truth(filename: str) -> List[List[SpinSentence]]:
-  """Load the precomputed QuickSIN ground truth from a file."""
+  """Load the precomputed QuickSIN ground truth from a file.
+  
+  Args:
+    The file from which to read the cached ground truth.
+
+  Return:
+    A list of 12 SPIN lists, each list containing the 6 SPIN 
+    sentences at the different SNRs.
+  """
   with fsspec.open(filename, 'r') as fp:
     saved_data = json.load(fp)
   if isinstance(saved_data, dict):
@@ -801,17 +809,15 @@ all_model_names = ('latest_long',
                    'chirp',
 )
 
-def score_all_models(
+def recognize_with_all_models(
     project_id: str,
     spin_test_names: List[str],
-    ground_truths: List[List[SpinSentence]],
-    test_snrs: List[float] = spin_snrs,
-    model_names: List[str] = all_model_names) -> Dict[str, np.ndarray]:
-  """Score all QuickSIN test files (from the spin_test_names argument) against
-  the ground_truths.  Return a dictionary of scores vs. SNRs, keyed by the 
-  model name.
+    model_names: List[str] = all_model_names) -> Dict[str, SpinFileTranscripts]:
+  """Recognize all QuickSIN test files (from the spin_test_names argument)
+  Return a dictionary of scores vs. list of lists of transcripts, keyed by 
+  the model name.
   """
-  model_scores = {}
+  model_results = {}
 
   for model_name in model_names:
     print(f'Model: {model_name}')
@@ -820,7 +826,23 @@ def score_all_models(
     asr_engine.CreateRecognizer()
     babble_transcripts = recognize_all_spin(spin_test_names, asr_engine)
     # Babble_transcripts is a SpinFileTranscripts List[List[RecogResults]]
+    model_results[model_name] = babble_transcripts
+  return model_results
 
+
+def score_all_models(
+    model_results: Dict[str, SpinFileTranscripts],
+    ground_truths: List[List[SpinSentence]],
+    test_snrs: List[float] = spin_snrs) -> Dict[str, np.ndarray]:
+  """Score all QuickSIN test files (from the spin_test_names argument) against
+  the ground_truths.  Return a dictionary of scores vs. SNRs, keyed by the 
+  model name.
+  """
+  model_scores = {}
+  print(type(model_results), model_results)
+
+  for model_name in model_results:
+    babble_transcripts = model_results[model_name]
     scores = score_all_tests(test_snrs,
                              ground_truths,
                              babble_transcripts,
@@ -829,7 +851,44 @@ def score_all_models(
   return model_scores
 
 
-def save_model_results(scores: Dict[str, np.ndarray], filename: str):
+def save_recognition_results(
+    recognition_results: Dict[str, SpinFileTranscripts],
+    recognition_json_file: str):
+  """Save the recognition results for all models into a JSON file so we don't 
+  have to query the cloud again."""
+  class DataclassEncoder(json.JSONEncoder):
+    def default(self, o):
+      if dataclasses.is_dataclass(o):
+        return dataclasses.asdict(o)
+      elif isinstance(o, set):
+        return list(o)
+      return super().default(o)
+
+  saved_data = {
+    'recognition_results': recognition_results,
+    'time': str(datetime.datetime.now())
+  }
+  with fsspec.open(recognition_json_file, 'w') as fp:
+    json.dump(saved_data, fp, cls=DataclassEncoder)
+
+def load_recognition_results(filename: str) -> Dict[str, SpinFileTranscripts]:
+  """Load the precomputed QuickSIN results from a file."""
+  with fsspec.open(filename, 'r') as fp:
+    results = json.load(fp)
+  if 'recognition_results' in results:
+    results = results['recognition_results']
+  for k in results:
+    # print(type(results[k]), results[k])
+    list_of_lists = []
+    for i in results[k]:
+      list_of_words = []
+      for j in i:
+        list_of_words.append(RecogResult(**j))
+      list_of_lists.append(list_of_words)
+    results[k] = list_of_lists
+  return results
+
+def save_model_scores(scores: Dict[str, np.ndarray], filename: str):
   """Save the QuickSIN results for all models into a JSON file so we don't have
   to compute it again."""
   class NumpyArrayEncoder(json.JSONEncoder):
@@ -846,7 +905,7 @@ def save_model_results(scores: Dict[str, np.ndarray], filename: str):
     json.dump(saved_data, fp, cls=NumpyArrayEncoder)
 
 
-def load_model_results(filename: str) -> Dict[str, np.ndarray]:
+def load_model_scores(filename: str) -> Dict[str, np.ndarray]:
   """Load the precomputed QuickSIN results from a file."""
   with fsspec.open(filename, 'r') as fp:
     results = json.load(fp)
@@ -912,27 +971,57 @@ def run_ground_truth(ground_truth_json_file: str,
     assert len(truths), 12
   return truths
 
-def run_score_models(models_json_file: str,
-                     truths, audio_dir: str,
-                     project_id: str) -> Dict[str, np.ndarray]:
-  if not os.path.exists(models_json_file):
+def run_recognize_models(recognition_json_file: str,
+                         audio_dir: str,
+                         project_id: str) -> Dict[str, SpinFileTranscripts]:
+  if not os.path.exists(recognition_json_file):
     spin_pattern = os.path.join(audio_dir, '*.wav')
     spin_file_names = fsspec.open_files(spin_pattern)
     spin_file_names = [f.full_name for f in spin_file_names]
     spin_test_names = [f for f in spin_file_names if 'Babble' in f]
     spin_test_names.sort(key=sort_by_list_number)
 
-    model_frac_scores = score_all_models(project_id,
-                                         spin_test_names,
+    recognition_results = recognize_with_all_models(
+      project_id,
+      spin_test_names,
+      )
+    save_recognition_results(recognition_results, recognition_json_file)
+  else:
+    print('Reloading recogntion results from', recognition_json_file)
+    recognition_results = load_recognition_results(recognition_json_file)
+    assert isinstance(recognition_results, dict)
+  return recognition_results
+
+def run_score_models(models_json_file: str,
+                     model_results: Dict[str, SpinFileTranscripts],
+                     truths) -> Dict[str, np.ndarray]:
+  if not os.path.exists(models_json_file):
+    model_frac_scores = score_all_models(model_results,
                                          truths)
     print('Model fraction correct scores:', model_frac_scores)
-    save_model_results(model_frac_scores, models_json_file)
+    save_model_scores(model_frac_scores, models_json_file)
   else:
     print('Reloading model scores from', models_json_file)
-    model_frac_scores = load_model_results(models_json_file)
+    model_frac_scores = load_model_scores(models_json_file)
     assert isinstance(model_frac_scores, dict)
   return model_frac_scores
 
+
+# From: https://devarea.com/linear-regression-with-numpy/
+def linear_regression(x: np.ndarray, y: np.ndarray) -> Tuple[float, float]:
+  x = np.asarray(list(x))
+  y = np.asarray(list(y))
+  print(f'x is a {type(x)}, y is a {type(y)}')
+  print(f'X: {x}, y: {y}')
+  # https://stackoverflow.com/questions/44462766/removing-nan-elements-from-2-arrays
+  indices = np.logical_not(np.logical_or(np.isnan(x), np.isnan(y)))    
+  indices = np.array(indices)
+  x = x[indices]
+  y = y[indices]
+  print(f'X: {x}, y: {y}')
+  m = (len(x) * np.sum(x*y) - np.sum(x) * np.sum(y)) / (len(x)*np.sum(x*x) - np.sum(x) ** 2)
+  b = (np.sum(y) - m *np.sum(x)) / len(x)
+  return m, b
 
 #############  MAIN PROGRAM - Test all models and create graphs  ###############
 
@@ -943,7 +1032,9 @@ FLAGS = flags.FLAGS
 # If there is a conflict, we'll get an error at import time.
 flags.DEFINE_string('ground_truth_cache', 'ground_truth.json',
                     'Where to keep a cache of the QuickSIN ground truth')
-flags.DEFINE_string('models_scores_cache', 'models_scores.json',
+flags.DEFINE_string('model_recognition_cache', 'model_recognition.json',
+                    'Where to keep a cache of the QuickSIN model results')
+flags.DEFINE_string('model_result_cache', 'model_result.json',
                     'Where to keep a cache of the QuickSIN model results')
 flags.DEFINE_string('audio_dir', '../QuickSIN/QuickSIN22/',
                     'Where to find the QuickSIN .wav files')
@@ -976,10 +1067,13 @@ def main(_):
                             FLAGS.audio_dir,
                             FLAGS.sentence_boundary_graph)
 
-  model_frac_scores = run_score_models(FLAGS.models_scores_cache,
-                                       truths,
+  model_results = run_recognize_models(FLAGS.model_recognition_cache,
                                        FLAGS.audio_dir,
                                        project_id)
+
+  model_frac_scores = run_score_models(FLAGS.model_result_cache,
+                                       model_results,
+                                       truths)
 
   #pylint: disable=consider-using-dict-items
   if FLAGS.all_score_graph:
@@ -1082,5 +1176,10 @@ def main(_):
     plt.plot([left, right], [left, right], '--')
     plt.savefig(FLAGS.logistic_counting_graph)
 
+    m, b = linear_regression(quicksin_regression_loss.values(),
+                             quicksin_counting_loss.values())
+    print(f'Linear regression: slope is {m}, bias is {b}')
+
 if __name__ == '__main__':
   app.run(main)
+
