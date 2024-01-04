@@ -1075,9 +1075,12 @@ def main(_):
                                        model_results,
                                        truths)
 
+  # Plot all the figures
+  figsize = (6.4, 4.8) # (10, 6)
+  
   #pylint: disable=consider-using-dict-items
   if FLAGS.all_score_graph:
-    plt.clf()
+    plt.figure(figsize=figsize)
     for m in model_frac_scores:
       plt.plot(spin_snrs,
                model_frac_scores[m],
@@ -1093,7 +1096,7 @@ def main(_):
       spin_snrs, model_frac_scores[m]) - FLAGS.human_level
 
   if FLAGS.spin_logistic_graph:
-    fig = plt.figure(figsize=(10, 6))
+    fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111)
     bar_labels = [s.replace('_', '\n') for s in quicksin_regression_loss]
     bar_container = ax.bar(bar_labels, quicksin_regression_loss.values())
@@ -1116,7 +1119,7 @@ def main(_):
                                    scores,
                                    ftol=1e-4)
     detailed_snr = np.arange(0, 25, 0.1)
-    fig = plt.figure(figsize=(6.4, 4.8))  # Reset to default size
+    fig = plt.figure(figsize=figsize)  # reset to default size
     plt.plot(spin_snrs, scores, 'x', label='Experimental Data')
     plt.plot(detailed_snr,
              psychometric_curve(detailed_snr,
@@ -1142,7 +1145,7 @@ def main(_):
     quicksin_counting_loss[m] = snr50 - FLAGS.human_level
 
   if FLAGS.spin_counting_graph:
-    fig = plt.figure(figsize=(10, 6))
+    fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111)
     bar_labels = [s.replace('_', '\n') for s in quicksin_counting_loss]
     bar_container = ax.bar(
@@ -1160,7 +1163,7 @@ def main(_):
     plt.savefig(FLAGS.spin_counting_graph)
 
   if FLAGS.logistic_counting_graph:
-    plt.clf()
+    plt.figure(figsize=figsize)
     # Remove outlier from this comparison
     quicksin_counting_loss['latest_short'] = np.nan
     plt.plot(quicksin_regression_loss.values(),

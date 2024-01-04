@@ -1,4 +1,4 @@
-# Measuring automatic speech-in-noise recognition with QuickSI
+# Measuring automatic speech-in-noise recognition with QuickSIN
 Malcolm Slaney and Matt Fitzgerald,
 Stanford University
 
