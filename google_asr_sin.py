@@ -1047,6 +1047,9 @@ flags.DEFINE_string('spin_logistic_graph', 'results/spin_logistic_graph.png',
                     'Where to store the plot with logistic SPIN scores.')
 flags.DEFINE_string('spin_counting_graph', 'results/spin_counting_graph.png',
                     'Where to store the plot with logistic SPIN scores.')
+flags.DEFINE_string('method_comparison_graph', 
+                    'results/method_comparison_graph.png',
+                    'Where to store the counting/logistic comparison graph.')
 flags.DEFINE_string('logistic_counting_graph',
                     'results/logistic-counting-comparison.png',
                     'Graph comparing regression vs. counting results')
@@ -1080,6 +1083,7 @@ def main(_):
   
   #pylint: disable=consider-using-dict-items
   if FLAGS.all_score_graph:
+    # Line graph showing the fraction correct for all recognizers for all SNRs.
     plt.figure(figsize=figsize)
     for m in model_frac_scores:
       plt.plot(spin_snrs,
@@ -1163,11 +1167,18 @@ def main(_):
     plt.savefig(FLAGS.spin_counting_graph)
 
   if FLAGS.logistic_counting_graph:
-    plt.figure(figsize=figsize)
     # Remove outlier from this comparison
+    quicksin_counting_loss_copy = quicksin_counting_loss.copy()
     quicksin_counting_loss['latest_short'] = np.nan
+
+    m, b = linear_regression(quicksin_regression_loss.values(),
+                             quicksin_counting_loss.values())
+    print('Linear regression connecting logistic and counting approaches: '
+          f'slope is {m}, bias is {b}')
+    
+    plt.figure(figsize=figsize)
     plt.plot(quicksin_regression_loss.values(),
-             quicksin_counting_loss.values(), 'x')
+             quicksin_counting_loss.values(), 'x', label='Recognition results')
     plt.xlabel('QuickSIN loss by logistic regression (dB)')
     plt.ylabel('QuickSIN loss by counting (dB)')
     plt.title('Comparison of loss by counting and logistic regression')
@@ -1175,13 +1186,52 @@ def main(_):
     current_axis = plt.axis()
     left = max(current_axis[0], current_axis[2])
     right = min(current_axis[1], current_axis[3])
-    plt.plot([left, right], [left, right], '--')
+    plt.plot([left, right], [left, right], '--', label='Unity slope, zero bias')
+    plt.plot([current_axis[0], right], [current_axis[0]+b, b+right*m], 
+             ':', label='Regression fit')
+    plt.legend()
     plt.savefig(FLAGS.logistic_counting_graph)
 
-    m, b = linear_regression(quicksin_regression_loss.values(),
-                             quicksin_counting_loss.values())
-    print('Linear regression connecting logistic and counting approaches: '
-          f'slope is {m}, bias is {b}')
+  if FLAGS.method_comparison_graph:
+    # https://matplotlib.org/stable/gallery/lines_bars_and_markers/barchart.html#sphx-glr-gallery-lines-bars-and-markers-barchart-py
+    def vector_round(vector, digits=2):
+      return [round(v, digits) for v in vector]
+
+    methods = bar_labels
+    method_means = {
+        'Counting': vector_round(quicksin_counting_loss_copy.values()),
+        'Regression (before correction)': 
+          vector_round(quicksin_regression_loss.values()),
+    }
+
+    x = np.arange(len(methods))  # the label locations
+    width = 0.25  # the width of the bars
+    multiplier = 0
+
+    fig, ax = plt.subplots(layout='constrained')
+
+    for attribute, measurement in method_means.items():
+        offset = width * multiplier
+        rects = ax.bar(x + offset, measurement, width, label=attribute)
+        ax.bar_label(rects, padding=3)
+        multiplier += 1
+
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax.set_ylabel('QuickSIN Loss')
+    ax.set_title('Score by recognizer and algorithm')
+    ax.set_xticks(x + width, methods)
+    a = plt.axis()
+    plt.axis('tight')
+    offset = 0.2
+    plt.plot(a[:2], [15, 15], '--', alpha=0.25)
+    plt.text(a[1], 15+offset, 'Severe', ha='right')
+    plt.plot(a[:2], [7, 7], '--', alpha=0.25)
+    plt.text(a[1], 7+offset, 'Moderate', ha='right')
+    plt.plot(a[:2], [3, 3], '--', alpha=0.25)
+    plt.text(a[1], 3+offset, 'Mild', ha='right')
+    ax.set_ylim(0, 16)
+    plt.legend(loc='upper center') # , ncol=2)
+    plt.savefig(FLAGS.method_comparison_graph)
 
 if __name__ == '__main__':
   app.run(main)
