@@ -261,7 +261,7 @@ def test_whisper():
   print('Just testing Whisper Engine')
   ground_truth = load_ground_truth(FLAGS.ground_truth_cache)
   whisper_engine = make_recognizer_engine('whisper.base.en')
-  spin_file = find_all_spin_files(FLAGS.audio_dir, 'Babble')[0]
+  spin_file = find_all_spin_files(FLAGS.audio_dir, 'Babble List ')[0]
   whisper_dict = whisper_engine.RecognizeFile(spin_file)
   word_list = whisper_engine.parse_transcript(whisper_dict)
 
@@ -503,10 +503,10 @@ L10 S 5  wall phone ring loud often
 
 L11 S 0  hinge door creaked old age
 L11 S 1  bright lanterns Gay dark lawn
-L11 S 2  offered proof  form large chart
+L11 S 2  offered proof form large chart
 L11 S 3  their eyelids droop want sleep
 L11 S 4  many ways do these things
-L11 S 5  we like see clear weather
+L11 S 5  we like see clear weather/whether
 """.split('\n')
 
 
@@ -521,12 +521,12 @@ def word_alternatives(words: str,
 
 
 homonyms = """
-  # Add word equivalances, here.
+  # Add word equivalances, here.  Nominal correct word, from the list above,
+  # should be listed first.  Then alternatives.
   # Homonyms
   tails/tales
-  4/four
-  four/for
-  maire/mare
+  four/4/for
+  mare/maire
   pedal/petal
   wheeled/wield
   sun/son
@@ -536,7 +536,7 @@ homonyms = """
   silk/whitesilk
   roll/role
   drowned/dround
-  yacht/yaught
+  yacht/yaught/yach
   hall/haul
   # Close enough words.
   # None so far.. we count if an error if even one phoneme is wrong.
@@ -666,7 +666,8 @@ def print_spin_ground_truth(truth: List[List[SpinSentence]]):
 
 def save_ground_truth(truth: List[List[SpinSentence]], filename: str):
   """Save the QuickSIN ground truth into a JSON file so we don't have
-  to compute it again."""
+  to compute it again. The ground truth starts as a SpinSentence, but is
+  saved (and restored) as a dictionary."""
   class GoogleSinEncoder(json.JSONEncoder):
     def default(self, o):
       if dataclasses.is_dataclass(o):
@@ -691,7 +692,8 @@ def load_ground_truth(filename: str) -> List[List[SpinSentence]]:
 
   Return:
     A list of 12 SPIN lists, each list containing the 6 SPIN 
-    sentences at the different SNRs.
+    sentences at the different SNRs.  The data is a dictionary on disk, but 
+    is converted to a SpinSentence by this routine.
   """
   with fsspec.open(filename, 'r') as fp:
     saved_data = json.load(fp)
@@ -711,21 +713,43 @@ def load_ground_truth(filename: str) -> List[List[SpinSentence]]:
   return truth
 
 
-number_re = re.compile(r' (\d+).wav')
+def print_quicksin_ground_truth(d: List[List[SpinSentence]]):
+  print('Ground Truth with all Synonyms:')
+  for list_number in range(12):
+    for sentence_number in range(6):
+      print(f'L{list_number} S{sentence_number}:', end='')
+      sent = d[list_number][sentence_number]
+      print(f' [{sent.start_time}-{sent.end_time}] ', end='')
+      for syn_set in sent.true_word_list:
+        syn_list = list(syn_set)
+        print(f'{"/".join(syn_list)} ',  end='')
+      print()
 
-def sort_by_list_number(s: str) -> int:
+
+XXnumber_re = re.compile(r' (\d+).wav')
+
+def XXsort_by_list_number(s: str) -> int:
   m = number_re.search(s)
   assert m, f'Could not find list number in {s}'
   return int(m[1])
 
 
-def find_all_spin_files(audio_dir: str, pattern: str):
-  spin_pattern = os.path.join(audio_dir, '*.wav')
-  spin_file_names = fsspec.open_files(spin_pattern)
-  spin_file_names = [f.full_name for f in spin_file_names]
-  wanted_spin_names = [f for f in spin_file_names if pattern in f]
-  wanted_spin_names.sort(key=sort_by_list_number)
-  return wanted_spin_names
+def find_all_spin_files(audio_dir: str, prefix: str):
+  """Return the list of SPIN test files that match the specified prefix.
+  Return them in order so we can use the ones we care about.
+  
+  Args:
+    audio_dir: Where to find the audio files in .wav format
+    prefix: The file name prefix for the subset we care about.
+    
+  Returns:
+    A list of filenames with the given prefix, in numerical order.
+  """
+  spin_file_names = [os.path.join(audio_dir, 
+                                  f'{prefix}{i+1}.wav') for i in range(12)]
+  for f in spin_file_names:
+    assert os.path.exists(f), f'{f} not found in find_all_spin_files'
+  return spin_file_names
 
 
 def compute_quicksin_truth(
@@ -739,7 +763,7 @@ def compute_quicksin_truth(
   sentence.  Combine with the keyword list to create a list (by QuickSin list) 
   of lists of sentences (one sentence per test SNR).
   """
-  spin_truth_names = find_all_spin_files(wav_dir, 'Clean')
+  spin_truth_names = find_all_spin_files(wav_dir, 'Clean List ')
   print(f'Found {len(spin_truth_names)} QuickSIN lists to process.')
 
   if sentence_breaks is None:
@@ -824,31 +848,38 @@ def score_word_list(true_words: List[Set[str]],
     score = min(score, max_count)
   if missing_words:
     missing_words = prettyprint_words_and_alternatives(missing_words)
-    #pylint: disable=inconsistent-quotes
-    print(f'Want {", ".join(missing_words)}, '
-          f'from: {", ".join(recognized_words)}')
+    missing_words_string = ', '.join(missing_words)
+    recognized_words_string = ', '.join(recognized_words)
+    print(f'Could not find {missing_words_string} '
+          f'in this recognition result: {recognized_words_string}')
   return score
 
 def score_all_tests(snrs: List[float],
                     ground_truths: List[List[SpinSentence]],
                     reco_results: List[RecogResult],
+                    # Good lists from McArdle2006 and Mead2006.
+                    good_lists: List[int] = [1, 2, 6, 8, 10, 11, 12],
                     debug=False) -> np.ndarray:
   """Score all list for all SNRs for one recognizer.  Iterate through all the
   lists, and then score each SNR in the list. 
   Args:
     snrs: List of (standard) test SNRs
     ground_truths: A list (one item per QuickSIN List) of lists (one per
-      SNR) of the ground truth sentences.
+      SNR) of the ground truth sentences. This routine uses the true_word_list
+      as the ground truth (this also contains the alternates).
     reco_results: A list of recognition results 
+    good_lists: Which QuickSIN lists do we want to use for scoring.  This list
+      starts at 1 (while the Python lists start counting at zero)!!!
   
   Return a np array with the fraction correct for each of the listed SNRs."""
-  num_lists = len(ground_truths)
+  num_lists = len(good_lists)
   num_keywords = 5
 
   correct_counts = []
   for snr_num, snr in enumerate(snrs):
     correct_count = 0
-    for list_num in range(num_lists):
+    for list_num in good_lists:
+      list_num -= 1  # Since Python starts lists at 0.
       true_words = ground_truths[list_num][snr_num].true_word_list
       recognized_words = words_in_trial(
         reco_results[list_num],
@@ -871,24 +902,28 @@ def score_all_tests(snrs: List[float],
 # Models listed here:
 # https://cloud.google.com/speech-to-text/docs/transcription-model
 
-all_model_names = (# Google cloud models
-                   # 'latest_long',
-                   # 'latest_short',
-                   # 'telephony',
-                   # 'medical_dictation',
-                   # 'medical_conversation',
-                   # 'chirp',
+all_model_names = {# Google cloud models
+                   'latest_long': 'Google\nLatest\nLong',
+                   # 'latest_short': 'Google\nLatest\nShort',
+                   'telephony': 'Google\nTelephony',
+                   # 'medical_dictation': Google\nMedical\nDictation',
+                   # 'medical_conversation': Google\nMedical\nConversation'
+                   'chirp': 'Google\nUSM/Chirp',
 
                    # Whisper models from https://github.com/openai/whisper
-                   'whisper.base.en',
-                   'whisper.small.en',
-                   'whisper.medium.en'
-)
+                   'whisper.base.en': 'Whisper\nBase',
+                   'whisper.small.en': 'Whisper\nSmall',
+                   'whisper.medium.en': 'Whisper\nMedium',
+                   'whisper.large': 'Whisper\nLarge',
+}
+
+
 
 def recognize_with_all_models(
     project_id: str,
     spin_test_names: List[str],
-    model_names: List[str] = all_model_names) -> Dict[str, SpinFileTranscripts]:
+    model_names: Dict[str, str] = all_model_names) -> Dict[str, 
+                                                           SpinFileTranscripts]:
   """Recognize all QuickSIN test files (from the spin_test_names argument)
   Return a dictionary of scores vs. list of lists of transcripts, keyed by 
   the model name.
@@ -918,12 +953,15 @@ def score_all_models(
   print(type(model_results), model_results)
 
   for model_name in model_results:
+    if model_name not in all_model_names:
+      continue
     print(f'Scoring model {model_name}')
     babble_transcripts = model_results[model_name]
     scores = score_all_tests(test_snrs,
                              ground_truths,
                              babble_transcripts,
                              debug=True)
+    print('Score_all_tests returned', scores)
     model_scores[model_name] = scores
   return model_scores
 
@@ -1037,7 +1075,15 @@ def run_ground_truth(ground_truth_json_file: str,
                      sin_wav_dir: str = ('/content/drive/MyDrive/'
                                          'Stanford/QuickSIN22/'),
                      sentence_boundary_graph: str = '',
-                    ):
+                    ) -> List[List[SpinSentence]]:
+  """
+  Returns:
+    Lists of lists of dictionaries, one for each QuickSIN sentence.
+    Lists are indexed for by QuickSIN list number, then QuickSIN sentence 
+    number. Each dictionary contains the sentence words (from the recognizers),
+    and the key words and alternates for the scoring.  As well as the start and
+    stop time of this sentence, and the SNR.
+  """
   if not os.path.exists(ground_truth_json_file):
     truths = compute_quicksin_truth(
       sin_wav_dir,
@@ -1049,6 +1095,8 @@ def run_ground_truth(ground_truth_json_file: str,
     truths = load_ground_truth(ground_truth_json_file)
     assert isinstance(truths, list)
     assert len(truths), 12
+
+  print_quicksin_ground_truth(truths)
   return truths
 
 
@@ -1056,7 +1104,7 @@ def run_recognize_models(recognition_json_file: str,
                          audio_dir: str,
                          project_id: str) -> Dict[str, SpinFileTranscripts]:
   if not os.path.exists(recognition_json_file):
-    spin_test_names = find_all_spin_files(audio_dir, 'Babble')
+    spin_test_names = find_all_spin_files(audio_dir, 'Babble List ')
 
     recognition_results = recognize_with_all_models(
       project_id,
@@ -1070,7 +1118,7 @@ def run_recognize_models(recognition_json_file: str,
 
 def run_score_models(models_json_file: str,
                      model_results: Dict[str, SpinFileTranscripts],
-                     truths) -> Dict[str, np.ndarray]:
+                     truths: List[List[SpinSentence]]) -> Dict[str, np.ndarray]:
   if not os.path.exists(models_json_file):
     model_frac_scores = score_all_models(model_results,
                                          truths)
@@ -1162,14 +1210,17 @@ def main(_):
   #pylint: disable=consider-using-dict-items
   if FLAGS.all_score_graph:
     # Line graph showing the fraction correct for all recognizers for all SNRs.
-    plt.figure(figsize=figsize)
+    plt.figure(figsize=(6, 4))
     for m in model_frac_scores:
       plt.plot(spin_snrs,
                model_frac_scores[m],
-               label=m)
+               label=all_model_names[m].replace('\n', ' '))
     plt.xlabel('SNR (dB)')
     plt.ylabel('Fraction of words recognized correctly')
     plt.legend()
+    a = plt.axis()
+    plt.plot([3, 3], [0, 1.0], '--')
+    plt.plot([0, 25], [0.5, 0.5], '--')
     plt.savefig(FLAGS.all_score_graph)
 
   quicksin_regression_loss = {}
@@ -1177,11 +1228,7 @@ def main(_):
     quicksin_regression_loss[m] = compute_quicksin_regression(
       spin_snrs, model_frac_scores[m]) - FLAGS.human_level
 
-  bar_labels = [s.replace('_', '\n') for s in quicksin_regression_loss]
-  bar_labels = [s.replace('whisper.', '') for s in bar_labels]
-  bar_labels = [s.replace('base.en', 'base\nen') for s in bar_labels]
-  bar_labels = [s.replace('small.en', 'small\nen') for s in bar_labels]
-  bar_labels = [s.replace('medium.en', 'medium\nen') for s in bar_labels]
+  bar_labels = [all_model_names[i] for i in quicksin_regression_loss]
 
   print('All results:', quicksin_regression_loss)
   if FLAGS.spin_logistic_graph:
@@ -1189,12 +1236,12 @@ def main(_):
     ax = fig.add_subplot(111)
     bar_container = ax.bar(bar_labels, quicksin_regression_loss.values())
     ax.set(ylabel='QuickSIN SNR Loss (dB)',
-           title='Cloud ASR QuickSIN Scores (logistic)', ylim=(0, 16))
+           title='Cloud ASR QuickSIN Scores (logistic)', ylim=(0, 9))
     ax.bar_label(bar_container)
     a = plt.axis()
-    plt.plot(a[:2], [15, 15], '--', label='Severe SNRloss')
-    plt.plot(a[:2], [7, 7], '--', label='Moderate SNRloss')
-    plt.plot(a[:2], [3, 3], '--', label='Mild SNRloss')
+    # plt.plot(a[:2], [15, 15], '--', label='Severe SNR Loss')
+    plt.plot(a[:2], [7, 7], '--', label='Moderate SNR Loss')
+    plt.plot(a[:2], [3, 3], '--', label='Mild SNR Loss')
     plt.legend()
     plt.axis(a)
     plt.savefig(FLAGS.spin_logistic_graph)
@@ -1207,7 +1254,7 @@ def main(_):
                                    scores,
                                    ftol=1e-4)
     detailed_snr = np.arange(0, 25, 0.1)
-    fig = plt.figure(figsize=figsize)  # reset to default size
+    fig = plt.figure(figsize=(figsize))  # reset to default size
     plt.plot(spin_snrs, scores, 'x', label='Experimental Data')
     plt.plot(detailed_snr,
              psychometric_curve(detailed_snr,
@@ -1239,12 +1286,12 @@ def main(_):
       bar_labels,
       quicksin_counting_loss.values())
     ax.set(ylabel='QuickSIN SNR Loss (dB)',
-           title='Cloud ASR QuickSIN Scores (counting)', ylim=(0, 16))
+           title='Cloud ASR QuickSIN Scores (counting)', ylim=(0, 9))
     ax.bar_label(bar_container)
     a = plt.axis()
-    plt.plot(a[:2], [15, 15], '--', label='Severe SNRloss')
-    plt.plot(a[:2], [7, 7], '--', label='Moderate SNRloss')
-    plt.plot(a[:2], [3, 3], '--', label='Mild SNRloss')
+    # plt.plot(a[:2], [15, 15], '--', label='Severe SNR Loss')
+    plt.plot(a[:2], [7, 7], '--', label='Moderate SNR Loss')
+    plt.plot(a[:2], [3, 3], '--', label='Mild SNR Loss')
     plt.legend()
     plt.axis(a)
     plt.savefig(FLAGS.spin_counting_graph)
@@ -1260,7 +1307,7 @@ def main(_):
     print('Linear regression connecting logistic and counting approaches: '
           f'slope is {m}, bias is {b}')
     
-    plt.figure(figsize=figsize)
+    plt.figure(figsize=(6, 4))
     plt.plot(quicksin_regression_loss.values(),
              quicksin_counting_loss.values(), 'x', label='Recognition results')
     plt.xlabel('QuickSIN SNR loss by logistic regression (dB)')
@@ -1307,13 +1354,13 @@ def main(_):
     a = plt.axis()
     plt.axis('tight')
     offset = 0.2
-    plt.plot(a[:2], [15, 15], '--', alpha=0.25)
-    plt.text(a[1], 15+offset, 'Severe', ha='right')
+    # plt.plot(a[:2], [15, 15], '--', alpha=0.25)
+    # plt.text(a[1], 15+offset, 'Severe', ha='right')
     plt.plot(a[:2], [7, 7], '--', alpha=0.25)
     plt.text(a[1], 7+offset, 'Moderate', ha='right')
     plt.plot(a[:2], [3, 3], '--', alpha=0.25)
     plt.text(a[1], 3+offset, 'Mild', ha='right')
-    ax.set_ylim(0, 16)
+    ax.set_ylim(0, 9)
     plt.legend(loc='upper center') # , ncol=2)
     plt.savefig(FLAGS.method_comparison_graph)
 

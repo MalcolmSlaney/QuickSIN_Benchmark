@@ -253,6 +253,7 @@ L 1 S 0  tear/Tara thin sheet yellow pad
                                  ['a', 'black', 'silk', 'jacket'])
     self.assertEqual(score, 3)
 
+    # Make sure duplicate recognitions are ignored.
     score = gasr.score_word_list(true_word_list,
                                  ['a', 'black', 'black', 'silk', 'jacket'])
     self.assertEqual(score, 3)
