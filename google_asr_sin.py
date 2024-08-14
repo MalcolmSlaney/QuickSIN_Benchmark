@@ -24,14 +24,39 @@ from google.api_core.client_options import ClientOptions
 from google.cloud.speech_v2 import SpeechClient
 from google.cloud.speech_v2.types import cloud_speech
 
+# Import the Google Recognizer
 from google.cloud.speech_v1.types.cloud_speech import RecognizeResponse
 # Supported Languages:
 # https://cloud.google.com/speech-to-text/v2/docs/speech-to-text-supported-languages
+
+# Import the Whisper Recognizer
+import whisper, subprocess
+from whisper.normalizers import EnglishTextNormalizer
+
+# https://github.com/openai/whisper/discussions/734
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+
+
+####### Utilities to describe recognition results ########
+@dataclasses.dataclass
+class RecogResult:
+  word: str
+  start_time: float
+  end_time: float
 
 
 ################### Speech Recognition Class (easier API) ######################
 
 class RecognitionEngine(object):
+  def CreateSpeechClient(self, gcp_project, model='default_long'):
+    pass
+
+  def CreateRecognizer(self, with_timings=False, locale: str = 'en-US'):
+    pass
+
+
+class GoogleRecognitionEngine(RecognitionEngine):
   """A class that provides a nicer interface to Google's Cloud
   text-to-speech API.
 
@@ -187,6 +212,30 @@ class RecognitionEngine(object):
     response = self._client.recognize(request)
     return response
 
+  def parse_transcript(self, response:
+                       cloud_speech.RecognizeResponse) -> List[RecogResult]:
+    """Parse the results from the Cloud ASR engine and return a simple list
+    of words and times.  This is for the entire (60s) utterance."""
+    words = []
+    for a_result in response.results:
+      try:
+        # For reasons I don't understand sometimes a results is missing the
+        # alternatives
+        l = len(a_result.alternatives) > 0
+        if not l:
+          continue
+      except: # pylint: disable=bare-except
+        continue
+      for word in a_result.alternatives[0].words:
+        # print(f'Processing: {word}')
+        start_time = parse_time(word.start_offset)
+        end_time = parse_time(word.end_offset)
+        recog_result = RecogResult(word.word.lower(), start_time, end_time)
+        words.append(recog_result)
+      words.append(RecogResult('.', end_time, end_time))
+      # print(words[-1])
+    return words
+
   def ReadAudioFile(self, audio_file_path: str):
     # if audio_file_path[0] != '/':
     #   PREFIX = '/google_src/files/head/depot/'
@@ -195,42 +244,9 @@ class RecognitionEngine(object):
       audio_data = audio_file.read()
     return audio_data
 
-####### Utilities to Parse Google Recognition Results ########
-@dataclasses.dataclass
-class RecogResult:
-  word: str
-  start_time: float
-  end_time: float
-
-
-def parse_time(time_proto) -> float:
-  # print(f'Time_proto is a {type(time_proto)}')
+def parse_time(time_proto:datetime.timedelta) -> float:
   # return time_proto.seconds + time_proto.nanos/1e9
   return time_proto.total_seconds()
-
-def parse_transcript(response:
-                     cloud_speech.RecognizeResponse) -> List[RecogResult]:
-  """Parse the results from the Cloud ASR engine and return a simple list
-  of words and times.  This is for the entire (60s) utterance."""
-  words = []
-  for a_result in response.results:
-    try:
-      # For reasons I don't understand sometimes a results is missing the
-      # alternatives
-      l = len(a_result.alternatives) > 0
-      if not l:
-        continue
-    except: # pylint: disable=bare-except
-      continue
-    for word in a_result.alternatives[0].words:
-      # print(f'Processing: {word}')
-      start_time = parse_time(word.start_offset)
-      end_time = parse_time(word.end_offset)
-      recog_result = RecogResult(word.word.lower(), start_time, end_time)
-      words.append(recog_result)
-    words.append(RecogResult('.', end_time, end_time))
-    # print(words[-1])
-  return words
 
 def print_all_sentences(results: cloud_speech.RecognizeResponse):
   for r in results:
@@ -239,6 +255,43 @@ def print_all_sentences(results: cloud_speech.RecognizeResponse):
     else:
       print('No alternatives')
 
+####### Code to talk to the Whisper Recognizer and reformat its results ########
+
+def test_whisper():
+  print('Just testing Whisper Engine')
+  ground_truth = load_ground_truth(FLAGS.ground_truth_cache)
+  whisper_engine = make_recognizer_engine('whisper.base.en')
+  spin_file = find_all_spin_files(FLAGS.audio_dir, 'Babble')[0]
+  whisper_dict = whisper_engine.RecognizeFile(spin_file)
+  word_list = whisper_engine.parse_transcript(whisper_dict)
+
+  score_all_tests(spin_snrs, ground_truth[:1], [word_list,], debug=True)
+
+class WhisperRecognitionEngine(RecognitionEngine):
+  def __init__(self, model_type='small.en'):
+    self.model = whisper.load_model(model_type)
+
+  def RecognizeFile(self, path: str, with_timings=False, debug=False) -> Dict:
+    """Recognize the speech from a file.
+    """
+    whisper_result = self.model.transcribe(path)
+    return whisper_result
+
+  def parse_transcript(self, whisper_dict) -> List[RecogResult]:
+    results = []
+    for seg in whisper_dict['segments']:
+      b = float(seg['start'])
+      e = float(seg['end'])
+      for w in seg['text'].split(' '):
+        results.append(RecogResult(w, b, e))
+    return results
+
+def make_recognizer_engine(model_type: str) -> RecognitionEngine:
+  if model_type.startswith('whisper'):
+    return WhisperRecognitionEngine(model_type.replace('whisper.', ''))
+  return GoogleRecognitionEngine()
+
+  
 
 ####### Utilities to prepare original SPIN waveforms ########
 
@@ -278,6 +331,14 @@ def recognize_all_spin(all_wavs: List[str],
   Return a list of the transcription results.  Each recognition result is
   a list of alternatives, all in RecogResult format. This is used for both 
   clean and noisy utterances.
+
+  Args:
+    all_wavs: List of SPIN wave file names
+    asr_engine: A recognition object to do the calculations
+    debug: Whether to generate debugging messages.
+  Returns:
+    A list (for each SPIN list) of lists (for each sentence) of recognition
+    results.
   """
   all_results = []
   for f in all_wavs:
@@ -294,7 +355,7 @@ def recognize_all_spin(all_wavs: List[str],
           print(f'   {result.alternatives[0].transcript}')
         else:
           print('.   ** Empty ASR Result **')
-    recog_results = parse_transcript(resp)
+    recog_results = asr_engine.parse_transcript(resp)
     all_results.append(recog_results)
   return all_results
 
@@ -366,11 +427,11 @@ key_word_list = """
 L 0 S 0  white silk jacket any shoes
 L 0 S 1  child crawled into dense grass
 L 0 S 2  Footprints showed path took beach
-L 0 S 3  event near edge fresh air
+L 0 S 3  event/vent near edge fresh air
 L 0 S 4  band Steel 3/three inches/in wide
 L 0 S 5  weight package seen high scale
 
-L 1 S 0  tear/Tara thin sheet yellow pad
+L 1 S 0  tear/Tara/tera thin sheet yellow pad
 L 1 S 1  cruise Waters Sleek yacht fun
 L 1 S 2  streak color down left Edge
 L 1 S 3  done before boy see it
@@ -423,7 +484,7 @@ L 8 S 0  take shelter tent keep still
 L 8 S 1  Little Tales/tails they tell false
 L 8 S 2  press pedal with left foot
 L 8 S 3  black trunk fell from Landing
-L 8 S 4  cheap clothes flashy don't last
+L 8 S 4  cheap clothes flashy don't/dont last
 L 8 S 5  night alarm roused/roust deep sleep
 
 L 9 S 0  dots light betrayed black cat
@@ -436,7 +497,7 @@ L 9 S 5  Seven Seals stamped great sheets
 L10 S 0  marsh freeze when cold enough
 L10 S 1  gray mare walked before colt
 L10 S 2  bottles hold four kinds rum
-L10 S 3  wheeled/wheled bike past winding road
+L10 S 3  wheeled/wheled/wield bike past winding road
 L10 S 4  throw used paper cup plate
 L10 S 5  wall phone ring loud often
 
@@ -658,6 +719,15 @@ def sort_by_list_number(s: str) -> int:
   return int(m[1])
 
 
+def find_all_spin_files(audio_dir: str, pattern: str):
+  spin_pattern = os.path.join(audio_dir, '*.wav')
+  spin_file_names = fsspec.open_files(spin_pattern)
+  spin_file_names = [f.full_name for f in spin_file_names]
+  wanted_spin_names = [f for f in spin_file_names if pattern in f]
+  wanted_spin_names.sort(key=sort_by_list_number)
+  return wanted_spin_names
+
+
 def compute_quicksin_truth(
     wav_dir: str,
     project_id: str,
@@ -669,13 +739,7 @@ def compute_quicksin_truth(
   sentence.  Combine with the keyword list to create a list (by QuickSin list) 
   of lists of sentences (one sentence per test SNR).
   """
-  spin_file_names = fsspec.open_files(os.path.join(wav_dir, '*.wav'))
-  spin_file_names = [f.full_name for f in spin_file_names]
-  spin_truth_names = [f for f in spin_file_names if 'Clean' in f]
-  assert spin_truth_names, f'Could not find clean speech files in {wav_dir}.'
-
-  # Make sure these are all sorted numerically.
-  spin_truth_names.sort(key=sort_by_list_number)
+  spin_truth_names = find_all_spin_files(wav_dir, 'Clean')
   print(f'Found {len(spin_truth_names)} QuickSIN lists to process.')
 
   if sentence_breaks is None:
@@ -686,7 +750,7 @@ def compute_quicksin_truth(
 
   model = 'latest_long'
   print(f'Transcribing the QuickSIN WAV files with {model} model....')
-  asr_engine = RecognitionEngine()
+  asr_engine = make_recognizer_engine(model)
   asr_engine.CreateSpeechClient(project_id, model)
   asr_engine.CreateRecognizer(with_timings=True)
 
@@ -769,6 +833,15 @@ def score_all_tests(snrs: List[float],
                     ground_truths: List[List[SpinSentence]],
                     reco_results: List[RecogResult],
                     debug=False) -> np.ndarray:
+  """Score all list for all SNRs for one recognizer.  Iterate through all the
+  lists, and then score each SNR in the list. 
+  Args:
+    snrs: List of (standard) test SNRs
+    ground_truths: A list (one item per QuickSIN List) of lists (one per
+      SNR) of the ground truth sentences.
+    reco_results: A list of recognition results 
+  
+  Return a np array with the fraction correct for each of the listed SNRs."""
   num_lists = len(ground_truths)
   num_keywords = 5
 
@@ -784,7 +857,7 @@ def score_all_tests(snrs: List[float],
       correct_this_trial = score_word_list(true_words, recognized_words,
                                            max_count=5)
       correct_count += correct_this_trial
-      if debug:
+      if debug and correct_this_trial < 5:
         print(f'SNR {snr}:')
         print(f'  Expected words: {true_words}')
         print(f'  Recognized words: {recognized_words}')
@@ -798,16 +871,18 @@ def score_all_tests(snrs: List[float],
 # Models listed here:
 # https://cloud.google.com/speech-to-text/docs/transcription-model
 
-all_model_names = ('latest_long',
-                   'latest_short',
-                   # 'command_and_search',
-                   # 'phone_call',
-                   'telephony',
-                   # 'video',
-                   'medical_dictation',
-                   'medical_conversation',
-                   # 'default',
-                   'chirp',
+all_model_names = (# Google cloud models
+                   # 'latest_long',
+                   # 'latest_short',
+                   # 'telephony',
+                   # 'medical_dictation',
+                   # 'medical_conversation',
+                   # 'chirp',
+
+                   # Whisper models from https://github.com/openai/whisper
+                   'whisper.base.en',
+                   'whisper.small.en',
+                   'whisper.medium.en'
 )
 
 def recognize_with_all_models(
@@ -821,8 +896,8 @@ def recognize_with_all_models(
   model_results = {}
 
   for model_name in model_names:
-    print(f'Model: {model_name}')
-    asr_engine = RecognitionEngine()
+    print(f'\nRecogizing with model: {model_name}')
+    asr_engine = make_recognizer_engine(model_name)
     asr_engine.CreateSpeechClient(project_id, model=model_name)
     asr_engine.CreateRecognizer()
     babble_transcripts = recognize_all_spin(spin_test_names, asr_engine)
@@ -843,6 +918,7 @@ def score_all_models(
   print(type(model_results), model_results)
 
   for model_name in model_results:
+    print(f'Scoring model {model_name}')
     babble_transcripts = model_results[model_name]
     scores = score_all_tests(test_snrs,
                              ground_truths,
@@ -975,15 +1051,12 @@ def run_ground_truth(ground_truth_json_file: str,
     assert len(truths), 12
   return truths
 
+
 def run_recognize_models(recognition_json_file: str,
                          audio_dir: str,
                          project_id: str) -> Dict[str, SpinFileTranscripts]:
   if not os.path.exists(recognition_json_file):
-    spin_pattern = os.path.join(audio_dir, '*.wav')
-    spin_file_names = fsspec.open_files(spin_pattern)
-    spin_file_names = [f.full_name for f in spin_file_names]
-    spin_test_names = [f for f in spin_file_names if 'Babble' in f]
-    spin_test_names.sort(key=sort_by_list_number)
+    spin_test_names = find_all_spin_files(audio_dir, 'Babble')
 
     recognition_results = recognize_with_all_models(
       project_id,
@@ -1059,9 +1132,13 @@ flags.DEFINE_string('logistic_fit_graph',
 flags.DEFINE_boolean('debug', False, 'Produces debugging output.')
 flags.DEFINE_float('human_level', 2.0,
                    'Normal human performance so we can subtract it (dB)')
-
+flags.DEFINE_boolean('whisper', False, 'Just test the whisper recognizer')
 
 def main(_):
+  if FLAGS.whisper:
+   test_whisper()
+   return
+
   project_id = os.getenv('GOOGLE_CLOUD_PROJECT')
   assert project_id, 'Can not find GOOGLE_CLOUD_PROJECT.'
 
@@ -1079,7 +1156,8 @@ def main(_):
                                        truths)
 
   # Plot all the figures
-  figsize = (6.4, 4.8) # (10, 6)
+  # figsize = (6.4, 4.8) # (10, 6)
+  figsize = (10, 6)
   
   #pylint: disable=consider-using-dict-items
   if FLAGS.all_score_graph:
@@ -1099,12 +1177,18 @@ def main(_):
     quicksin_regression_loss[m] = compute_quicksin_regression(
       spin_snrs, model_frac_scores[m]) - FLAGS.human_level
 
+  bar_labels = [s.replace('_', '\n') for s in quicksin_regression_loss]
+  bar_labels = [s.replace('whisper.', '') for s in bar_labels]
+  bar_labels = [s.replace('base.en', 'base\nen') for s in bar_labels]
+  bar_labels = [s.replace('small.en', 'small\nen') for s in bar_labels]
+  bar_labels = [s.replace('medium.en', 'medium\nen') for s in bar_labels]
+
+  print('All results:', quicksin_regression_loss)
   if FLAGS.spin_logistic_graph:
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111)
-    bar_labels = [s.replace('_', '\n') for s in quicksin_regression_loss]
     bar_container = ax.bar(bar_labels, quicksin_regression_loss.values())
-    ax.set(ylabel='QuickSIN Loss (dB)',
+    ax.set(ylabel='QuickSIN SNR Loss (dB)',
            title='Cloud ASR QuickSIN Scores (logistic)', ylim=(0, 16))
     ax.bar_label(bar_container)
     a = plt.axis()
@@ -1115,7 +1199,7 @@ def main(_):
     plt.axis(a)
     plt.savefig(FLAGS.spin_logistic_graph)
 
-  if FLAGS.logistic_fit_graph:
+  if FLAGS.logistic_fit_graph and 'latest_long' in model_frac_scores:
     scores = model_frac_scores['latest_long']
     # pylint: disable=unbalanced-tuple-unpacking
     logistic_params, _ = curve_fit(psychometric_curve,
@@ -1151,11 +1235,10 @@ def main(_):
   if FLAGS.spin_counting_graph:
     fig = plt.figure(figsize=figsize)
     ax = fig.add_subplot(111)
-    bar_labels = [s.replace('_', '\n') for s in quicksin_counting_loss]
     bar_container = ax.bar(
       bar_labels,
       quicksin_counting_loss.values())
-    ax.set(ylabel='QuickSIN Loss (dB)',
+    ax.set(ylabel='QuickSIN SNR Loss (dB)',
            title='Cloud ASR QuickSIN Scores (counting)', ylim=(0, 16))
     ax.bar_label(bar_container)
     a = plt.axis()
@@ -1169,7 +1252,8 @@ def main(_):
   if FLAGS.logistic_counting_graph:
     # Remove outlier from this comparison
     quicksin_counting_loss_copy = quicksin_counting_loss.copy()
-    quicksin_counting_loss['latest_short'] = np.nan
+    if 'latest_short' in quicksin_counting_loss:
+      quicksin_counting_loss['latest_short'] = np.nan
 
     m, b = linear_regression(quicksin_regression_loss.values(),
                              quicksin_counting_loss.values())
@@ -1179,8 +1263,8 @@ def main(_):
     plt.figure(figsize=figsize)
     plt.plot(quicksin_regression_loss.values(),
              quicksin_counting_loss.values(), 'x', label='Recognition results')
-    plt.xlabel('QuickSIN loss by logistic regression (dB)')
-    plt.ylabel('QuickSIN loss by counting (dB)')
+    plt.xlabel('QuickSIN SNR loss by logistic regression (dB)')
+    plt.ylabel('QuickSIN SNR loss by counting (dB)')
     plt.title('Comparison of loss by counting and logistic regression')
     plt.axis('square')
     current_axis = plt.axis()
@@ -1217,7 +1301,7 @@ def main(_):
         multiplier += 1
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax.set_ylabel('QuickSIN Loss')
+    ax.set_ylabel('QuickSIN SNR Loss')
     ax.set_title('Score by recognizer and algorithm')
     ax.set_xticks(x + width, methods)
     a = plt.axis()

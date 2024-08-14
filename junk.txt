@@ -1,0 +1,142 @@
+Scoring model whisper.base.en
+SNR 25:
+  Expected words: [{'tear', 'tara'}, {'thin'}, {'sheet'}, {'yellow'}, {'pad'}]
+  Recognized words: ['', 'tera', 'thin', 'sheet', 'from', 'the', 'yellow', 'pad', '', 'a', 'cruise', 'in', 'warm', 'waters', 'in', 'a', 'sleek', 'yacht', 'is', 'fun']
+  Correct count is 4
+SNR 20:
+  Expected words: [{'beetle', 'beatle'}, {'drowned'}, {'hot'}, {'june', 'tunes'}, {'son', 'sun'}]
+  Recognized words: ['', 'the', 'kite', 'dipped', 'and', 'swayed', 'but', 'stayed', 'aloft', '', 'the', 'beetle', 'drowned', 'in', 'the', 'hotjooned', 'sun']
+  Correct count is 3
+SNR 15:
+  Expected words: [{'drop'}, {'ashes'}, {'warren', 'worn'}, {'old'}, {'rug'}]
+  Recognized words: ['', 'he', 'picked', 'up', 'the', 'dice', 'for', 'a', 'second', 'roll', '', 'he', 'picked', 'up', 'the', 'ashes', 'on', 'the', 'worn', 'old', 'rug']
+  Correct count is 4
+SNR 15:
+  Expected words: [{'down'}, {'road'}, {'way'}, {'grain'}, {'farmer'}]
+  Recognized words: ['', 'down', 'that', 'road', 'is', 'the', 'way', 'to', 'the', 'grain', 'fund', '', 'the', 'best', 'method', 'is', 'to', 'fix', 'it', 'in', 'place', 'with', 'slips']
+  Correct count is 4
+SNR 15:
+  Expected words: [{'bottles'}, {'hold'}, {'for', 'four'}, {'kinds'}, {'rum'}]
+  Recognized words: ['', 'bottles', 'hold', 'four', 'kinds', 'of', 'worms', '', 'he', 'wield', 'the', 'bite', 'has', 'the', 'winding', 'road']
+  Correct count is 4
+SNR 10:
+  Expected words: [{'event'}, {'near'}, {'edge'}, {'fresh'}, {'air'}]
+  Recognized words: ['', 'a', 'vent', 'near', 'the', 'edge', 'brought', 'in', 'fresh', 'air', '', 'it', 'is', 'a', 'band', 'of', 'steel']
+  Correct count is 4
+SNR 10:
+  Expected words: [{'couch'}, {'cover'}, {'hall'}, {'drapes'}, {'blue'}]
+  Recognized words: ['', 'he', 'picked', 'up', 'the', 'ashes', 'on', 'the', 'worn', 'old', 'rug', '', 'were', 'blue']
+  Correct count is 1
+SNR 10:
+  Expected words: [{'chair'}, {'looked'}, {'strong'}, {'no'}, {'bottom'}]
+  Recognized words: ['', 'the', 'chair', 'looked', 'strong', 'but', 'had', 'no', 'volume', '', 'they', 'told', 'wild', 'hands', 'to', 'frighten']
+  Correct count is 4
+SNR 10:
+  Expected words: [{'best'}, {'method'}, {'fix'}, {'place'}, {'clips'}]
+  Recognized words: ['', 'the', 'best', 'method', 'is', 'to', 'fix', 'it', 'in', 'place', 'with', 'slips', '', 'if', 'you', 'mummels', 'youll', 'be', 'lost']
+  Correct count is 4
+SNR 10:
+  Expected words: [{'wheled', 'wheeled'}, {'bike'}, {'past'}, {'winding'}, {'road'}]
+  Recognized words: ['', 'he', 'wield', 'the', 'bite', 'has', 'the', 'winding', 'road', '', 'throw', 'out', 'the', 'used', 'paper', 'cup', 'and', 'the', 'evidence']
+  Correct count is 2
+SNR 10:
+  Expected words: [{'their'}, {'eyelids'}, {'drop', 'droop'}, {'want'}, {'sleep'}]
+  Recognized words: ['', 'their', 'eyelids', 'drew', 'from', 'water', 'slink', '', 'there', 'are', 'many', 'ways', 'to', 'do', 'this']
+  Correct count is 2
+SNR 5:
+  Expected words: [{'band'}, {'steel'}, {'three', '3'}, {'in', 'inches'}, {'wide'}]
+  Recognized words: ['', 'it', 'is', 'a', 'band', 'of', 'steel', '', 'it', 'is', 'a', 'weatherish', 'water']
+  Correct count is 2
+SNR 5:
+  Expected words: [{'crouch'}, {'before'}, {'jump'}, {'miss'}, {'mark'}]
+  Recognized words: ['', 'it', 'was', 'done', 'before', 'the', 'boy', 'could', 'see', 'it', '', 'a', 'crash', 'before', 'you', 'jump', 'on', 'the', 'side']
+  Correct count is 2
+SNR 5:
+  Expected words: [{'pick'}, {'card'}, {'slip'}, {'under'}, {'pact', 'pack'}]
+  Recognized words: ['', 'on', 'hours', 'itoc', 'signed', 'this', 'morning']
+  Correct count is 0
+SNR 5:
+  Expected words: [{'stems'}, {'tall'}, {'glasses'}, {'cracked'}, {'broke'}]
+  Recognized words: ['', 'were', 'blue']
+  Correct count is 0
+SNR 5:
+  Expected words: [{'told'}, {'wild'}, {'tales', 'tails'}, {'frighten'}, {'him'}]
+  Recognized words: ['', 'they', 'told', 'wild', 'hands', 'to', 'frighten', '', 'checking', 'the', 'screen', 'is', 'very', 'exciting']
+  Correct count is 3
+SNR 5:
+  Expected words: [{'if'}, {'mumble'}, {'your'}, {'speech'}, {'lost'}]
+  Recognized words: ['', 'if', 'you', 'mummels', 'youll', 'be', 'lost', '', 'if', 'you', 'mummels', 'youll', 'be', 'lost']
+  Correct count is 2
+SNR 5:
+  Expected words: [{'hurdle'}, {'pit'}, {'aid'}, {'long'}, {'pole'}]
+  Recognized words: ['', 'his', 'wide', 'grin', 'earned', 'many', 'friends', '', 'the', 'emotional', 'guard', 'told', 'the', 'guy', 'through']
+  Correct count is 0
+SNR 5:
+  Expected words: [{'news'}, {'struct', 'struck'}, {'out'}, {'restless'}, {'minds'}]
+  Recognized words: ['', 'the', 'news', 'struck', 'down', 'into', 'resting', 'years', '', 'the', 'incline']
+  Correct count is 2
+SNR 5:
+  Expected words: [{'cheap'}, {'clothes'}, {'flashy', 'flash'}, {"don't"}, {'last'}]
+  Recognized words: ['', 'the', 'black', 'trunk', 'fell', 'from', 'the', 'landing', '', 'keep', 'the', 'clothes', 'are', 'flashing', '', 'it', 'doesnt', 'have', 'any', 'issues']
+  Correct count is 1
+SNR 5:
+  Expected words: [{'glass', 'gloss'}, {'top'}, {'made'}, {'unfit'}, {'read'}]
+  Recognized words: ['', 'a', 'flat', 'pack', 'takes', 'less', 'luggage', 'space', '', 'the', 'gloss', 'on', 'top', 'made', 'it', 'unfitched', 'and', 'fixed', 'void']
+  Correct count is 3
+SNR 5:
+  Expected words: [{'throw'}, {'used'}, {'paper'}, {'cup'}, {'plate'}]
+  Recognized words: ['', 'throw', 'out', 'the', 'used', 'paper', 'cup', 'and', 'the', 'evidence', '', 'in', 'the', 'first', 'immigration', 'all']
+  Correct count is 4
+SNR 5:
+  Expected words: [{'many'}, {'ways'}, {'do'}, {'these'}, {'things'}]
+  Recognized words: ['', 'there', 'are', 'many', 'ways', 'to', 'do', 'this', '', 'we', 'like', 'to', 'see', 'our', 'commerce', 'our', 'whole', 'civilization']
+  Correct count is 3
+SNR 0:
+  Expected words: [{'weight'}, {'package'}, {'seen'}, {'high'}, {'scale'}]
+  Recognized words: ['', 'it', 'is', 'a', 'weatherish', 'water', '', 'the', 'airish', 'water', 'is', 'a', 'weatherish', 'water', '', 'the', 'waterish', 'water', 'is', 'a', 'weatherish', 'water']
+  Correct count is 0
+SNR 0:
+  Expected words: [{'square'}, {'peg'}, {'settle'}, {'round'}, {'hole'}]
+  Recognized words: ['', 'a', 'crash', 'before', 'you', 'jump', 'on', 'the', 'side']
+  Correct count is 0
+SNR 0:
+  Expected words: [{'store'}, {'jammed'}, {'before'}, {'sale'}, {'start'}]
+  Recognized words: ['', 'on', 'hours', 'itoc', 'signed', 'this', 'morning']
+  Correct count is 0
+SNR 0:
+  Expected words: [{'cleats'}, {'sank', 'sink'}, {'deeply'}, {'soft'}, {'turf'}]
+  Recognized words: []
+  Correct count is 0
+SNR 0:
+  Expected words: [{'force'}, {'equal'}, {'would'}, {'move'}, {'earth'}]
+  Recognized words: ['', 'checking', 'the', 'screen', 'is', 'very', 'exciting']
+  Correct count is 0
+SNR 0:
+  Expected words: [{'toad'}, {'frog'}, {'hard'}, {'tell'}, {'apart'}]
+  Recognized words: ['', 'if', 'you', 'mummels', 'youll', 'be', 'lost']
+  Correct count is 0
+SNR 0:
+  Expected words: [{'peep', 'keep'}, {'under'}, {'tent'}, {'see'}, {'clown'}]
+  Recognized words: ['', 'the', 'emotional', 'guard', 'told', 'the', 'guy', 'through']
+  Correct count is 0
+SNR 0:
+  Expected words: [{'sand'}, {'drifts', 'drift'}, {'over'}, {'sale', 'sill'}, {'house'}]
+  Recognized words: ['', 'the', 'incline', '', 'the', 'diversity', 'of', 'opportunity', 'of', 'a', '', 'global', 'nation', 'is', 'alsoia']
+  Correct count is 0
+SNR 0:
+  Expected words: [{'night'}, {'alarm'}, {'roused', 'roust'}, {'deep'}, {'sleep'}]
+  Recognized words: ['', 'it', 'doesnt', 'have', 'any', 'issues', '', 'and', 'again', 'the', 'ceiling', 'so', 'that', 'they', 'do', 'not', 'need', 'your', 'idea', '', 'to', 'develop', 'the', 'way', 'they', 'add', 'or', 'could', 'guarantee', 'as', 'a', 'result']
+  Correct count is 0
+SNR 0:
+  Expected words: [{'seven'}, {'seals'}, {'stamped'}, {'great'}, {'sheets'}]
+  Recognized words: ['', 'the', 'gloss', 'on', 'top', 'made', 'it', 'unfitched', 'and', 'fixed', 'void']
+  Correct count is 0
+SNR 0:
+  Expected words: [{'wall'}, {'phone'}, {'ring'}, {'loud'}, {'often'}]
+  Recognized words: ['', 'in', 'the', 'first', 'immigration', 'all']
+  Correct count is 0
+SNR 0:
+  Expected words: [{'we'}, {'like'}, {'see'}, {'clear'}, {'weather'}]
+  Recognized words: ['', 'we', 'like', 'to', 'see', 'our', 'commerce', 'our', 'whole', 'civilization', '', 'in', 'this', 'sense', 'lets', 'find', 'the', 'house', 'of', 'conference']
+  Correct count is 3
+Model fraction correct

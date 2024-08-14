@@ -1,0 +1,10 @@
+Reloading ground truth saved at 2023-11-29 09:05:25.501643
+
+Recogizing with model: whisper.base.en
+
+Recogizing with model: whisper.small.en
+
+Recogizing with model: whisper.medium.en
+Reloading model scores saved at 2024-05-24 22:54:30.947453
+All results: {'latest_long': 6.428775488501806, 'latest_short': 7.936941474908105, 'telephony': 4.816121770979863, 'medical_dictation': 5.723720075164246, 'medical_conversation': 7.402585401103366, 'chirp': 2.265828614022311, 'whisper.base.en': 3.9951846544886385, 'whisper.small.en': 1.4867909883632624, 'whisper.medium.en': 2.0829481278971507}
+Linear regression connecting logistic and counting approaches: slope is 1.1122775769103836, bias is 0.650991529118703

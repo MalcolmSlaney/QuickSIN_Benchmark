@@ -118,7 +118,7 @@ class GoogleRecognizerTest(absltest.TestCase):
     """Test my new ASR class, which abstracts many of the Cloud ASR calls into
     a simpler API.
     """
-    engine = gasr.RecognitionEngine()
+    engine = gasr.GoogleRecognitionEngine()
     engine.CreateSpeechClient(GOOGLE_CLOUD_PROJECT, model='long')
     engine.CreateRecognizer()
 
@@ -185,7 +185,7 @@ L 1 S 0  tear/Tara thin sheet yellow pad
     self.assertEqual(all_keyword_dict, expected_ground_truth)
 
   def test_parse_transcript(self):
-    engine = gasr.RecognitionEngine()
+    engine = gasr.GoogleRecognitionEngine()
     engine.CreateSpeechClient(GOOGLE_CLOUD_PROJECT, model='long')
     engine.CreateRecognizer()
     response = engine.RecognizeFile('tests/tapestry.wav',
@@ -193,7 +193,7 @@ L 1 S 0  tear/Tara thin sheet yellow pad
 
     self.assertIsInstance(response, cloud_speech.RecognizeResponse)
 
-    asr_transcript = gasr.parse_transcript(response)
+    asr_transcript = engine.parse_transcript(response)
     # print(asr_transcript)
     # One extra word for the period.
     self.assertLen(asr_transcript, 8)
@@ -211,8 +211,8 @@ L 1 S 0  tear/Tara thin sheet yellow pad
     self.assertEqual(gasr.word_alternatives('foo/bar', {}), set(['foo', 'bar']))
 
     self.assertEqual(gasr.all_keyword_dict[1, 0],
-                     [set(['tear', 'tara']), set(['thin']), set(['sheet']),
-                      set(['yellow']), set(['pad'])])
+                     [set(['tear', 'tara', 'tera']), set(['thin']), 
+                      set(['sheet']), set(['yellow']), set(['pad'])])
 
   def test_file_sort(self):
     files = ['foo 12.wav', 'foo 7.wav', 'foo 3.wav']
@@ -246,10 +246,15 @@ L 1 S 0  tear/Tara thin sheet yellow pad
     self.assertEqual(matches, list(range(1, 13)))
 
   def test_spin_files(self):
-    score = gasr.score_word_list([set(['white', 'black']), set(['silk']),
-                                  set(['jacket']), set(['goes']), set(['with']),
-                                  set(['any']), set(['shoes'])],
+    true_word_list = [set(['white', 'black']), set(['silk']), 
+                      set(['jacket']), set(['goes']), set(['with']), 
+                      set(['any']), set(['shoes'])]
+    score = gasr.score_word_list(true_word_list,
                                  ['a', 'black', 'silk', 'jacket'])
+    self.assertEqual(score, 3)
+
+    score = gasr.score_word_list(true_word_list,
+                                 ['a', 'black', 'black', 'silk', 'jacket'])
     self.assertEqual(score, 3)
 
     spin_file_names = fsspec.open_files('tests/*.wav')
@@ -261,7 +266,7 @@ L 1 S 0  tear/Tara thin sheet yellow pad
     self.assertLen(list(spin_test_names), 2)
     self.assertLen(list(spin_truth_names), 2)
 
-    asr_engine = gasr.RecognitionEngine()
+    asr_engine = gasr.GoogleRecognitionEngine()
     asr_engine.CreateSpeechClient(GOOGLE_CLOUD_PROJECT, 'long')
     asr_engine.CreateRecognizer(with_timings=True)
     reco_transcripts = gasr.recognize_all_spin(spin_truth_names, asr_engine)
@@ -288,12 +293,12 @@ L 1 S 0  tear/Tara thin sheet yellow pad
     # Make sure we get the right words from the transcdript
     found_words = gasr.words_in_trial(reco_transcripts[0], 5, 6, tolerance=0)
     print(f'Found words are: {found_words}')
-    self.assertEqual(found_words, ['white', 'silk', 'jacket'])
+    self.assertEqual(found_words, ['white', 'silk', 'jacket', 'goes'])
 
     # Make sure we get more words with a bigger tolerance.
     found_words = gasr.words_in_trial(reco_transcripts[0], 5, 6, tolerance=1)
     print(f'Found words are: {found_words}')
-    self.assertEqual(found_words, ['it', 'is', 'a', 'white', 'silk', 'jacket',
+    self.assertEqual(found_words, ['a', 'white', 'silk', 'jacket',
                                    'goes', 'with', 'any', 'shoes'])
 
     # Make sure we count the number of words right.
