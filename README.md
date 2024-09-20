@@ -20,6 +20,10 @@ We demonstrate that a modern recognizer, built using millions of hours of
 unsupervised training data, is mildly impaired in noise compared 
 to human subjects.
 
+Note: Version 2.0 of this release corresponds to the paper we published.  
+You should be able to regenerate the results in the paper with this version
+[Link to V2.0](https://github.com/MalcolmSlaney/QuickSIN_Benchmark/releases/tag/v2.0)
+
 ## Introduction
 
 For many years, speech recognizers have performed better than human in 
