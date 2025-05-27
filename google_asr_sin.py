@@ -423,6 +423,11 @@ def find_sentence_boundaries(
 # Equivalncy across lists and signal-to-noise ratios.
 # https://etda.libraries.psu.edu/files/final_submissions/5788
 
+# Corrections made May 27, 2025
+#   List 3, Sentence 5: cleats -> cleat 
+#   List 6, Sentence 1: drowned -> droned 
+#   List 10, Sentence 5: ring -> rang 
+
 key_word_list = """
 L 0 S 0  white silk jacket any shoes
 L 0 S 1  child crawled into dense grass
@@ -450,7 +455,7 @@ L 3 S 1  picked up dice second roll
 L 3 S 2  drop ashes worn/Warren Old rug
 L 3 S 3  couch cover Hall drapes blue
 L 3 S 4  stems Tall Glasses cracked broke
-L 3 S 5  cleats sank deeply soft turf
+L 3 S 5  cleat sank deeply soft turf
 
 L 4 S 0  have better than wait Hope
 L 4 S 1  screen before fire kept Sparks
@@ -467,7 +472,7 @@ L 5 S 4  if Mumble your speech lost
 L 5 S 5  toad Frog hard tell apart
 
 L 6 S 0  kite dipped swayed/suede stayed aloft
-L 6 S 1  beatle/beetle drowned hot June sun/son
+L 6 S 1  beatle/beetle droned hot June sun/son
 L 6 S 2  theft Pearl pin Kept Secret
 L 6 S 3  wide grin earned many friends
 L 6 S 4  hurdle pit aid long Pole
@@ -499,7 +504,7 @@ L10 S 1  gray mare walked before colt
 L10 S 2  bottles hold four kinds rum
 L10 S 3  wheeled/wheled/wield bike past winding road
 L10 S 4  throw used paper cup plate
-L10 S 5  wall phone ring loud often
+L10 S 5  wall phone rang loud often
 
 L11 S 0  hinge door creaked old age
 L11 S 1  bright lanterns Gay dark lawn
@@ -538,8 +543,9 @@ homonyms = """
   drowned/dround
   yacht/yaught/yach
   hall/haul
-  # Close enough words.
-  # None so far.. we count if an error if even one phoneme is wrong.
+  # Additions May 27, 2025
+  vent/event
+  cleat/cleats
 """
 
 def make_homonyms_dictionary(*equivalance_lists: str) -> Dict[str, Set[str]]:
@@ -707,6 +713,24 @@ def load_ground_truth(filename: str) -> List[List[SpinSentence]]:
   for i in range(len(truth)):        # Nominally 12, except during testing
     assert isinstance(truth[i], list)
     for s in range(len(truth[i])):   # Nominally 6, except during testing
+      # Corrections added May 27, 2025, fixing these here too.
+      if i == 3 and s == 5:
+        print('Truth', truth[i][s], type(truth[i][s]))
+        print('Truth', truth[i][s]['true_word_list'])
+        if truth[i][s]['true_word_list'][0] == ['cleats']:
+          truth[i][s]['true_word_list'][0] = ['cleat']
+        else:
+          raise ValueError(f"Found unexpected word for cleats: {truth[i][s]['true_word_list'][0]}")
+      elif i == 6 and s == 1:
+        if truth[i][s]['true_word_list'][1] == ['drowned', 'dround']:
+          truth[i][s]['true_word_list'][1] = ['droned']
+        else:
+          raise ValueError(f"Found unexpected word for drowned: {truth[i][s]['true_word_list'][1]}")
+      elif i == 10 and s == 5:
+        if truth[i][s]['true_word_list'][2] == ['ring']:
+          truth[i][s]['true_word_list'][2] = ['rang']
+        else:
+          raise ValueError(f"Found unexpected word for ring: {truth[i][s]['true_word_list'][2]}")
       truth[i][s] = SpinSentence(**truth[i][s])
       truth[i][s].true_word_list = [set(word_list) for word_list
                                     in truth[i][s].true_word_list]
@@ -1084,6 +1108,7 @@ def run_ground_truth(ground_truth_json_file: str,
     and the key words and alternates for the scoring.  As well as the start and
     stop time of this sentence, and the SNR.
   """
+  print('Looking for', ground_truth_json_file, os.path.exists(ground_truth_json_file))
   if not os.path.exists(ground_truth_json_file):
     truths = compute_quicksin_truth(
       sin_wav_dir,
